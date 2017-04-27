@@ -31,3 +31,10 @@ dt[,
 data(sleep_sexual_dimorphism)
 sleep_sexual_dimorphism
 key(sleep_sexual_dimorphism)
+summary_dt <- sleep_sexual_dimorphism[,# all rows
+                                      .(sleep_fraction = sum(asleep)/.N), # number of alseep is TRUE over total (.N)
+                                      # this is the IMPORTANT bit.
+                                      # we do this for each animal independently
+                                      by = key(sleep_sexual_dimorphism)
+                                      ]
+summary_dt
