@@ -38,3 +38,4 @@ summary_dt <- sleep_sexual_dimorphism[,# all rows
                                       by = key(sleep_sexual_dimorphism)
                                       ]
 summary_dt
+ggplot(summary_dt, aes(sex,sleep_fraction, fill=sex)) + geom_boxplot()
