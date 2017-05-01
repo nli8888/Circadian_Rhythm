@@ -1,6 +1,7 @@
 library(rethomics)
 #time_format can either be "hr"/"min"/"sec"
-DAM1_read = function(file, time_format="min", ref_hour = NULL){
+#time_to_avg_over in seconds
+DAM1_read = function(file, time_format="min", time_to_avg_over=60*60, ref_hour = NULL){
   #header = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what="", nmax= 1, sep="\n")
   #infile = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what=1, skip=1, sep="\n")
   header = scan(file, what="", nmax= 1, sep="\n")
@@ -16,11 +17,7 @@ DAM1_read = function(file, time_format="min", ref_hour = NULL){
     break
   }  
 
-
-  #sample_freq
-  #typeof(infile)
   activity = infile[4:length(infile)]
-  #activity
   t_list = vector()
   t = 0
   for (i in activity){
@@ -28,8 +25,7 @@ DAM1_read = function(file, time_format="min", ref_hour = NULL){
     t_list = c(t_list, t)
     t = t + sample_freq
   }
-  #t_list = c(t_list, sample_freq)
-  t_round = floor(t_list/(30*60))*(30*60)
+  t_round = floor(t_list/(time_to_avg_over))*(time_to_avg_over)
   
   dt = data.table(activity=activity, t=t_list, t_round=t_round)
   return(dt)
@@ -38,16 +34,15 @@ DAM1_read = function(file, time_format="min", ref_hour = NULL){
 x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")
 dt = x[, .(mean_activity = mean (activity)), by = t_round]
 
-#n = 7
-#dt2 = x[, .(mean_activity = mean(activity)), by = list(every_30_mins = (seq(nrow(x)) - 1) %/% n)]
-#every_30 = seq(0,1195500,by = 1800)
-#time_dt = data.table(every_30)
+
 plot1 = ggplot(x, aes(x=t , y=activity)) + geom_line()
 plot2 = ggplot(dt, aes(x=t_round, y=mean_activity)) + geom_line()
 #plot3 = ggplot(dt2, aes(x=every_30_mins, y=mean_activity)) + geom_line()
-plot1
+#plot1
 plot2
 #plot3
+
+
 #data.table rolling join -> for subsampling
 #rbindlist()
 
