@@ -52,23 +52,12 @@ x = lapply(filelist, DAM1_read, time_format="min")
 DT = rbindlist(x)
 setkeyv(DT, key(x[[1]]))
 
-# filelist = vector()
-# for (i in temp_filelist){
-#   #print(substr(i, nchar(i)-3, nchar(i)))
-#    if (substr(i, nchar(i)-3, nchar(i))==".txt"){
-#      print(i)
-#      filelist = c(filelist, i)
-#    }
-# }
+
 overviewPlot(activity, DT, machine_name)
 overviewPlot(activity, DT[region_id==1], machine_name)
 ethogramPlot(activity, DT, machine_name, error="sem")
 ethogramPlot(activity, DT, facet_var=machine_name, error="sem")
-# dtlist = vector()
-# for (i in filelist){
-#   x = DAM1_read(paste("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/",i,sep=""),"min")
-#   dtlist = rbind(x, x)
-# }
+
  x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")
 # x2 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C02.txt", "min")
 # x3 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt", "min")
