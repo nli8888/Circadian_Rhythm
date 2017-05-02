@@ -40,8 +40,15 @@ DAM1_read = function(file, time_format="min", time_to_avg_over=60*60, ref_hour =
     t = t + sample_freq
   }
   t_round = floor(t_list/(time_to_avg_over))*(time_to_avg_over)
-  
-  dt = data.table(experiment_id=expID, region_id=channel, date=raw_date, machine_name=monitor, activity=activity, t=t_list, t_round=t_round)
+  t_in_day = floor(t_round/(24*60*60))
+  dt = data.table(experiment_id=expID, 
+                  region_id=channel, 
+                  date=raw_date, 
+                  machine_name=monitor, 
+                  activity=activity, 
+                  t=t_list, 
+                  t_round=t_round,
+                  t_in_day=t_in_day)
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   return(dt)
 }
@@ -51,32 +58,36 @@ filelist
 x = lapply(filelist, DAM1_read, time_format="min")
 DT = rbindlist(x)
 setkeyv(DT, key(x[[1]]))
+d = DT[region_id == 1]
+d = d[machine_name == "M007"]
+d = d[, .(mean_activity = mean (activity), t_in_day=t_in_day), by = t_round]
+plot = ggplot(d, aes(x=t_round, y=mean_activity)) + geom_line()
+plot
+####PLOTS THAT Q SHOWED ME####
+#overviewPlot(activity, DT, machine_name)
+#overviewPlot(activity, DT[region_id==1], machine_name)
+#ethogramPlot(activity, DT, machine_name, error="sem")
+#ethogramPlot(activity, DT, facet_var=machine_name, error="sem")
 
-
-overviewPlot(activity, DT, machine_name)
-overviewPlot(activity, DT[region_id==1], machine_name)
-ethogramPlot(activity, DT, machine_name, error="sem")
-ethogramPlot(activity, DT, facet_var=machine_name, error="sem")
-
- x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")
+# x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")
 # x2 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C02.txt", "min")
 # x3 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt", "min")
 # x4 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C04.txt", "min")
 # x5 = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C05.txt", "min")
- dt = x[, .(mean_activity = mean (activity)), by = t_round]
+# dt = x[, .(mean_activity = mean (activity)), by = t_round]
 # dt2 = x2[, .(mean_activity = mean (activity)), by = t_round]
 # dt3 = x3[, .(mean_activity = mean (activity)), by = t_round]
 # dt4 = x4[, .(mean_activity = mean (activity)), by = t_round]
 # dt5 = x5[, .(mean_activity = mean (activity)), by = t_round]
 
 #plot1 = ggplot(x, aes(x=t , y=activity)) + geom_line()
- plot1 = ggplot(dt, aes(x=t_round, y=mean_activity)) + geom_line()
+# plot1 = ggplot(dt, aes(x=t_round, y=mean_activity)) + geom_line()
 # plot2 = ggplot(dt2, aes(x=t_round, y=mean_activity)) + geom_line()
 # plot3 = ggplot(dt3, aes(x=t_round, y=mean_activity)) + geom_line()
 # plot4 = ggplot(dt4, aes(x=t_round, y=mean_activity)) + geom_line()
 # plot5 = ggplot(dt5, aes(x=t_round, y=mean_activity)) + geom_line()
 # 
- plot1
+# plot1
 # plot2
 # plot3
 # plot4
