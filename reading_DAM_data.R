@@ -1,7 +1,12 @@
 library(rethomics)
 #time_format can either be "hr"/"min"/"sec"
 #time_to_avg_over in seconds
-DAM1_read = function(file, time_format="min", time_to_avg_over=60*60, ref_hour = NULL){
+CirAnal = function(file, 
+                   file_format = "DAM1",
+                   time_format = "min", 
+                   time_to_avg_over = 60*60, 
+                   ref_hour = NULL){
+  if (file_format == "DAM1"){
   #header = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what="", nmax= 1, sep="\n")
   #infile = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what=1, skip=1, sep="\n")
   header = scan(file, what="", nmax= 1, sep="\n")
@@ -39,18 +44,21 @@ DAM1_read = function(file, time_format="min", time_to_avg_over=60*60, ref_hour =
     t_list = c(t_list, t)
     t = t + sample_freq
   }
-  t_round = floor(t_list/(time_to_avg_over))*(time_to_avg_over)
-  t_in_day = floor(t_round/(24*60*60))
+  t_round = floor(t_list/(time_to_avg_over))#*(time_to_avg_over)
+  day = floor(t_round/(24))
   dt = data.table(experiment_id=expID, 
                   region_id=channel, 
                   date=raw_date, 
                   machine_name=monitor, 
                   activity=activity, 
                   t=t_list, 
-                  t_round=t_round,
-                  t_in_day=t_in_day)
+                  hour=t_round,
+                  day=day)
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   return(dt)
+  } else if (file_format == "DAM2"){
+    
+  }
 }
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
@@ -58,11 +66,19 @@ filelist
 x = lapply(filelist, DAM1_read, time_format="min")
 DT = rbindlist(x)
 setkeyv(DT, key(x[[1]]))
-d = DT[region_id == 1]
-d = d[machine_name == "M007"]
-d = d[, .(mean_activity = mean (activity), t_in_day=t_in_day), by = t_round]
-plot = ggplot(d, aes(x=t_round, y=mean_activity)) + geom_line()
-plot
+
+#d = DT[region_id == 1]
+#d = d[machine_name == "M007"]
+
+d = DT[region_id == 1 & machine_name == "M007"]
+e = copy(d)
+e = e[, day := day-1]
+
+#d = d[, .(mean_activity = mean (activity), t_in_day=t_in_day), by = t_round]
+
+#dplot = ggplot(d, aes(x=t_round, y=mean_activity)) + geom_line()
+#dplot
+
 ####PLOTS THAT Q SHOWED ME####
 #overviewPlot(activity, DT, machine_name)
 #overviewPlot(activity, DT[region_id==1], machine_name)
