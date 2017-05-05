@@ -54,7 +54,7 @@ CirAnal = function(file,
                   machine_name=monitor, 
                   activity=activity, 
                   t=t_list, 
-                  #t_round=t_round,
+                  t_round=t_round,
                   hour=hour,
                   day=day)
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
@@ -90,6 +90,8 @@ CirAnal = function(file,
 ###SINGLEFILE###
 DT = CirAnal("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 actod = copy(DT)
+actod = actod[,.(sum_activity = sum(activity), hour = hour, day = day), by = t_round]
+actod = unique(actod)
 actod2 = copy(actod)
 actod2 = actod2[,day := day-1]
 actod2 = actod2[,hour := hour + 24]
@@ -97,21 +99,23 @@ actod = actod[day<max(day)]
 actodd = rbind(actod, actod2)
 actodd = actodd[day>-1]
 actodd = actodd[, day_str := sprintf("day\n%03d",day)]
-# p = ggplot(actodd, aes(hour,ymax=activity, ymin=min(activity))) +
-#   geom_ribbon() +
-#   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
-#   scale_y_continuous(name="activity")
-p = ggplot(actodd, aes(x=hour, y=activity)) + 
-  geom_col() +
+
+
+p = ggplot(actodd, aes(hour,ymax=sum_activity, ymin=min(sum_activity))) +
+  geom_ribbon() +
   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
   scale_y_continuous(name="activity")
+# p = ggplot(actodd, aes(x=hour, y=sum_activity)) + 
+#   geom_col() +
+#   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
+#   scale_y_continuous(name="activity")
 p
 
 d = DT[region_id == 1 & machine_name == "M007"]
 e = copy(d)
 e = e[, day := day-1]
 
-#d = d[, .(mean_activity = mean (activity), t_in_day=t_in_day), by = t_round]
+d = d[, .(mean_activity = mean (activity), hour=hour), by = t_round]
 
 #dplot = ggplot(d, aes(x=t_round, y=mean_activity)) + geom_line()
 #dplot
