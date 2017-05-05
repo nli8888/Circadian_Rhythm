@@ -5,6 +5,7 @@ CirAnal = function(file,
                    file_format = "DAM1",
                    time_format = "min", 
                    time_to_avg_over = 60*60, 
+                   num_of_dup = "double", #can be "double", "triple" or "quadruple"
                    ref_hour = NULL){
   if (file_format == "DAM1"){
   #header = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what="", nmax= 1, sep="\n")
@@ -45,30 +46,66 @@ CirAnal = function(file,
     t = t + sample_freq
   }
   t_round = floor(t_list/(time_to_avg_over))#*(time_to_avg_over)
-  day = floor(t_round/(24))
+  hour = t_round%%24
+  day = (floor(t_round/(24)))
   dt = data.table(experiment_id=expID, 
                   region_id=channel, 
                   date=raw_date, 
                   machine_name=monitor, 
                   activity=activity, 
                   t=t_list, 
-                  hour=t_round,
+                  #t_round=t_round,
+                  hour=hour,
                   day=day)
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  # actod = copy(dt)
+  # if (num_of_dup == "double"){
+  #   actod2 = copy(actod)
+  #   actod2 = actod2[,day := day-1]
+  #   actod2 = actod2[,hour := hour + 24]
+  #   actod = actod[day<max(day)]
+  #   actodd = rbind(actod, actod2)
+  #   actodd = actodd[day>-1]
+  #   actodd = actodd[, day_str := sprintf("day\n%03d",day)]
+  #   p = ggplot(actodd,aes(hour,ymax=y, ymin=min(y))) +
+  #     geom_ribbon() + 
+  #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
+  #     scale_y_continuous(name="y")
+  #   p
+  # }
+  
+  #return(c(dt, actod, actod2))
   return(dt)
   } else if (file_format == "DAM2"){
     
   }
 }
-PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
-filelist
-x = lapply(filelist, CirAnal, time_format="min")
-DT = rbindlist(x)
-setkeyv(DT, key(x[[1]]))
-
-#d = DT[region_id == 1]
-#d = d[machine_name == "M007"]
+###MULTIFILE###
+# PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+# filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
+# filelist
+# x = lapply(filelist, CirAnal, time_format="min")
+# DT = rbindlist(x)
+# setkeyv(DT, key(x[[1]]))
+###SINGLEFILE###
+DT = CirAnal("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
+actod = copy(DT)
+actod2 = copy(actod)
+actod2 = actod2[,day := day-1]
+actod2 = actod2[,hour := hour + 24]
+actod = actod[day<max(day)]
+actodd = rbind(actod, actod2)
+actodd = actodd[day>-1]
+actodd = actodd[, day_str := sprintf("day\n%03d",day)]
+# p = ggplot(actodd, aes(hour,ymax=activity, ymin=min(activity))) +
+#   geom_ribbon() +
+#   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
+#   scale_y_continuous(name="activity")
+p = ggplot(actodd, aes(x=hour, y=activity)) + 
+  geom_col() +
+  facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = 0:8 * 6)+
+  scale_y_continuous(name="activity")
+p
 
 d = DT[region_id == 1 & machine_name == "M007"]
 e = copy(d)
