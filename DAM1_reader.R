@@ -5,7 +5,7 @@ DAM1_reader = function(file,
                    #file_format = "DAM1",
                    time_format = "min", 
                    time_to_avg_over = 60*60, 
-                   num_of_dup = "double", #can be "double", "triple" or "quadruple"
+                   #num_of_dup = "double", #can be "double", "triple" or "quadruple"
                    ref_hour = NULL){
   #if (file_format == "DAM1"){
   #header = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what="", nmax= 1, sep="\n")
