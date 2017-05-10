@@ -93,13 +93,14 @@ DAM1_multi_reader = function(path,
 }
 
 ###MULTIFILE###
-#PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-# filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
-# filelist
-# x = lapply(filelist, DAM1_reader, time_format="min")
-# DT = rbindlist(x)
-# setkeyv(DT, key(x[[1]]))
+PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #DT = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
+
+## filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
+## filelist
+## x = lapply(filelist, DAM1_reader, time_format="min")
+## DT = rbindlist(x)
+## setkeyv(DT, key(x[[1]]))
 ###SINGLEFILE###
 # DT = DAM1_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 # actod = copy(DT)
@@ -136,7 +137,7 @@ DAM1_multi_reader = function(path,
 ####PLOTS THAT Q SHOWED ME####
 #overviewPlot(activity, DT, machine_name)
 #overviewPlot(activity, DT[region_id==1], machine_name)
-#ethogramPlot(activity, DT, machine_name, error="sem")
+ethogramPlot(activity, DT, machine_name, error="sem")
 #ethogramPlot(activity, DT, facet_var=machine_name, error="sem")
 
 # x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")
