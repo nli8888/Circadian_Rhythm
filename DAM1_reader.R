@@ -1,10 +1,10 @@
 library(rethomics)
 #time_format can either be "hr"/"min"/"sec"
-#time_to_avg_over in seconds
-DAM1_reader = function(file, 
+#time_to_round_to in seconds
+DAM1_single_reader = function(file, 
                    #file_format = "DAM1",
                    time_format = "min", 
-                   time_to_avg_over = 60*60, 
+                   time_to_round_to = 60*60, #aka hour
                    #num_of_dup = "double", #can be "double", "triple" or "quadruple"
                    ref_hour = NULL){
   #if (file_format == "DAM1"){
@@ -45,7 +45,7 @@ DAM1_reader = function(file,
     t_list = c(t_list, t)
     t = t + sample_freq
   }
-  t_round = floor(t_list/(time_to_avg_over))#*(time_to_avg_over)
+  t_round = floor(t_list/(time_to_round_to))#*(time_to_round_to)
   hour = t_round%%24
   day = (floor(t_round/(24)))
   dt = data.table(experiment_id=expID,
@@ -82,13 +82,24 @@ DAM1_reader = function(file,
   # }
 }
 
+DAM1_multi_reader = function(path,
+                             time_format = "min", 
+                             time_to_round_to = 60*60){
+  filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
+  x = lapply(filelist, DAM1_single_reader, time_format=time_format, time_to_round_to=time_to_round_to)
+  DT = rbindlist(x)
+  setkeyv(DT, key(x[[1]]))
+  return(DT)
+}
+
 ###MULTIFILE###
-# PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+#PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 # filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
 # filelist
-# x = lapply(filelist, CirAnal, time_format="min")
+# x = lapply(filelist, DAM1_reader, time_format="min")
 # DT = rbindlist(x)
 # setkeyv(DT, key(x[[1]]))
+#DT = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
 ###SINGLEFILE###
 # DT = DAM1_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 # actod = copy(DT)

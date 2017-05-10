@@ -16,8 +16,15 @@ actoplot = function(y,
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   if (mean == FALSE){
-    dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, sum_activity = sum(activity), hour = hour, day = day), by = t_round]
+    dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = sum(activity), hour = hour, day = day), by = t_round]
     dt = unique(dt)
+    mode = "(sum)"
+  } else if (mean == TRUE){
+    #dt = dt[, .(mean_activity = mean(activity), hour=hour), by = t_round]
+    dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = mean(activity), hour = hour, day = day), by = t_round]
+    dt = unique(dt)
+    mode = "(mean)"
+  }
   if (num_of_dup == "double"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
@@ -27,11 +34,12 @@ actoplot = function(y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:8 * 6
-    p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) + 
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"))
+      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Double actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   } else if (num_of_dup == "triple"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
@@ -45,11 +53,12 @@ actoplot = function(y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:12 * 6
-    p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) + 
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"))
+      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Triple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   } else if (num_of_dup == "quad"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
@@ -67,15 +76,15 @@ actoplot = function(y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:16 * 6
-    p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) + 
       geom_col() +
-      facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
+      facet_grid(day_str ~ .) + 
+      scale_x_continuous(name="time (h)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"))
+      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Quadruple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   }
-  } else if (mean == TRUE){
-    #dt = dt[, .(mean_activity = mean(activity), hour=hour), by = t_round]
-  }
+  
   # p = ggplot(binddt,aes(hour,ymax=sum_activity, ymin=min(um_activity))) +
   #   geom_ribbon() +
   #   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
@@ -86,11 +95,11 @@ actoplot = function(y,
   #     scale_y_continuous(name="activity") +
   #     theme(panel.spacing = unit(0, "lines"))
   p
-  #return(binddt)
+  #return(dt)
 }
 
 dam1 = DAM1_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
-actoplot(activity, dam1, num_of_dup = "quad")
+actoplot(activity, dam1, num_of_dup = "quad", mean = TRUE)
 
 # myoverviewPlot <- function(y,data,
 #                          condition=NULL,
