@@ -6,7 +6,7 @@ DAM1_single_reader = function(file,
                    time_format = "min", 
                    time_to_round_to = 60*60, #aka hour
                    #num_of_dup = "double", #can be "double", "triple" or "quadruple"
-                   ref_hour = NULL){
+                   ref_hour = NULL){ #time_zone/ref_hour not supported yet, not for future work; can force check 4th line to make sure its 0000; if not stop
   #if (file_format == "DAM1"){
   #header = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what="", nmax= 1, sep="\n")
   #infile = scan("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", what=1, skip=1, sep="\n")
@@ -83,10 +83,9 @@ DAM1_single_reader = function(file,
 }
 
 DAM1_multi_reader = function(path,
-                             time_format = "min", 
-                             time_to_round_to = 60*60){
+                             ...){ #use rethomics:::checkDirExists to also check if dir exist 
   filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
-  x = lapply(filelist, DAM1_single_reader, time_format=time_format, time_to_round_to=time_to_round_to)
+  x = lapply(filelist, DAM1_single_reader, ...)
   DT = rbindlist(x)
   setkeyv(DT, key(x[[1]]))
   return(DT)
@@ -137,7 +136,7 @@ PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/
 ####PLOTS THAT Q SHOWED ME####
 #overviewPlot(activity, DT, machine_name)
 #overviewPlot(activity, DT[region_id==1], machine_name)
-ethogramPlot(activity, DT, machine_name, error="sem")
+#ethogramPlot(activity, DT, machine_name, error="sem")
 #ethogramPlot(activity, DT, facet_var=machine_name, error="sem")
 
 # x = DAM1_read("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt", "min")

@@ -2,9 +2,10 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 library(grid)
 actoplot = function(#y,
                     data,
-                    num_of_dup = "double", #can be "double", "triple" or "quad"
-                    time_to_round = 60*60,
-                    mean = FALSE
+                    num_of_dup = "double", #can be "double", "triple" or "quad" #generalise this
+                    time_to_round = hours(1), #see if can rename this to something used before
+                    #mean = FALSE #change to actually use a function
+                    operation = mean #can be sum/median
                     ){
   dt = copy(as.data.table(data))
   #y_var_name <- deparse(substitute(y))
@@ -16,16 +17,18 @@ actoplot = function(#y,
   dt[, hour := hour]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
-  if (mean == FALSE){
-    dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = sum(activity), hour = hour, day = day), by = t_round]
-    dt = unique(dt)
-    mode = "(sum)"
-  } else if (mean == TRUE){
-    #dt = dt[, .(mean_activity = mean(activity), hour=hour), by = t_round]
-    dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = mean(activity), hour = hour, day = day), by = t_round]
-    dt = unique(dt)
-    mode = "(mean)"
-  }
+  # if (mean == FALSE){
+  #   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = sum(activity), hour = hour, day = day), by = t_round]
+  #   dt = unique(dt)
+  #   mode = "(sum)"
+  # } else if (mean == TRUE){
+  #   #dt = dt[, .(mean_activity = mean(activity), hour=hour), by = t_round]
+  #   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = mean(activity), hour = hour, day = day), by = t_round]
+  #   dt = unique(dt)
+  #   mode = "(mean)"
+  # }
+  dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = operation(activity), hour = hour, day = day), by = t_round]
+  dt = unique(dt)
   if (num_of_dup == "double"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
@@ -39,8 +42,9 @@ actoplot = function(#y,
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle(sprintf("Double actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Double actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+      #ggtitle(sprintf("Double actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   } else if (num_of_dup == "triple"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
@@ -104,7 +108,7 @@ actoplot = function(#y,
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-#actoplot(dam1, num_of_dup = "quad", mean = FALSE)
+actoplot(dam1, num_of_dup = "double", operation = mean)
 
 # myoverviewPlot <- function(y,data,
 #                          condition=NULL,
@@ -180,7 +184,7 @@ myethogramPlot <- function(y,data,
   dt[,y_var:=as.numeric(y_var)]
   c_var_name <- deparse(substitute(condition))
   f_var_name <- deparse(substitute(facet_var))
-  
+  print(c_var_name)
   if(c_var_name == "NULL")
     dt[,c_var:=TRUE]
   else
@@ -191,81 +195,82 @@ myethogramPlot <- function(y,data,
   else
     setnames(dt, f_var_name,"f_var")
   
-  if(is.numeric(dt[,c_var])){
-    dt[,c_var = as.character(c_var)] 
-    warning("Condition variable is a number.
-            Converting it to a factor")
-  }
-  
-  if(is.numeric(dt[,f_var])){
-    dt[,c_var = as.character(f_var)] 
-    warning("Faceting variable is a number. 
-            Converting it to a factor")
-  }
-  
-  if(normalise_var_per_id)
-    dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
-  
-  summary_dt <- dt[,list(y_var=mean(y_var)),
-                   by=c("t_r","c_var","f_var",key(dt))]
-  
-  
-  summary_dt[,t_d:=t_r/time_unit_conversion(1)]
-  
-  if(!is.null(error_bar)){
-    if(!error_bar %in% c("sd", "sem", "boot_ci", "gauss_ci"))
-      stop("error_bar should can be only one of NULL,'sd, 'sem', 'gauss_ci' or 'boot_ci' ")
-    
-    if(error_bar == "sd")
-      errBarFun <- plusMinusSd
-    
-    if(error_bar == "sem")
-      errBarFun <-plusMinusSem
-    
-    if(error_bar == "gauss_ci")
-      errBarFun <-gaussianCi
-    
-    if(error_bar == "boot_ci")
-      errBarFun <- bootCi
-    
-    
-    summary_dt_all_animals <- summary_dt[,c(
-      y_var=mean(y_var),
-      errBarFun(y_var)),
-      by=.(t_r,c_var,f_var)]  
-    
-  }
-  if(is.null(error_bar))
-    summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)] 
-  
-  summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
-  
-  if(c_var_name != "NULL"){
-    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line() 
-  }
-  else{
-    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line() 
-  }
-  
-  
-  if(!is.null(error_bar)){
-    if(c_var_name != "NULL"){
-      p <- p + geom_ribbon(aes(ymin=lower, ymax=higher,colour=NULL),alpha=.3)
-    }
-    else{
-      p <- p + geom_ribbon(aes(ymin=lower, ymax=higher),alpha=.3)
-    }
-  }
-  
-  p <- p + labs(title= sprintf("Average '%s' over time",y_var_name),x="time", y=y_var_name)
-  p <- p + guides(fill=guide_legend(title=c_var_name),
-                  colour=guide_legend(title=c_var_name))
-  
-  if(f_var_name != "NULL"){
-    p <- p + facet_grid(f_var ~ .)
-  }
-  p
-  #return(dt)
+  print(typeof(dt[,c_var]))
+  # # if(is.numeric(dt[,c_var])){
+  # #   dt[,c_var = as.character(c_var)]
+  # #   warning("Condition variable is a number.
+  # #           Converting it to a factor")
+  # # }
+  # # 
+  # # if(is.numeric(dt[,f_var])){
+  # #   dt[,c_var = as.character(f_var)]
+  # #   warning("Faceting variable is a number.
+  # #           Converting it to a factor")
+  # # }
+  # 
+  # if(normalise_var_per_id)
+  #   dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
+  # 
+  # summary_dt <- dt[,list(y_var=mean(y_var)),
+  #                  by=c("t_r","c_var","f_var",key(dt))]
+  # 
+  # 
+  # summary_dt[,t_d:=t_r/time_unit_conversion(1)]
+  # 
+  # # if(!is.null(error_bar)){
+  # #   if(!error_bar %in% c("sd", "sem", "boot_ci", "gauss_ci"))
+  # #     stop("error_bar should can be only one of NULL,'sd, 'sem', 'gauss_ci' or 'boot_ci' ")
+  # #
+  # #   if(error_bar == "sd")
+  # #     errBarFun <- plusMinusSd
+  # #
+  # #   if(error_bar == "sem")
+  # #     errBarFun <-plusMinusSem
+  # #
+  # #   if(error_bar == "gauss_ci")
+  # #     errBarFun <-gaussianCi
+  # #
+  # #   if(error_bar == "boot_ci")
+  # #     errBarFun <- bootCi
+  # #
+  # #
+  # #   summary_dt_all_animals <- summary_dt[,c(
+  # #     y_var=mean(y_var),
+  # #     errBarFun(y_var)),
+  # #     by=.(t_r,c_var,f_var)]
+  # #
+  # # }
+  # if(is.null(error_bar))
+  #   summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)]
+  # 
+  # summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
+  # 
+  # if(c_var_name != "NULL"){
+  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line()
+  # }
+  # else{
+  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line()
+  # }
+  # 
+  # 
+  # if(!is.null(error_bar)){
+  #   if(c_var_name != "NULL"){
+  #     p <- p + geom_ribbon(aes(ymin=lower, ymax=higher,colour=NULL),alpha=.3)
+  #   }
+  #   else{
+  #     p <- p + geom_ribbon(aes(ymin=lower, ymax=higher),alpha=.3)
+  #   }
+  # }
+  # 
+  # p <- p + labs(title= sprintf("Average '%s' over time",y_var_name),x="time", y=y_var_name)
+  # p <- p + guides(fill=guide_legend(title=c_var_name),
+  #                 colour=guide_legend(title=c_var_name))
+  # 
+  # if(f_var_name != "NULL"){
+  #   p <- p + facet_grid(f_var ~ .)
+  # }
+  # p
+  return(dt)
   }
 
 
@@ -297,4 +302,4 @@ myethogramPlot <- function(y,data,
 #   out
 # }
 
-myethogramPlot(activity, dammulti, time_wrap = NULL, summary_time_window = mins(30))
+#etho = myethogramPlot(activity, dammulti, time_wrap = NULL, summary_time_window = mins(30), condition = machine_name)
