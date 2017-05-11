@@ -2,7 +2,7 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 library(grid)
 actoplot = function(#y,
                     data,
-                    num_of_dup = "double", #can be "double", "triple" or "quad" #generalise this
+                    type_of_plot = "double", #can be "double", "triple" or "quad" #generalise this
                     time_to_round = hours(1), #see if can rename this to something used before
                     #mean = FALSE #change to actually use a function
                     operation = mean #can be sum/median
@@ -29,7 +29,7 @@ actoplot = function(#y,
   # }
   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = operation(activity), hour = hour, day = day), by = t_round]
   dt = unique(dt)
-  if (num_of_dup == "double"){
+  if (type_of_plot == "double"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
     dt2 = dt2[,hour := hour + 24]
@@ -38,14 +38,14 @@ actoplot = function(#y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:8 * 6
-    p = ggplot(binddt, aes(x=hour, y=activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) +
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Double actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
       #ggtitle(sprintf("Double actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
-  } else if (num_of_dup == "triple"){
+  } else if (type_of_plot == "triple"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
     dt2 = dt2[,hour := hour + 24]
@@ -58,13 +58,14 @@ actoplot = function(#y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:12 * 6
-    p = ggplot(binddt, aes(x=hour, y=activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) +
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle(sprintf("Triple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
-  } else if (num_of_dup == "quad"){
+      ggtitle(sprintf("Triple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+      #ggtitle(sprintf("Triple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
+  } else if (type_of_plot == "quad"){
     dt2 = copy(dt)
     dt2 = dt2[,day := day-1]
     dt2 = dt2[,hour := hour + 24]
@@ -81,13 +82,14 @@ actoplot = function(#y,
     binddt = binddt[day>-1]
     binddt = binddt[, day_str := sprintf("day\n%03d",day)]
     x_scale = 0:16 * 6
-    p = ggplot(binddt, aes(x=hour, y=activity)) + 
+    p = ggplot(binddt, aes(x=hour, y=activity)) +
       geom_col() +
-      facet_grid(day_str ~ .) + 
+      facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (h)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle(sprintf("Quadruple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
+      ggtitle(sprintf("Quadruple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+      #ggtitle(sprintf("Quadruple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   }
   } else if (length(unique(dt[,experiment_id])) > 1){
     
@@ -108,7 +110,7 @@ actoplot = function(#y,
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-actoplot(dam1, num_of_dup = "double", operation = mean)
+actoplot(dam1, type_of_plot = "double", operation = mean)
 
 # myoverviewPlot <- function(y,data,
 #                          condition=NULL,
