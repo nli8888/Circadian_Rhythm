@@ -9,7 +9,6 @@ actoplot = function(#y,
                     ){
   dt = copy(as.data.table(data))
   #y_var_name <- deparse(substitute(y))
-  if (length(unique(dt[,experiment_id])) == 1){
   t_round = floor(dt[,t]/(time_to_round))
   hour = t_round%%24
   day = (floor(t_round/(24)))
@@ -17,6 +16,7 @@ actoplot = function(#y,
   dt[, hour := hour]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  if (length(unique(dt[,experiment_id])) == 1){
   # if (mean == FALSE){
   #   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = sum(activity), hour = hour, day = day), by = t_round]
   #   dt = unique(dt)
@@ -27,7 +27,14 @@ actoplot = function(#y,
   #   dt = unique(dt)
   #   mode = "(mean)"
   # }
-  dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = operation(activity), hour = hour, day = day), by = t_round]
+  dt = dt[,.(experiment_id = experiment_id, 
+             machine_name = machine_name, 
+             region_id = region_id, 
+             date = date, 
+             activity = operation(activity), 
+             hour = hour, 
+             day = day), 
+          by = t_round]
   dt = unique(dt)
   if (type_of_plot == "double"){
     dt2 = copy(dt)
@@ -62,7 +69,7 @@ actoplot = function(#y,
       geom_col() +
       facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Triple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
       #ggtitle(sprintf("Triple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   } else if (type_of_plot == "quad"){
@@ -87,31 +94,106 @@ actoplot = function(#y,
       facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (h)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Quadruple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
       #ggtitle(sprintf("Quadruple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
   }
   } else if (length(unique(dt[,experiment_id])) > 1){
-    
+    summary_dt = dt[,list(activity=operation(activity), 
+                          hour=hour,
+                          day=day),
+                     by=c("t_round", key(dt))]
+    summary_dt = unique(summary_dt)
+    summary_dt_all_animals = summary_dt[,list(activity=operation(activity)),
+                                        by=c("t_round", 
+                                             "experiment_id",
+                                             "date",
+                                             "machine_name",
+                                             "hour",
+                                             "day")]
+    if (type_of_plot == "double"){
+      summary_dt_all_animals2 = copy(summary_dt_all_animals)
+      summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
+      summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
+      summary_dt_all_animals = summary_dt_all_animals[day<max(day)]
+      binddt = rbind(summary_dt_all_animals, summary_dt_all_animals2)
+      binddt = binddt[day>-1]
+      binddt = binddt[, day_str := sprintf("day\n%03d",day)]
+      x_scale = 0:8 * 6
+      p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (h)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Double actogram plot of population activity over time")
+    } else if (type_of_plot == "triple"){
+      summary_dt_all_animals2 = copy(summary_dt_all_animals)
+      summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
+      summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
+      summary_dt_all_animals3 = copy(summary_dt_all_animals2)
+      summary_dt_all_animals3 = summary_dt_all_animals3[,day := day-1]
+      summary_dt_all_animals3 = summary_dt_all_animals3[,hour := hour + 24]
+      summary_dt_all_animals = summary_dt_all_animals[day<(max(day)-1)]
+      summary_dt_all_animals2 = summary_dt_all_animals2[day<max(day)]
+      binddt = rbind(summary_dt_all_animals, summary_dt_all_animals2, summary_dt_all_animals3)
+      binddt = binddt[day>-1]
+      binddt = binddt[, day_str := sprintf("day\n%03d",day)]
+      x_scale = 0:12 * 6
+      p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (h)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Triple actogram plot of population activity over time of experiment")
+    } else if (type_of_plot == "quad"){
+      summary_dt_all_animals2 = copy(summary_dt_all_animals)
+      summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
+      summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
+      summary_dt_all_animals3 = copy(summary_dt_all_animals2)
+      summary_dt_all_animals3 = summary_dt_all_animals3[,day := day-1]
+      summary_dt_all_animals3 = summary_dt_all_animals3[,hour := hour + 24]
+      summary_dt_all_animals4 = copy(summary_dt_all_animals3)
+      summary_dt_all_animals4 = summary_dt_all_animals4[,day := day-1]
+      summary_dt_all_animals4 = summary_dt_all_animals4[,hour := hour + 24]
+      summary_dt_all_animals = summary_dt_all_animals[day<(max(day)-2)]
+      summary_dt_all_animals2 = summary_dt_all_animals2[day<max(day)-1]
+      summary_dt_all_animals3 = summary_dt_all_animals3[day<max(day)]
+      binddt = rbind(summary_dt_all_animals, 
+                     summary_dt_all_animals2, 
+                     summary_dt_all_animals3, 
+                     summary_dt_all_animals4)
+      binddt = binddt[day>-1]
+      binddt = binddt[, day_str := sprintf("day\n%03d",day)]
+      x_scale = 0:16 * 6
+      p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (h)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Quadruple actogram plot of population activity over time of experiment")
+    }
   }
-  # p = ggplot(binddt,aes(hour,ymax=sum_activity, ymin=min(um_activity))) +
-  #   geom_ribbon() +
-  #   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  #   scale_y_continuous(name="y")
-  # p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
-  #     geom_col() +
-  #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  #     scale_y_continuous(name="activity") +
-  #     theme(panel.spacing = unit(0, "lines"))
+  # # p = ggplot(binddt,aes(hour,ymax=sum_activity, ymin=min(um_activity))) +
+  # #   geom_ribbon() +
+  # #   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
+  # #   scale_y_continuous(name="y")
+  # # p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
+  # #     geom_col() +
+  # #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
+  # #     scale_y_continuous(name="activity") +
+  # #     theme(panel.spacing = unit(0, "lines"))
   p
-  #return(dt)
+  #return(summary_dt_all_animals)
 }
 
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-actoplot(dam1, type_of_plot = "double", operation = mean)
-
+acto = actoplot(dammulti, type_of_plot = "quad", operation = mean)
+acto
 # myoverviewPlot <- function(y,data,
 #                          condition=NULL,
 #                          summary_time_window=mins(30),
@@ -213,11 +295,12 @@ myethogramPlot <- function(y,data,
   # if(normalise_var_per_id)
   #   dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
   # 
-  # summary_dt <- dt[,list(y_var=mean(y_var)),
-  #                  by=c("t_r","c_var","f_var",key(dt))]
+  summary_dt <- dt[,list(y_var=mean(y_var)),
+                   by=c("t_r","c_var","f_var",key(dt))]
+  
   # 
   # 
-  # summary_dt[,t_d:=t_r/time_unit_conversion(1)]
+  summary_dt[,t_d:=t_r/time_unit_conversion(1)]
   # 
   # # if(!is.null(error_bar)){
   # #   if(!error_bar %in% c("sd", "sem", "boot_ci", "gauss_ci"))
@@ -242,17 +325,17 @@ myethogramPlot <- function(y,data,
   # #     by=.(t_r,c_var,f_var)]
   # #
   # # }
-  # if(is.null(error_bar))
-  #   summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)]
+  if(is.null(error_bar))
+    summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)]
   # 
-  # summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
+  summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
   # 
-  # if(c_var_name != "NULL"){
-  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line()
-  # }
-  # else{
-  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line()
-  # }
+  if(c_var_name != "NULL"){
+    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line()
+  }
+  else{
+    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line()
+  }
   # 
   # 
   # if(!is.null(error_bar)){
@@ -271,8 +354,8 @@ myethogramPlot <- function(y,data,
   # if(f_var_name != "NULL"){
   #   p <- p + facet_grid(f_var ~ .)
   # }
-  # p
-  return(dt)
+  p
+  #return(summary_dt)
   }
 
 
@@ -304,4 +387,4 @@ myethogramPlot <- function(y,data,
 #   out
 # }
 
-#etho = myethogramPlot(activity, dammulti, time_wrap = NULL, summary_time_window = mins(30), condition = machine_name)
+#myethogramPlot(activity, dammulti, time_wrap = NULL, summary_time_window = mins(30), condition = machine_name)
