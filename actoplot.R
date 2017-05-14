@@ -2,7 +2,7 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 library(grid)
 actoplot = function(#y,
                     data,
-                    type_of_plot = "double", #can be "double", "triple" or "quad" #generalise this
+                    type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                     num_of_dup = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
                     operation = mean, #can be sum/median
@@ -56,13 +56,47 @@ actoplot = function(#y,
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
   x_scale = 0:(4*num_of_dup) * 6
-  p = ggplot(dt, aes(x=hour, y=activity)) +
-    geom_col() +
-    facet_grid(day_str ~ .) + 
-    scale_x_continuous(name="time (hours)",breaks = x_scale) +
-    scale_y_continuous(name="activity") +
-    theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-    ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  if (type_of_plot == "bar"){
+    p = ggplot(dt, aes(x=hour, y=activity)) +
+      geom_col() +
+      facet_grid(day_str ~ .) + 
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  } else if (type_of_plot == "line"){
+    p = ggplot(dt, aes(hour, activity)) +
+      geom_line() +
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  } else if (type_of_plot == "ribbon"){
+    p = ggplot(dt, aes(hour, ymin=min(activity), ymax=activity)) +
+      geom_ribbon() +
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  } else if (type_of_plot == "tile"){
+    dt[,row_name:=sprintf("%s | %02d",experiment_id,region_id)]
+    # p = ggplot(dt, aes(x=hour, y=row_name, fill=activity)) +
+    #   geom_tile(alpha=1) +
+    #   facet_grid(day_str ~ .) +
+    #   scale_x_continuous(name="time (hours)",breaks = x_scale) +
+    #   #scale_y_continuous(name="activity") +
+    #   theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) #+
+    #   #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+    p = ggplot(dt,aes(x=hour,y=row_name,fill=activity)) + 
+      geom_tile(alpha=1) +
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
+      guides(fill=guide_legend(title="activity"))
+  }
   # if (type_of_plot == "double"){
   #   dt2 = copy(dt)
   #   dt2 = dt2[, day := day-1]
@@ -157,13 +191,47 @@ actoplot = function(#y,
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
       x_scale = 0:(4*num_of_dup) * 6
-      p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
-        geom_line() +
-        facet_grid(day_str ~ .) +
-        scale_x_continuous(name="time (hours)",breaks = x_scale) +
-        scale_y_continuous(name="activity") +
-        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-        ggtitle("Overview Actogram plot of population activity over time")
+      if (type_of_plot == "bar"){
+        p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+          geom_col() +
+          facet_grid(day_str ~ .) +
+          scale_x_continuous(name="time (hours)",breaks = x_scale) +
+          scale_y_continuous(name="activity") +
+          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          ggtitle("Overview Actogram plot of population activity over time")
+      } else if (type_of_plot == "line"){
+        p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+          geom_line() +
+          facet_grid(day_str ~ .) +
+          scale_x_continuous(name="time (hours)",breaks = x_scale) +
+          scale_y_continuous(name="activity") +
+          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          ggtitle("Overview Actogram plot of population activity over time")
+      } else if (type_of_plot == "ribbon"){
+        p = ggplot(summary_dt_all_animals, aes(hour, ymin=min(activity), ymax=activity)) +
+          geom_ribbon() +
+          facet_grid(day_str ~ .) +
+          scale_x_continuous(name="time (hours)",breaks = x_scale) +
+          scale_y_continuous(name="activity") +
+          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          ggtitle("Overview Actogram plot of population activity over time")
+      } else if (type_of_plot == "tile"){
+        summary_dt_all_animals[,row_name:=""]
+        # p = ggplot(dt, aes(x=hour, y=row_name, fill=activity)) +
+        #   geom_tile(alpha=1) +
+        #   facet_grid(day_str ~ .) +
+        #   scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        #   #scale_y_continuous(name="activity") +
+        #   theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) #+
+        #   #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+        p = ggplot(summary_dt_all_animals, aes(x=hour, y=row_name, fill=activity)) +
+          geom_tile(alpha=1) +
+          facet_grid(day_str ~ .) +
+          scale_x_continuous(name="time (hours)",breaks = x_scale) +
+          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
+          guides(fill=guide_legend(title="activity"))
+      }
     } else if (is.null(pop_overview)){
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
@@ -258,61 +326,62 @@ actoplot = function(#y,
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-acto = actoplot(dammulti, num_of_dup = 4, type_of_plot = 0, operation = mean, pop_overview = NULL)
+acto = actoplot(dammulti, num_of_dup = 4, type_of_plot = "tile", operation = mean, pop_overview = mean)
 acto
-# myoverviewPlot <- function(y,data,
-#                          condition=NULL,
-#                          summary_time_window=mins(30),
-#                          normalise_var_per_id=FALSE,
-#                          time_wrap=NULL,
-#                          time_unit_conversion=days){
-#   
-#   dt = copy(as.data.table(data))  
-#   #print(y)
-#   y_var_name <- deparse(substitute(y))
-#   print(y_var_name)
-#   setnames(dt,y_var_name,"y_var")
-#   print(dt)
-#   dt[,t_r := floor(t/summary_time_window) * summary_time_window]
-#   print(dt)
-#   if(!is.null(time_wrap))
-#      dt[,t_r := t_r %% time_wrap]
-#   dt[,y_var:=as.numeric(y_var)]
-#   print(dt)
-#   c_var_name <- deparse(substitute(condition))
-#   print(c_var_name)
-#   if(c_var_name == "NULL")
-#      dt[,c_var:=TRUE]
-#    else
-#      setnames(dt, c_var_name,"c_var")
-#    
-#   if(normalise_var_per_id)
-#     dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
-#   
-#   summary_dt <- dt[,list(y_var=mean(y_var)),
-#                    by=c("t_r","c_var",key(dt))]
-#   print(summary_dt)
-#   summary_dt[,t_d:=t_r/time_unit_conversion(1)]
-#    
-#   if(c_var_name != "NULL"){
-#     summary_dt[,row_name:=sprintf("%s | %s | %02d",c_var,experiment_id,region_id)]
-#     y_lab <- sprintf("Individual (%s | experiment_id | region_id)", c_var_name)
-#   }
-#   else{
-#     summary_dt[,row_name:=sprintf("%s | %02d",experiment_id,region_id)]
-#     y_lab <- "Individual (experiment_id | region_id)"
-#   }
-#   print(summary_dt)
-#   p <- ggplot(summary_dt,aes(x=t_d,y=row_name,fill=y_var)) + geom_tile(alpha=1) +
-#     labs(title= sprintf("Overview of individual '%s' pattern over time",y_var_name),x="time", y=y_lab)+
-#     guides(fill=guide_legend(title=y_var_name))
-#   p
-#   #return(summary_dt)
-# }
+
+myoverviewPlot <- function(y,data,
+                         condition=NULL,
+                         summary_time_window=mins(30),
+                         normalise_var_per_id=FALSE,
+                         time_wrap=NULL,
+                         time_unit_conversion=days){
+
+  dt = copy(as.data.table(data))
+  #print(y)
+  y_var_name <- deparse(substitute(y))
+  print(y_var_name)
+  setnames(dt,y_var_name,"y_var")
+  print(dt)
+  dt[,t_r := floor(t/summary_time_window) * summary_time_window]
+  print(dt)
+  if(!is.null(time_wrap))
+     dt[,t_r := t_r %% time_wrap]
+  dt[,y_var:=as.numeric(y_var)]
+  print(dt)
+  c_var_name <- deparse(substitute(condition))
+  print(c_var_name)
+  if(c_var_name == "NULL")
+     dt[,c_var:=TRUE]
+   else
+     setnames(dt, c_var_name,"c_var")
+
+  if(normalise_var_per_id)
+    dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
+
+  summary_dt <- dt[,list(y_var=mean(y_var)),
+                   by=c("t_r","c_var",key(dt))]
+  print(summary_dt)
+  summary_dt[,t_d:=t_r/time_unit_conversion(1)]
+
+  if(c_var_name != "NULL"){
+    summary_dt[,row_name:=sprintf("%s | %s | %02d",c_var,experiment_id,region_id)]
+    y_lab <- sprintf("Individual (%s | experiment_id | region_id)", c_var_name)
+  }
+  else{
+    summary_dt[,row_name:=sprintf("%s | %02d",experiment_id,region_id)]
+    y_lab <- "Individual (experiment_id | region_id)"
+  }
+  print(summary_dt)
+  p <- ggplot(summary_dt,aes(x=t_d,y=row_name,fill=y_var)) + geom_tile(alpha=1) +
+    labs(title= sprintf("Overview of individual '%s' pattern over time",y_var_name),x="time", y=y_lab)+
+    guides(fill=guide_legend(title=y_var_name))
+  #p
+  return(summary_dt)
+}
 
 #data(sleep_sexual_dimorphism)
 #DT = sleep_sexual_dimorphism
-#myoverviewPlot(asleep, DT)
+#over = myoverviewPlot(activity, dam1)
 
 myethogramPlot <- function(y,data,
                          condition=NULL,
