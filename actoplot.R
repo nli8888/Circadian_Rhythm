@@ -3,13 +3,17 @@ library(grid)
 actoplot = function(#y,
                     data,
                     type_of_plot = "double", #can be "double", "triple" or "quad" #generalise this
-                    num_of_dup = 2, #can be "double", "triple" or "quad" #generalise this
-                    time_to_round = hours(1), #see if can rename this to something used before
+                    num_of_dup = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
-                    operation = mean #can be sum/median
+                    operation = mean, #can be sum/median
+                    pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
+                    time_to_round = hours(1) #see if can rename this to something used before
                     ){
-  dt = copy(as.data.table(data))
   num_of_dup = as.numeric(num_of_dup)
+  if (num_of_dup%%1!=0){
+    stop("num_of_dup must be an integer")
+  }
+  dt = copy(as.data.table(data))
   #y_var_name <- deparse(substitute(y))
   t_round = floor(dt[,t]/(time_to_round))
   hour = t_round%%24
@@ -145,16 +149,33 @@ actoplot = function(#y,
         summary_dt_all_animals = unique(summary_dt_all_animals)
       }
     }
-    summary_dt_all_animals = summary_dt_all_animals[day>-1]
-    summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
-    x_scale = 0:(4*num_of_dup) * 6
-    p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=machine_name)) +
-      geom_line() +
-      facet_grid(day_str ~ .) +
-      scale_x_continuous(name="time (h)",breaks = x_scale) +
-      scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle("Actogram plot of population activity over time")
+    if (!is.null(pop_overview)){
+      summary_dt_all_animals = summary_dt_all_animals[,list(activity=pop_overview(activity)),
+                                                      by=c("t_round",
+                                                           "hour",
+                                                           "day")]
+      summary_dt_all_animals = summary_dt_all_animals[day>-1]
+      summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+      x_scale = 0:(4*num_of_dup) * 6
+      p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Overview Actogram plot of population activity over time")
+    } else if (is.null(pop_overview)){
+      summary_dt_all_animals = summary_dt_all_animals[day>-1]
+      summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+      x_scale = 0:(4*num_of_dup) * 6
+      p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=machine_name)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Actogram plot of population activity over time")
+    }
     # if (type_of_plot == "double"){
     #   summary_dt_all_animals2 = copy(summary_dt_all_animals)
     #   summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
@@ -237,7 +258,7 @@ actoplot = function(#y,
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 #dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-acto = actoplot(dammulti, num_of_dup = 3, type_of_plot = 0, operation = mean)
+acto = actoplot(dammulti, num_of_dup = 4, type_of_plot = 0, operation = mean, pop_overview = NULL)
 acto
 # myoverviewPlot <- function(y,data,
 #                          condition=NULL,
