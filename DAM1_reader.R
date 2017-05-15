@@ -4,7 +4,7 @@ library(rethomics)
 DAM1_single_reader = function(file, 
                    #file_format = "DAM1",
                    time_format = "min", 
-                   time_to_round_to = 60*60, #aka hour
+                   time_to_round_to = 60*60, #aka hour in seconds
                    #num_of_dup = "double", #can be "double", "triple" or "quadruple"
                    ref_hour = NULL){ #time_zone/ref_hour not supported yet, not for future work; can force check 4th line to make sure its 0000; if not stop
   #if (file_format == "DAM1"){

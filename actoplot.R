@@ -62,7 +62,7 @@ actoplot = function(#y,
       facet_grid(day_str ~ .) + 
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "line"){
     p = ggplot(dt, aes(hour, activity)) +
@@ -70,7 +70,7 @@ actoplot = function(#y,
       facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "ribbon"){
     p = ggplot(dt, aes(hour, ymin=min(activity), ymax=activity)) +
@@ -78,7 +78,7 @@ actoplot = function(#y,
       facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "tile"){
     dt[,row_name:=sprintf("%s | %02d",experiment_id,region_id)]
@@ -93,7 +93,7 @@ actoplot = function(#y,
       geom_tile(alpha=1) +
       facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
-      theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
       labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
       guides(fill=guide_legend(title="activity"))
   }
@@ -197,7 +197,7 @@ actoplot = function(#y,
           facet_grid(day_str ~ .) +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
           scale_y_continuous(name="activity") +
-          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
           ggtitle("Overview Actogram plot of population activity over time")
       } else if (type_of_plot == "line"){
         p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
@@ -205,7 +205,7 @@ actoplot = function(#y,
           facet_grid(day_str ~ .) +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
           scale_y_continuous(name="activity") +
-          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
           ggtitle("Overview Actogram plot of population activity over time")
       } else if (type_of_plot == "ribbon"){
         p = ggplot(summary_dt_all_animals, aes(hour, ymin=min(activity), ymax=activity)) +
@@ -213,7 +213,7 @@ actoplot = function(#y,
           facet_grid(day_str ~ .) +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
           scale_y_continuous(name="activity") +
-          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+          theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
           ggtitle("Overview Actogram plot of population activity over time")
       } else if (type_of_plot == "tile"){
         summary_dt_all_animals[,row_name:=""]
@@ -226,11 +226,11 @@ actoplot = function(#y,
         #   #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
         p = ggplot(summary_dt_all_animals, aes(x=hour, y=row_name, fill=activity)) +
           geom_tile(alpha=1) +
-          facet_grid(day_str ~ .) +
+          facet_grid(day_str ~ ., switch = "y") +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
-          theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-          labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
-          guides(fill=guide_legend(title="activity"))
+          theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5), axis.ticks.y = element_blank()) +
+          labs(title="Overview Actogram plot of population activity over time",x="time", y="") #+
+          #guides(fill=guide_legend(title="activity"))
       }
     } else if (is.null(pop_overview)){
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
@@ -241,7 +241,7 @@ actoplot = function(#y,
         facet_grid(day_str ~ .) +
         scale_x_continuous(name="time (hours)",breaks = x_scale) +
         scale_y_continuous(name="activity") +
-        theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
         ggtitle("Actogram plot of population activity over time")
     }
     # if (type_of_plot == "double"){
@@ -324,9 +324,11 @@ actoplot = function(#y,
 }
 
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
-PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-#dammulti = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
-acto = actoplot(dammulti, num_of_dup = 4, type_of_plot = "tile", operation = mean, pop_overview = mean)
+PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
+#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+#dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
+acto = actoplot(dammulti1, num_of_dup = 6, type_of_plot = "ribbon", operation = mean, pop_overview = mean)
 acto
 
 myoverviewPlot <- function(y,data,
