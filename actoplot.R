@@ -3,15 +3,15 @@ library(grid)
 actoplot = function(#y,
                     data,
                     type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
-                    num_of_dup = 2, #can be any integer
+                    num_of_plot = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
                     operation = mean, #can be sum/median
                     pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
                     time_to_round = hours(1) #see if can rename this to something used before
                     ){
-  num_of_dup = as.numeric(num_of_dup)
-  if (num_of_dup%%1!=0){
-    stop("num_of_dup must be an integer")
+  num_of_plot = as.numeric(num_of_plot)
+  if (num_of_plot%%1!=0){
+    stop("num_of_plot must be an integer")
   }
   dt = copy(as.data.table(data))
   #y_var_name <- deparse(substitute(y))
@@ -42,8 +42,8 @@ actoplot = function(#y,
              day = day), 
           by = t_round]
   dt = unique(dt)
-  if (num_of_dup>1){
-    for (i in 2:num_of_dup){
+  if (num_of_plot>1){
+    for (i in 2:num_of_plot){
       #print(i)
       dt_temp = copy(dt)
       dt_temp = dt_temp[, day := day-1]
@@ -55,7 +55,7 @@ actoplot = function(#y,
   }
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
-  x_scale = 0:(4*num_of_dup) * 6
+  x_scale = 0:(4*num_of_plot) * 6
   if (type_of_plot == "bar"){
     p = ggplot(dt, aes(x=hour, y=activity)) +
       geom_col() +
@@ -166,14 +166,14 @@ actoplot = function(#y,
                      by=c("t_round", key(dt))]
     summary_dt = unique(summary_dt)
     summary_dt_all_animals = summary_dt[,list(activity=operation(activity)),
-                                        by=c("t_round", 
+                                        by=c("t_round", #see if can utilize key(dt)
                                              "experiment_id",
                                              "date",
                                              "machine_name",
                                              "hour",
                                              "day")]
-    if (num_of_dup>1){
-      for (i in 2:num_of_dup){
+    if (num_of_plot>1){
+      for (i in 2:num_of_plot){
         #print(i)
         dt_temp = copy(summary_dt_all_animals)
         dt_temp = dt_temp[, day := day-1]
@@ -190,7 +190,7 @@ actoplot = function(#y,
                                                            "day")]
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
-      x_scale = 0:(4*num_of_dup) * 6
+      x_scale = 0:(4*num_of_plot) * 6
       if (type_of_plot == "bar"){
         p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
           geom_col() +
@@ -235,7 +235,7 @@ actoplot = function(#y,
     } else if (is.null(pop_overview)){
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
-      x_scale = 0:(4*num_of_dup) * 6
+      x_scale = 0:(4*num_of_plot) * 6
       p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=machine_name)) +
         geom_line() +
         facet_grid(day_str ~ .) +
@@ -328,7 +328,7 @@ PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 #dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
-acto = actoplot(dammulti1, num_of_dup = 6, type_of_plot = "ribbon", operation = mean, pop_overview = mean)
+acto = actoplot(dammulti1, num_of_plot = 2, type_of_plot = "tile", operation = mean, pop_overview = mean)
 acto
 
 myoverviewPlot <- function(y,data,
