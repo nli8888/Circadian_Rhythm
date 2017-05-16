@@ -14,6 +14,8 @@ DAM1_single_reader = function(file,
   channel = substr(strsplit(header, " ")[[1]][1], nchar(strsplit(header, " ")[[1]][1])-1, nchar(strsplit(header, " ")[[1]][1]))
   channel = as.numeric(channel)
   print(channel)
+  condition = substr(strsplit(header, " ")[[1]][1], 7, 11)
+  print(condition)
   raw_date = substr(strsplit(header, " ")[[1]][1], 1, 6)
   print(raw_date)
   # day = substr(raw_date, 1, 2)
@@ -49,6 +51,7 @@ DAM1_single_reader = function(file,
   hour = t_round%%24
   day = (floor(t_round/(24)))
   dt = data.table(experiment_id=expID,
+                  condition=condition,
                   machine_name=monitor,
                   region_id=channel, 
                   date=raw_date, 
@@ -82,7 +85,7 @@ DAM1_single_reader = function(file,
   # }
 }
 
-DAM1_multi_reader = function(path,
+DAM1_multi_reader = function(PATH,
                              ...){ #use rethomics:::checkDirExists to also check if dir exist 
   filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
   x = lapply(filelist, DAM1_single_reader, ...)
@@ -92,7 +95,7 @@ DAM1_multi_reader = function(path,
 }
 
 ###MULTIFILE###
-PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+#PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 #DT = DAM1_multi_reader(PATH, time_format = "min", time_to_round_to = 60*60)
 
 ## filelist = list.files(PATH, pattern=".*\\.txt", full.names=TRUE)
@@ -101,7 +104,7 @@ PATH="/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/
 ## DT = rbindlist(x)
 ## setkeyv(DT, key(x[[1]]))
 ###SINGLEFILE###
-# DT = DAM1_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
+# DT = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 # actod = copy(DT)
 # actod = actod[,.(sum_activity = sum(activity), hour = hour, day = day), by = t_round]
 # actod = unique(actod)
