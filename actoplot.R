@@ -1,5 +1,5 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-library(grid)
+#library(grid)
 actoplot = function(#y,
                     file1,
                     type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
@@ -345,10 +345,16 @@ actoplot = function(#y,
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
+PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
+PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
+PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Ces"
 #dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
+#dammulti3 = DAM1_multi_reader(PATH3, time_format = "min")
+#dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
+#dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
-acto = actoplot(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = NULL, condition=1)
+acto = actoplot(dammulti5, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 acto
 
 myoverviewPlot <- function(y,data,
