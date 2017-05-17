@@ -354,7 +354,7 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
-acto = actoplot(dammulti5, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto = actoplot(dam1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 acto
 
 myoverviewPlot <- function(y,data,

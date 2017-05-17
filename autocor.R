@@ -18,4 +18,4 @@ dt = dt[,.(experiment_id = experiment_id,
            day = day), 
         by = t_round]
 dt = unique(dt)
-acf(dt[,activity])
+x = acf(dt[,activity], ci=0.95, lag.max= (length(dt[,activity])/3))
