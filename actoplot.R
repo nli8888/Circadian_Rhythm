@@ -341,7 +341,7 @@ actoplot = function(#y,
   #return(summary_dt_all_animals)
   #return(dt)
 }
-
+##DAM1##
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
@@ -354,9 +354,40 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
-acto = actoplot(dam1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
-acto
 
+##DAM2##
+#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
+#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"
+file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+dam2 = rethomics:::loadSingleDAM2File(file)
+dam2[,experiment_id := "dam2_file"]
+dam2[, t := as.character(t)]
+x = tstrsplit(dam2[,t], " ")
+dam2[, date := x[1]]
+dam2[, t := x[2]]
+
+#acto = actoplot(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+#acto
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############TESTING BELOW###################
 myoverviewPlot <- function(y,data,
                          condition=NULL,
                          summary_time_window=mins(30),
