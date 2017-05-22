@@ -1,5 +1,6 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-#library(grid)
+library(chron)
+library(lubridate)
 actoplot = function(#y,
                     file1,
                     type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
@@ -361,11 +362,16 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 dam2 = rethomics:::loadSingleDAM2File(file)
 dam2[,experiment_id := "dam2_file"]
-dam2[, t := as.character(t)]
-x = tstrsplit(dam2[,t], " ")
+dam2[, date := as.character(t)]
+x = tstrsplit(dam2[,date], " ")
 dam2[, date := x[1]]
 dam2[, t := x[2]]
-
+x = lapply(dam2[,t], strptime, format = "%H:%M:%S")
+seconds = sapply(x, second)
+minutes = sapply(x, minute)
+hours = sapply(x, hour)
+seconds = seconds + (minutes*60) + (hours*60*60)
+dam2[, t := seconds]
 #acto = actoplot(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 #acto
 
