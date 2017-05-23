@@ -1,8 +1,6 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-library(chron)
-library(lubridate)
-actoplot = function(file1,
-                    file_format = NULL, #dam1 or dam2
+
+actoplot_dam1 = function(file1,
                     type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                     num_of_plot = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
@@ -15,11 +13,7 @@ actoplot = function(file1,
   if (num_of_plot%%1!=0){
     stop("num_of_plot must be an integer")
   }
-  if (is.null(file_format)){
-    stop('file_format must be specified as either "dam1" or "dam2"')
-  }
   dt = copy(as.data.table(file1))
-  #y_var_name <- deparse(substitute(y))
   t_round = floor(dt[,t]/(time_to_round))
   hour = t_round%%24
   day = (floor(t_round/(24)))
@@ -28,16 +22,6 @@ actoplot = function(file1,
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   if (length(unique(dt[,experiment_id])) == 1){
-  # if (mean == FALSE){
-  #   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = sum(activity), hour = hour, day = day), by = t_round]
-  #   dt = unique(dt)
-  #   mode = "(sum)"
-  # } else if (mean == TRUE){
-  #   #dt = dt[, .(mean_activity = mean(activity), hour=hour), by = t_round]
-  #   dt = dt[,.(experiment_id = experiment_id, machine_name = machine_name, region_id = region_id, date = date, activity = mean(activity), hour = hour, day = day), by = t_round]
-  #   dt = unique(dt)
-  #   mode = "(mean)"
-  # }
   dt = dt[,.(experiment_id = experiment_id,
              condition = condition,
              machine_name = machine_name, 
@@ -50,7 +34,6 @@ actoplot = function(file1,
   dt = unique(dt)
   if (num_of_plot>1){
     for (i in 2:num_of_plot){
-      #print(i)
       dt_temp = copy(dt)
       dt_temp = dt_temp[, day := day-1]
       dt_temp = dt_temp[, hour := hour + 24]
@@ -88,13 +71,6 @@ actoplot = function(file1,
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "tile"){
     dt[,row_name:=sprintf("%s | %02d",experiment_id,region_id)]
-    # p = ggplot(dt, aes(x=hour, y=row_name, fill=activity)) +
-    #   geom_tile(alpha=1) +
-    #   facet_grid(day_str ~ .) +
-    #   scale_x_continuous(name="time (hours)",breaks = x_scale) +
-    #   #scale_y_continuous(name="activity") +
-    #   theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) #+
-    #   #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
     p = ggplot(dt,aes(x=hour,y=row_name,fill=activity)) + 
       geom_tile(alpha=1) +
       facet_grid(day_str ~ .) +
@@ -103,68 +79,6 @@ actoplot = function(file1,
       labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
       guides(fill=guide_legend(title="activity"))
   }
-  # if (type_of_plot == "double"){
-  #   dt2 = copy(dt)
-  #   dt2 = dt2[, day := day-1]
-  #   dt2 = dt2[, hour := hour + 24]
-  #   dt = dt[day<max(day)]
-  #   binddt = rbind(dt, dt2)
-  #   binddt = binddt[day>-1]
-  #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-  #   x_scale = 0:8 * 6
-  #   p = ggplot(binddt, aes(x=hour, y=activity)) +
-  #     geom_col() +
-  #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  #     scale_y_continuous(name="activity") +
-  #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-  #     ggtitle(sprintf("Double actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
-  #     #ggtitle(sprintf("Double actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
-  # } else if (type_of_plot == "triple"){
-  #   dt2 = copy(dt)
-  #   dt2 = dt2[,day := day-1]
-  #   dt2 = dt2[,hour := hour + 24]
-  #   dt3 = copy(dt2)
-  #   dt3 = dt3[,day := day-1]
-  #   dt3 = dt3[,hour := hour + 24]
-  #   dt = dt[day<(max(day)-1)]
-  #   dt2 = dt2[day<max(day)]
-  #   binddt = rbind(dt, dt2, dt3)
-  #   binddt = binddt[day>-1]
-  #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-  #   x_scale = 0:12 * 6
-  #   p = ggplot(binddt, aes(x=hour, y=activity)) +
-  #     geom_col() +
-  #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  #     scale_y_continuous(name="activity") +
-  #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-  #     ggtitle(sprintf("Triple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
-  #     #ggtitle(sprintf("Triple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
-  # } else if (type_of_plot == "quad"){
-  #   dt2 = copy(dt)
-  #   dt2 = dt2[,day := day-1]
-  #   dt2 = dt2[,hour := hour + 24]
-  #   dt3 = copy(dt2)
-  #   dt3 = dt3[,day := day-1]
-  #   dt3 = dt3[,hour := hour + 24]
-  #   dt4 = copy(dt3)
-  #   dt4 = dt4[,day := day-1]
-  #   dt4 = dt4[,hour := hour + 24]
-  #   dt = dt[day<(max(day)-2)]
-  #   dt2 = dt2[day<max(day)-1]
-  #   dt3 = dt3[day<max(day)]
-  #   binddt = rbind(dt, dt2, dt3, dt4)
-  #   binddt = binddt[day>-1]
-  #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-  #   x_scale = 0:16 * 6
-  #   p = ggplot(binddt, aes(x=hour, y=activity)) +
-  #     geom_col() +
-  #     facet_grid(day_str ~ .) +
-  #     scale_x_continuous(name="time (h)",breaks = x_scale) +
-  #     scale_y_continuous(name="activity") +
-  #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-  #     ggtitle(sprintf("Quadruple actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
-  #     #ggtitle(sprintf("Quadruple actogram plot of individual activity %s over time of experiment %s", mode, unique(dt[,experiment_id])))
-  # }
   } else if (length(unique(dt[,experiment_id])) > 1){
     summary_dt = dt[,list(activity=operation(activity), 
                           hour=hour,
@@ -180,7 +94,6 @@ actoplot = function(file1,
                                              "day")]
     if (num_of_plot>1){
       for (i in 2:num_of_plot){
-        #print(i)
         dt_temp = copy(summary_dt_all_animals)
         dt_temp = dt_temp[, day := day-1]
         dt_temp = dt_temp[, hour := hour + 24]
@@ -223,13 +136,6 @@ actoplot = function(file1,
           ggtitle("Overview Actogram plot of population activity over time")
       } else if (type_of_plot == "tile"){
         summary_dt_all_animals[,row_name:=""]
-        # p = ggplot(dt, aes(x=hour, y=row_name, fill=activity)) +
-        #   geom_tile(alpha=1) +
-        #   facet_grid(day_str ~ .) +
-        #   scale_x_continuous(name="time (hours)",breaks = x_scale) +
-        #   #scale_y_continuous(name="activity") +
-        #   theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) #+
-        #   #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
         p = ggplot(summary_dt_all_animals, aes(x=hour, y=row_name, fill=activity)) +
           geom_tile(alpha=1) +
           facet_grid(day_str ~ ., switch = "y") +
@@ -267,80 +173,7 @@ actoplot = function(file1,
       #     ggtitle("Actogram plot of population activity over time")
       # }
     }
-    # if (type_of_plot == "double"){
-    #   summary_dt_all_animals2 = copy(summary_dt_all_animals)
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
-    #   summary_dt_all_animals = summary_dt_all_animals[day<max(day)]
-    #   binddt = rbind(summary_dt_all_animals, summary_dt_all_animals2)
-    #   binddt = binddt[day>-1]
-    #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-    #   x_scale = 0:8 * 6
-    #   p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
-    #     geom_line() +
-    #     facet_grid(day_str ~ .) +
-    #     scale_x_continuous(name="time (h)",breaks = x_scale) +
-    #     scale_y_continuous(name="activity") +
-    #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-    #     ggtitle("Double actogram plot of population activity over time")
-    # } else if (type_of_plot == "triple"){
-    #   summary_dt_all_animals2 = copy(summary_dt_all_animals)
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
-    #   summary_dt_all_animals3 = copy(summary_dt_all_animals2)
-    #   summary_dt_all_animals3 = summary_dt_all_animals3[,day := day-1]
-    #   summary_dt_all_animals3 = summary_dt_all_animals3[,hour := hour + 24]
-    #   summary_dt_all_animals = summary_dt_all_animals[day<(max(day)-1)]
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[day<max(day)]
-    #   binddt = rbind(summary_dt_all_animals, summary_dt_all_animals2, summary_dt_all_animals3)
-    #   binddt = binddt[day>-1]
-    #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-    #   x_scale = 0:12 * 6
-    #   p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
-    #     geom_line() +
-    #     facet_grid(day_str ~ .) +
-    #     scale_x_continuous(name="time (h)",breaks = x_scale) +
-    #     scale_y_continuous(name="activity") +
-    #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-    #     ggtitle("Triple actogram plot of population activity over time of experiment")
-    # } else if (type_of_plot == "quad"){
-    #   summary_dt_all_animals2 = copy(summary_dt_all_animals)
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,day := day-1]
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[,hour := hour + 24]
-    #   summary_dt_all_animals3 = copy(summary_dt_all_animals2)
-    #   summary_dt_all_animals3 = summary_dt_all_animals3[,day := day-1]
-    #   summary_dt_all_animals3 = summary_dt_all_animals3[,hour := hour + 24]
-    #   summary_dt_all_animals4 = copy(summary_dt_all_animals3)
-    #   summary_dt_all_animals4 = summary_dt_all_animals4[,day := day-1]
-    #   summary_dt_all_animals4 = summary_dt_all_animals4[,hour := hour + 24]
-    #   summary_dt_all_animals = summary_dt_all_animals[day<(max(day)-2)]
-    #   summary_dt_all_animals2 = summary_dt_all_animals2[day<max(day)-1]
-    #   summary_dt_all_animals3 = summary_dt_all_animals3[day<max(day)]
-    #   binddt = rbind(summary_dt_all_animals, 
-    #                  summary_dt_all_animals2, 
-    #                  summary_dt_all_animals3, 
-    #                  summary_dt_all_animals4)
-    #   binddt = binddt[day>-1]
-    #   binddt = binddt[, day_str := sprintf("day\n%03d",day)]
-    #   x_scale = 0:16 * 6
-    #   p = ggplot(binddt, aes(hour, activity, colour=machine_name)) +
-    #     geom_line() +
-    #     facet_grid(day_str ~ .) +
-    #     scale_x_continuous(name="time (h)",breaks = x_scale) +
-    #     scale_y_continuous(name="activity") +
-    #     theme(panel.spacing = unit(0.1, "lines"), plot.title = element_text(hjust = 0.5)) +
-    #     ggtitle("Quadruple actogram plot of population activity over time of experiment")
-    # }
   }
-  # # p = ggplot(binddt,aes(hour,ymax=sum_activity, ymin=min(um_activity))) +
-  # #   geom_ribbon() +
-  # #   facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  # #   scale_y_continuous(name="y")
-  # # p = ggplot(binddt, aes(x=hour, y=sum_activity)) + 
-  # #     geom_col() +
-  # #     facet_grid(day_str ~ .) + scale_x_continuous(name="time (h)",breaks = x_scale)+
-  # #     scale_y_continuous(name="activity") +
-  # #     theme(panel.spacing = unit(0, "lines"))
   p
   #return(summary_dt_all_animals)
   #return(dt)
@@ -358,29 +191,50 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
-
-##DAM2##
-#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
-#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"
-
-machine_name = "M012"
-file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
-dam2 = rethomics:::loadSingleDAM2File(file)
-dam2[,machine_name := machine_name]
-dam2[, date := as.character(t)]
-x = tstrsplit(dam2[,date], " ")
-dam2[, date := x[1]]
-dam2[,experiment_id := paste(x[1], machine_name, sep = "")]
-dam2[, t := x[2]]
-x = lapply(dam2[,t], strptime, format = "%H:%M:%S")
-seconds = sapply(x, second)
-minutes = sapply(x, minute)
-hours = sapply(x, hour)
-seconds = seconds + (minutes*60) + (hours*60*60)
-dam2[, t := seconds]
-#acto = actoplot(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+#acto = actoplot_dam1(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 #acto
 
+##DAM2##
+file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
+#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+#dam2 = rethomics:::loadSingleDAM2File(file1)
+library(chron)
+library(lubridate)
+actoplot_dam2 = function(file1,
+                         machine_name = NULL,
+                         type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
+                         num_of_plot = 2, #can be any integer
+                         #mean = FALSE #change to actually use a function
+                         operation = mean, #can be sum/median
+                         condition = NULL,
+                         pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
+                         time_to_round = hours(1) #see if can rename this to something used before
+){
+  num_of_plot = as.numeric(num_of_plot)
+  if (num_of_plot%%1!=0){
+    stop("num_of_plot must be an integer")
+  }
+  if (is.null(machine_name)){
+    stop('"machine_name" must be specified')
+  }
+  dt = copy(as.data.table(file1))
+  dt[,machine_name := machine_name]
+  dt[, date := as.character(t)]
+  x = tstrsplit(dt[,date], " ")
+  dt[, date := x[1]]
+  #dt[,experiment_id := paste(x[1], machine_name, sep = "")]
+  dt[, t := x[2]]
+  x = lapply(dt[,t], strptime, format = "%H:%M:%S")
+  seconds = sapply(x, second)
+  minutes = sapply(x, minute)
+  hours = sapply(x, hour)
+  seconds = seconds + (minutes*60) + (hours*60*60)
+  dt[, t := seconds]
+  return(dt)
+}
+
+acto_dam2 = actoplot_dam2(dam2, machine_name = "M012", num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 
 
 
