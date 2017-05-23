@@ -7,7 +7,7 @@ actoplot_dam1 = function(file1,
                     operation = mean, #can be sum/median
                     condition = NULL,
                     pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
-                    time_to_round = hours(1) #see if can rename this to something used before
+                    time_to_round = rethomics:::hours(1) #see if can rename this to something used before
                     ){
   num_of_plot = as.numeric(num_of_plot)
   if (num_of_plot%%1!=0){
@@ -191,7 +191,8 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
-#acto = actoplot_dam1(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+
+#acto = actoplot_dam1(dam1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
 #acto
 
 ##DAM2##
@@ -209,7 +210,7 @@ actoplot_dam2 = function(file1,
                          operation = mean, #can be sum/median
                          condition = NULL,
                          pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
-                         time_to_round = hours(1) #see if can rename this to something used before
+                         time_to_round = rethomics:::hours(1) #see if can rename this to something used before
 ){
   num_of_plot = as.numeric(num_of_plot)
   if (num_of_plot%%1!=0){
@@ -223,19 +224,58 @@ actoplot_dam2 = function(file1,
   dt[, date := as.character(t)]
   x = tstrsplit(dt[,date], " ")
   dt[, date := x[1]]
-  #dt[,experiment_id := paste(x[1], machine_name, sep = "")]
   dt[, t := x[2]]
   x = lapply(dt[,t], strptime, format = "%H:%M:%S")
-  seconds = sapply(x, second)
-  minutes = sapply(x, minute)
-  hours = sapply(x, hour)
-  seconds = seconds + (minutes*60) + (hours*60*60)
+  seconds = sapply(x, lubridate:::second)
+  minutes = sapply(x, lubridate:::minute)
+  hours = sapply(x, lubridate:::hour)
+  seconds = as.numeric(seconds + (minutes*60) + (hours*60*60))
+  ###FIX HERE#### PROBALY DON'T EVEN NEED LUBRIDATE IF I'M GOING TO JUST MAKE MY OWN T_LIST
+  # t_list = vector()
+  # t = 0
+  # for (i in)
+  ###########  
   dt[, t := seconds]
+  t_round = floor(dt[,t]/(time_to_round))
+  hour = t_round%%24
+  day = (floor(t_round/(24)))
+  dt[, t_round := t_round]
+  dt[, hour := hour]
+  dt[, day := day]
+  # dt = dt[,.(machine_name = machine_name,
+  #            activity = operation(activity)),
+  #         by = c("t_round", "hour", "day", "date", "region_id")]
+  # dt = unique(dt)
+  # dt[,experiment_id := paste(date, machine_name, sep = "")]
+  # setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  # if (num_of_plot>1){
+  #   for (i in 2:num_of_plot){
+  #     dt_temp = copy(dt)
+  #     dt_temp = dt_temp[, day := day-1]
+  #     dt_temp = dt_temp[, hour := hour + 24]
+  #     dt = dt[day<(max(day))]
+  #     dt = rbind(dt, dt_temp)
+  #     dt = unique(dt)
+  #   }
+  # }
+  #dt = dt[day>-1]
+  # dt = dt[, day_str := sprintf("day\n%03d", day)]
+  # x_scale = 0:(4*num_of_plot) * 6
+  # if (type_of_plot == "bar"){
+  #   p = ggplot(dt, aes(x=hour, y=activity)) +
+  #     geom_col() +
+  #     facet_grid(day_str ~ .) + 
+  #     scale_x_continuous(name="time (hours)",breaks = x_scale) +
+  #     scale_y_continuous(name="activity") +
+  #     theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+  #     ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  # }
+  #p
   return(dt)
 }
 
-acto_dam2 = actoplot_dam2(dam2, machine_name = "M012", num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
-
+acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
+#acto_dam2
 
 
 
