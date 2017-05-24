@@ -1,6 +1,12 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
-dt = copy(as.data.table(dam1))
+
+#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
+#dt = copy(as.data.table(dam1))
+
+PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+dt = copy(as.data.table(dammulti1))
+
 t_round = floor(dt[,t]/(60*60))
 hour = t_round%%24
 day = (floor(t_round/(24)))
@@ -19,3 +25,4 @@ dt = dt[,.(experiment_id = experiment_id,
         by = t_round]
 dt = unique(dt)
 x = acf(dt[,activity], ci=0.95, lag.max= (length(dt[,activity])/3))
+#x = acf(dt[,activity], ci=0.95, lag.max= 3900)

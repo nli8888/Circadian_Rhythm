@@ -185,21 +185,21 @@ PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
 PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
 PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Ces"
-#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
 #dammulti3 = DAM1_multi_reader(PATH3, time_format = "min")
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-#acto = actoplot_dam1(dam1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
-#acto
+acto = actoplot_dam1(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto
 
 ##DAM2##
 file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
-#dam2 = rethomics:::loadSingleDAM2File(file1)
+dam2 = rethomics:::loadSingleDAM2File(file1)
 library(chron)
 library(lubridate)
 actoplot_dam2 = function(file1,
@@ -225,27 +225,26 @@ actoplot_dam2 = function(file1,
   x = tstrsplit(dt[,date], " ")
   dt[, date := x[1]]
   dt[, t := x[2]]
-  x = lapply(dt[,t], strptime, format = "%H:%M:%S")
-  seconds = sapply(x, lubridate:::second)
-  minutes = sapply(x, lubridate:::minute)
-  hours = sapply(x, lubridate:::hour)
-  seconds = as.numeric(seconds + (minutes*60) + (hours*60*60))
+  # x = lapply(dt[,t], strptime, format = "%H:%M:%S")
+  # seconds = sapply(x, lubridate:::second)
+  # minutes = sapply(x, lubridate:::minute)
+  # hours = sapply(x, lubridate:::hour)
+  # seconds = as.numeric(seconds + (minutes*60) + (hours*60*60))
   ###FIX HERE#### PROBALY DON'T EVEN NEED LUBRIDATE IF I'M GOING TO JUST MAKE MY OWN T_LIST
-  # t_list = vector()
-  # t = 0
-  # for (i in)
+  t_list = seq(0, length(dt[,t])-1)
+  
   ###########  
-  dt[, t := seconds]
-  t_round = floor(dt[,t]/(time_to_round))
+  #dt[, t := seconds]
+  t_round = floor(t_list/(time_to_round))
   hour = t_round%%24
   day = (floor(t_round/(24)))
   dt[, t_round := t_round]
   dt[, hour := hour]
   dt[, day := day]
-  # dt = dt[,.(machine_name = machine_name,
-  #            activity = operation(activity)),
-  #         by = c("t_round", "hour", "day", "date", "region_id")]
-  # dt = unique(dt)
+  dt = dt[,.(machine_name = machine_name,
+             activity = operation(activity)),
+          by = c("t_round", "hour", "day", "date", "region_id")]
+  dt = unique(dt)
   # dt[,experiment_id := paste(date, machine_name, sep = "")]
   # setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   # if (num_of_plot>1){
@@ -274,7 +273,7 @@ actoplot_dam2 = function(file1,
   return(dt)
 }
 
-acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
+#acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
 #acto_dam2
 
 
