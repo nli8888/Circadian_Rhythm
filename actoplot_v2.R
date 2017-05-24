@@ -185,7 +185,7 @@ PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
 PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
 PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Ces"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
 #dammulti3 = DAM1_multi_reader(PATH3, time_format = "min")
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
