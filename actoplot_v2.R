@@ -192,16 +192,22 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dammulti1, num_of_plot = 4, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto = actoplot_dam1(dammulti1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
 acto
 
 ##DAM2##
 file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
-dam2 = rethomics:::loadSingleDAM2File(file1)
-library(chron)
-library(lubridate)
+query = data.table(path=file1,
+                   start_date="2015-08-06_00-00-00", 
+                   stop_date="2015-08-19", 
+                   region_id=c(1:32),
+                   machine_name = "M002")
+dam2 = loadDAM2Data(query)
+#dam2 = rethomics:::loadSingleDAM2File(file1)
+# library(chron)
+# library(lubridate)
 actoplot_dam2 = function(file1,
                          machine_name = NULL,
                          type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
@@ -220,61 +226,61 @@ actoplot_dam2 = function(file1,
     stop('"machine_name" must be specified')
   }
   dt = copy(as.data.table(file1))
-  dt[,machine_name := machine_name]
-  dt[, date := as.character(t)]
-  x = tstrsplit(dt[,date], " ")
-  dt[, date := x[1]]
-  dt[, t := x[2]]
+  # dt[,machine_name := machine_name]
+  # dt[, date := as.character(t)]
+  # x = tstrsplit(dt[,date], " ")
+  # dt[, date := x[1]]
+  # dt[, t := x[2]]
   # x = lapply(dt[,t], strptime, format = "%H:%M:%S")
   # seconds = sapply(x, lubridate:::second)
   # minutes = sapply(x, lubridate:::minute)
   # hours = sapply(x, lubridate:::hour)
   # seconds = as.numeric(seconds + (minutes*60) + (hours*60*60))
   ###FIX HERE#### PROBALY DON'T EVEN NEED LUBRIDATE IF I'M GOING TO JUST MAKE MY OWN T_LIST
-  t_list = seq(0, length(dt[,t])-1)
+  # t_list = seq(0, length(dt[,t])-1)
   
   ###########  
   #dt[, t := seconds]
-  t_round = floor(t_list/(time_to_round))
+  t_round = floor(dt[,t]/(time_to_round))
   hour = t_round%%24
   day = (floor(t_round/(24)))
   dt[, t_round := t_round]
   dt[, hour := hour]
   dt[, day := day]
+  #setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
   dt = dt[,.(machine_name = machine_name,
              activity = operation(activity)),
-          by = c("t_round", "hour", "day", "date", "region_id")]
+          by = c("t_round", "hour", "day", "region_id")]
   dt = unique(dt)
-  # dt[,experiment_id := paste(date, machine_name, sep = "")]
-  # setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
-  # if (num_of_plot>1){
-  #   for (i in 2:num_of_plot){
-  #     dt_temp = copy(dt)
-  #     dt_temp = dt_temp[, day := day-1]
-  #     dt_temp = dt_temp[, hour := hour + 24]
-  #     dt = dt[day<(max(day))]
-  #     dt = rbind(dt, dt_temp)
-  #     dt = unique(dt)
-  #   }
-  # }
-  #dt = dt[day>-1]
-  # dt = dt[, day_str := sprintf("day\n%03d", day)]
-  # x_scale = 0:(4*num_of_plot) * 6
-  # if (type_of_plot == "bar"){
-  #   p = ggplot(dt, aes(x=hour, y=activity)) +
-  #     geom_col() +
-  #     facet_grid(day_str ~ .) + 
-  #     scale_x_continuous(name="time (hours)",breaks = x_scale) +
-  #     scale_y_continuous(name="activity") +
-  #     theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
-  #     ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
-  # }
-  #p
-  return(dt)
+  if (num_of_plot>1){
+    for (i in 2:num_of_plot){
+      dt_temp = copy(dt)
+      dt_temp = dt_temp[, day := day-1]
+      dt_temp = dt_temp[, hour := hour + 24]
+      dt = dt[day<(max(day))]
+      dt = rbind(dt, dt_temp)
+      dt = unique(dt)
+    }
+  }
+  dt = dt[day>-1]
+  dt = dt[, day_str := sprintf("day\n%03d", day)]
+  x_scale = 0:(4*num_of_plot) * 6
+  if (type_of_plot == "bar"){
+    p = ggplot(dt, aes(x=hour, y=activity)) +
+      geom_col() +
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+      #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+      ggtitle("Actogram plot of population activity over time")
+  }
+  p
+  # return(dt)
 }
 
-#acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
-#acto_dam2
+acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
+acto_dam2
 
 
 
