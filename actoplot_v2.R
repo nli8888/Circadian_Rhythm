@@ -192,12 +192,12 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dammulti1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
-acto
+#acto = actoplot_dam1(dammulti1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
+#acto
 
 ##DAM2##
 file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
-#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 query = data.table(path=file1,
                    start_date="2015-08-06_00-00-00", 
@@ -247,8 +247,10 @@ actoplot_dam2 = function(file1,
   dt[, t_round := t_round]
   dt[, hour := hour]
   dt[, day := day]
-  #setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  setkeyv(dt, c("experiment_id", "region_id", "start_date", "machine_name"))
   dt = dt[,.(machine_name = machine_name,
+             start_date = start_date,
+             experiment_id = experiment_id,
              activity = operation(activity)),
           by = c("t_round", "hour", "day", "region_id")]
   dt = unique(dt)
