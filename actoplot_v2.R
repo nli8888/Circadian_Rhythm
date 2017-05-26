@@ -247,41 +247,117 @@ actoplot_dam2 = function(file1,
   dt[, t_round := t_round]
   dt[, hour := hour]
   dt[, day := day]
-  setkeyv(dt, c("experiment_id", "region_id", "start_date", "machine_name"))
-  dt = dt[,.(machine_name = machine_name,
-             start_date = start_date,
-             experiment_id = experiment_id,
-             activity = operation(activity)),
-          by = c("t_round", "hour", "day", "region_id")]
-  dt = unique(dt)
+  # setkeyv(dt, c("experiment_id", "region_id", "start_date", "machine_name"))
+  summary_dt = dt[,list(activity=operation(activity), 
+                        hour=hour,
+                        day=day),
+                  by=c("t_round", key(dt))]
+  summary_dt = unique(summary_dt)
+  setkeyv(summary_dt, c("experiment_id", "start_date", "machine_name"))
+  summary_dt_all_animals = summary_dt[,list(activity=operation(activity)),
+                                      by=c("t_round", #see if can utilize key(dt)
+                                           key(summary_dt),
+                                           "hour",
+                                           "day")]
   if (num_of_plot>1){
     for (i in 2:num_of_plot){
-      dt_temp = copy(dt)
+      dt_temp = copy(summary_dt_all_animals)
       dt_temp = dt_temp[, day := day-1]
       dt_temp = dt_temp[, hour := hour + 24]
-      dt = dt[day<(max(day))]
-      dt = rbind(dt, dt_temp)
-      dt = unique(dt)
+      summary_dt_all_animals = summary_dt_all_animals[day<(max(day))]
+      summary_dt_all_animals = rbind(summary_dt_all_animals, dt_temp)
+      summary_dt_all_animals = unique(summary_dt_all_animals)
     }
   }
-  dt = dt[day>-1]
-  dt = dt[, day_str := sprintf("day\n%03d", day)]
-  x_scale = 0:(4*num_of_plot) * 6
-  if (type_of_plot == "bar"){
-    p = ggplot(dt, aes(x=hour, y=activity)) +
-      geom_col() +
+  if (!is.null(pop_overview)){
+    summary_dt_all_animals = summary_dt_all_animals[,list(activity=pop_overview(activity)),
+                                                    by=c("t_round",
+                                                         "hour",
+                                                         "day")]
+    summary_dt_all_animals = summary_dt_all_animals[day>-1]
+    summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+    x_scale = 0:(4*num_of_plot) * 6
+    if (type_of_plot == "bar"){
+      p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+        geom_col() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Overview Actogram plot of population activity over time")
+    } else if (type_of_plot == "line"){
+      p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Overview Actogram plot of population activity over time")
+    } else if (type_of_plot == "ribbon"){
+      p = ggplot(summary_dt_all_animals, aes(hour, ymin=min(activity), ymax=activity)) +
+        geom_ribbon() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Overview Actogram plot of population activity over time")
+    } else if (type_of_plot == "tile"){
+      summary_dt_all_animals[,row_name:=""]
+      p = ggplot(summary_dt_all_animals, aes(x=hour, y=row_name, fill=activity)) +
+        geom_tile(alpha=1) +
+        facet_grid(day_str ~ ., switch = "y") +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5), axis.ticks.y = element_blank()) +
+        labs(title="Overview Actogram plot of population activity over time",x="time", y="") #+
+      #guides(fill=guide_legend(title="activity"))
+    }
+  } else if (is.null(pop_overview)){  #THIS IS BIT IS NOT APPLICABLE TO ANNE'S DATA, WILL NEED TO CHANGE MAYBE SPLITTING TO EACH INDIVIDUAL
+    summary_dt_all_animals = summary_dt_all_animals[day>-1]
+    summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+    x_scale = 0:(4*num_of_plot) * 6
+    p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=machine_name)) +
+      geom_line() +
       facet_grid(day_str ~ .) +
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
-      #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
       ggtitle("Actogram plot of population activity over time")
+    # if (is.null(condition)){
+    #   p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=machine_name)) +
+    #     geom_line() +
+    #     facet_grid(day_str ~ .) +
+    #     scale_x_continuous(name="time (hours)",breaks = x_scale) +
+    #     scale_y_continuous(name="activity") +
+    #     theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+    #     ggtitle("Actogram plot of population activity over time")
+    # } else if (!is.null(condition)){
+    #   p = ggplot(summary_dt_all_animals, aes(hour, activity, colour=condition)) +
+    #     geom_line() +
+    #     facet_grid(day_str ~ .) +
+    #     scale_x_continuous(name="time (hours)",breaks = x_scale) +
+    #     scale_y_continuous(name="activity") +
+    #     theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+    #     ggtitle("Actogram plot of population activity over time")
+    # }
   }
+  # dt = dt[day>-1]
+  # dt = dt[, day_str := sprintf("day\n%03d", day)]
+  # x_scale = 0:(4*num_of_plot) * 6
+  # if (type_of_plot == "bar"){
+  #   p = ggplot(dt, aes(x=hour, y=activity)) +
+  #     geom_col() +
+  #     facet_grid(day_str ~ .) +
+  #     scale_x_continuous(name="time (hours)",breaks = x_scale) +
+  #     scale_y_continuous(name="activity") +
+  #     theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+  #     #ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  #     ggtitle("Actogram plot of population activity over time")
+  # }
   p
   # return(dt)
 }
 
-acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = sum, pop_overview = mean)
+acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
 acto_dam2
 
 
