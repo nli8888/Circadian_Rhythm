@@ -14,7 +14,7 @@ dt[, t_round := t_round]
 dt[, hour := hour]
 dt[, day := day]
 setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
-dt = dt[,.(experiment_id = experiment_id,
+summary_dt = dt[,.(experiment_id = experiment_id,
            condition = condition,
            machine_name = machine_name, 
            region_id = region_id, 
@@ -23,9 +23,22 @@ dt = dt[,.(experiment_id = experiment_id,
            hour = hour, 
            day = day), 
         by = t_round]
-dt = unique(dt)
-x = acf(dt[,activity], ci=0.95, lag.max= 10000)#(length(dt[,activity])/3))
-x = data.table(lag = c(1:length(x[[1]])),
-               acf = x[[1]])
-y=x[2000:8000]
+summary_dt = unique(summary_dt)
+setkeyv(summary_dt, c("experiment_id", "date", "machine_name"))
+summary_dt_all_animals = summary_dt[,list(activity=mean(activity)),
+                                    by=c("t_round", #see if can utilize key(dt)
+                                         key(summary_dt),
+                                         "condition",
+                                         "hour",
+                                         "day")]
+summary_dt_all_animals = summary_dt_all_animals[,list(activity=mean(activity)),
+                                                by=c("t_round",
+                                                     "hour",
+                                                     "day")]
 #x = acf(dt[,activity], ci=0.95, lag.max= 3900)
+x = acf(summary_dt_all_animals[,activity], ci=0.95, plot = 1, lag.max=(length(summary_dt_all_animals[,activity])))
+y = data.table(lag = c(1:(length(x[[1]])-1)),
+               #period = seq(0, length(summary_dt_all_animals[,activity])),
+               acf = x[[1]][2:length(x[[1]])])
+
+period = which.max(y[10:50,acf]) + 9
