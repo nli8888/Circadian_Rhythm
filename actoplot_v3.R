@@ -209,12 +209,10 @@ dam2 = loadDAM2Data(query)
 # library(chron)
 # library(lubridate)
 actoplot_dam2 = function(file1,
-                         machine_name = NULL,
                          type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                          num_of_plot = 2, #can be any integer
                          #mean = FALSE #change to actually use a function
                          operation = mean, #can be sum/median
-                         condition = NULL,
                          pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
                          time_to_round = rethomics:::hours(1) #see if can rename this to something used before
 ){
@@ -226,21 +224,6 @@ actoplot_dam2 = function(file1,
     stop('"machine_name" must be specified')
   }
   dt = copy(as.data.table(file1))
-  # dt[,machine_name := machine_name]
-  # dt[, date := as.character(t)]
-  # x = tstrsplit(dt[,date], " ")
-  # dt[, date := x[1]]
-  # dt[, t := x[2]]
-  # x = lapply(dt[,t], strptime, format = "%H:%M:%S")
-  # seconds = sapply(x, lubridate:::second)
-  # minutes = sapply(x, lubridate:::minute)
-  # hours = sapply(x, lubridate:::hour)
-  # seconds = as.numeric(seconds + (minutes*60) + (hours*60*60))
-  ###FIX HERE#### PROBALY DON'T EVEN NEED LUBRIDATE IF I'M GOING TO JUST MAKE MY OWN T_LIST
-  # t_list = seq(0, length(dt[,t])-1)
-  
-  ###########  
-  #dt[, t := seconds]
   t_round = floor(dt[,t]/(time_to_round))
   hour = t_round%%24
   day = (floor(t_round/(24)))
@@ -357,7 +340,7 @@ actoplot_dam2 = function(file1,
   # return(dt)
 }
 
-acto_dam2 = actoplot_dam2(dam2, machine_name = "M002", num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto_dam2 = actoplot_dam2(dam2, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
 acto_dam2
 
 
