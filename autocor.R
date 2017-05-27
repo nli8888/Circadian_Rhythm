@@ -4,7 +4,7 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 #dt = copy(as.data.table(dam1))
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 dt = copy(as.data.table(dammulti1))
 
 t_round = floor(dt[,t]/(60*60))
@@ -24,5 +24,8 @@ dt = dt[,.(experiment_id = experiment_id,
            day = day), 
         by = t_round]
 dt = unique(dt)
-x = acf(dt[,activity], ci=0.95, lag.max= (length(dt[,activity])/3))
+x = acf(dt[,activity], ci=0.95, lag.max= 10000)#(length(dt[,activity])/3))
+x = data.table(lag = c(1:length(x[[1]])),
+               acf = x[[1]])
+y=x[2000:8000]
 #x = acf(dt[,activity], ci=0.95, lag.max= 3900)
