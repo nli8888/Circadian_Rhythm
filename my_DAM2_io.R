@@ -109,8 +109,9 @@ testloadSingleDAM2File <- function(FILE,
   return(out)
 }
 
-file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
-#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/exampleDAM2.txt"
+#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
+#file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"
+file = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 out = testloadSingleDAM2File(file)
 
 #dt <- fread(file, header = FALSE)
