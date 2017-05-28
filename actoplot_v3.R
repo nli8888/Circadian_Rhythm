@@ -46,7 +46,7 @@ actoplot_dam1 = function(file1,
   dt = dt[, day_str := sprintf("day\n%03d", day)]
   x_scale = 0:(4*num_of_plot) * 6
   if (type_of_plot == "bar"){
-    p = ggplot(dt, aes(x=hour, y=activity)) +
+    p = ggplot(dt, aes(x=hour, y=activity, width=1)) +
       geom_col() +
       facet_grid(day_str ~ .) + 
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
@@ -111,7 +111,7 @@ actoplot_dam1 = function(file1,
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
       x_scale = 0:(4*num_of_plot) * 6
       if (type_of_plot == "bar"){
-        p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+        p = ggplot(summary_dt_all_animals, aes(hour, activity, width=1)) +
           geom_col() +
           facet_grid(day_str ~ .) +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
@@ -175,7 +175,7 @@ actoplot_dam1 = function(file1,
     }
   }
   print(p)
-  if (length(unique(dt[,experiment_id])) = 1){
+  if (length(unique(dt[,experiment_id])) == 1){
     return(dt)
   } else if (length(unique(dt[,experiment_id])) > 1){
     return(summary_dt_all_animals)
@@ -255,7 +255,7 @@ actoplot_dam2 = function(file1,
     dt = dt[, day_str := sprintf("day\n%03d", day)]
     x_scale = 0:(4*num_of_plot) * 6
     if (type_of_plot == "bar"){
-      p = ggplot(dt, aes(x=hour, y=activity)) +
+      p = ggplot(dt, aes(x=hour, y=activity, width=1)) +
         geom_col() +
         facet_grid(day_str ~ .) + 
         scale_x_continuous(name="time (hours)",breaks = x_scale) +
@@ -314,7 +314,7 @@ actoplot_dam2 = function(file1,
     summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
     x_scale = 0:(4*num_of_plot) * 6
     if (type_of_plot == "bar"){
-      p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
+      p = ggplot(summary_dt_all_animals, aes(hour, activity, width=1)) +
         geom_col() +
         facet_grid(day_str ~ .) +
         scale_x_continuous(name="time (hours)",breaks = x_scale) +
