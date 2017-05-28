@@ -174,9 +174,12 @@ actoplot_dam1 = function(file1,
       # }
     }
   }
-  p
-  #return(summary_dt_all_animals)
-  #return(dt)
+  print(p)
+  if (length(unique(dt[,experiment_id])) = 1){
+    return(dt)
+  } else if (length(unique(dt[,experiment_id])) > 1){
+    return(summary_dt_all_animals)
+  }
 }
 ##DAM1##
 dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
@@ -185,7 +188,7 @@ PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
 PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
 PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Ces"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
 #dammulti3 = DAM1_multi_reader(PATH3, time_format = "min")
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
@@ -193,18 +196,18 @@ dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
 acto = actoplot_dam1(dammulti1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
-acto
+#acto
 
 ##DAM2##
-file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
+#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  
-#file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
 query = data.table(path=file1,
-                   start_date="2015-08-06_00-00-00", 
-                   stop_date="2015-08-19", 
+                   start_date="2016-11-21_00-00-00", 
+                   stop_date="2016-12-07", 
                    #region_id=c(1:32),
                    region_id=2,
-                   machine_name = "M002")
+                   machine_name = "M012")
 dam2 = loadDAM2Data(query)
 #dam2 = rethomics:::loadSingleDAM2File(file1)
 # library(chron)
@@ -345,12 +348,12 @@ actoplot_dam2 = function(file1,
       #guides(fill=guide_legend(title="activity"))
     }
   } 
-  p
-  #return(dt)
+  print(p)
+  return(dt)
 }
 
-#acto_dam2 = actoplot_dam2(dam2, num_of_plot = 2, type_of_plot = "bar", operation = mean)
-#acto_dam2
+# acto_dam2 = actoplot_dam2(dam2, num_of_plot = 2, type_of_plot = "bar", operation = mean)
+# acto_dam2
 
 
 
