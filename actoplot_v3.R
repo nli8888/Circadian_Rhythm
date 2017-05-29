@@ -182,7 +182,8 @@ actoplot_dam1 = function(file1,
   }
 }
 ##DAM1##
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
+#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
@@ -195,7 +196,7 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dammulti1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto = actoplot_dam1(dam1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
 #acto
 
 ##DAM2##

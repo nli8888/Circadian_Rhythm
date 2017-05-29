@@ -1,15 +1,18 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
 
-#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C01.txt")
-#dt = copy(as.data.table(dam1))
+#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 
 #dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
-dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
-dt = copy(as.data.table(dammulti2))
+#dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
+#dt = copy(as.data.table(dammulti2))
 
+#autocor
+dt = copy(as.data.table(dam1))
 t_round = floor(dt[,t]/(60*60))
 hour = t_round%%24
 day = (floor(t_round/(24)))
@@ -39,13 +42,13 @@ summary_dt_all_animals = summary_dt_all_animals[,list(activity=mean(activity)),
                                                      "hour",
                                                      "day")]
 #x = acf(dt[,activity], ci=0.95, lag.max= 3900)
-x = acf(summary_dt_all_animals[,activity], ci=0.95, plot = 1, lag.max=(length(summary_dt_all_animals[,activity])))
+x = acf(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], ci=0.95, plot = 1, lag.max=(length(summary_dt_all_animals[,activity])))
 y = data.table(lag = c(1:(length(x[[1]])-1)),
                #period = seq(0, length(summary_dt_all_animals[,activity])),
                acf = x[[1]][2:length(x[[1]])])
 
 subset_y = copy(as.data.table(y))
-subset_y = subset_y[10:50]
+subset_y = subset_y[10:30]
 setnames(subset_y, "lag", "period")
 p = ggplot(subset_y, aes(period, acf)) +
   geom_col() +
@@ -54,4 +57,22 @@ p = ggplot(subset_y, aes(period, acf)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   ggtitle("Correlogram of acf over period")
 p
-period = which.max(subset_y[,acf]) + 9
+which.max(subset_y[,acf]) + 9
+
+
+##FOURIER ANALYSIS## NEED TO SPLIT LD AND DD DATA APART AND DO THE CALCULATIONS SEPARATELY
+ff = abs(fft(x[[1]])/sqrt(length(x[[1]])))^2
+p = (4/length(x[[1]]))*ff[1:((length(x[[1]])/2)+1)]
+f = (0:(length(x[[1]])/2))/length(x[[1]])
+plot(f,p,type="l")
+plot(f[10:25],p[10:25],type="l")
+which.max(p[10:25])
+f[10:25][which.max(p[10:25])]
+1/f[10:25][which.max(p[10:25])]
+
+##LOMB-SCARGLE PERIODOGRAM##
+lsp(as.vector(x[[1]]))
+
+# ts_object = ts(x[[1]], frequency = 1, start = 0)
+# welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = tukeywindow)
+# plot(welch$frequency, welch$power, log="y", type="l")
