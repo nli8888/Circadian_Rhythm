@@ -50,12 +50,17 @@ y = data.table(lag = c(1:(length(x[[1]])-1)),
 subset_y = copy(as.data.table(y))
 subset_y = subset_y[10:30]
 setnames(subset_y, "lag", "period")
+#upper=0+(1.96/sqrt(length(x[[1]])))
+upper=qnorm((1 + 0.95)/2)/sqrt(length(x[[1]])) #the way acf() does it
+#lower=0-(1.96/sqrt(length(x[[1]])))
+lower=upper*-1  #I assume
 p = ggplot(subset_y, aes(period, acf)) +
   geom_col() +
   scale_x_continuous(name="period (hours)") +
   scale_y_continuous(name="acf") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  ggtitle("Correlogram of acf over period")
+  ggtitle("Correlogram of acf over period") +
+  geom_hline(yintercept = upper) + geom_hline(yintercept = lower)
 p
 which.max(subset_y[,acf]) + 9
 
@@ -71,7 +76,8 @@ f[10:25][which.max(p[10:25])]
 1/f[10:25][which.max(p[10:25])]
 
 ##LOMB-SCARGLE PERIODOGRAM##
-lsp(as.vector(x[[1]]))
+library(lomb)
+lsp = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.1)
 
 # ts_object = ts(x[[1]], frequency = 1, start = 0)
 # welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = tukeywindow)
