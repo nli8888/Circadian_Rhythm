@@ -69,6 +69,8 @@ which.max(subset_y[,acf]) + 9
 ff = abs(fft(x[[1]])/sqrt(length(x[[1]])))^2
 p = (4/length(x[[1]]))*ff[1:((length(x[[1]])/2)+1)]
 f = (0:(length(x[[1]])/2))/length(x[[1]])
+#level = length(x[[1]])*((1-(max(p)/sum(p)))^(length(x[[1]])-1))
+#level = -2*log(1-(0.05^(1/length(x[[1]]))))
 plot(f,p,type="l")
 plot(f[10:25],p[10:25],type="l")
 which.max(p[10:25])
@@ -77,7 +79,7 @@ f[10:25][which.max(p[10:25])]
 
 ##LOMB-SCARGLE PERIODOGRAM##
 library(lomb)
-lsp = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.1)
+lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.08)
 
 # ts_object = ts(x[[1]], frequency = 1, start = 0)
 # welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = tukeywindow)
