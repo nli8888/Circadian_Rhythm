@@ -81,6 +81,7 @@ f[10:25][which.max(p[10:25])]
 library(lomb)
 lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.08)
 
-# ts_object = ts(x[[1]], frequency = 1, start = 0)
-# welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = tukeywindow)
-# plot(welch$frequency, welch$power, log="y", type="l")
+ts_object = ts(x[[1]], frequency = 1, start = 0)
+library(bspec)
+welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = tukeywindow)
+plot(welch$frequency, welch$power, log="y", type="l")
