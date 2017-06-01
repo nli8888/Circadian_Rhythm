@@ -45,6 +45,7 @@ actoplot_dam1 = function(file1,
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
   x_scale = 0:(4*num_of_plot) * 6
+  i = 1:2
   if (type_of_plot == "bar"){
     p = ggplot(dt, aes(x=hour, y=activity, width=1)) +
       geom_col() +
@@ -52,7 +53,8 @@ actoplot_dam1 = function(file1,
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id]))) +
+      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", i)), aes(fill=day_str), fill="grey", xmin = 0,xmax = 30,ymin = -Inf,ymax = Inf,alpha = 0.005)
   } else if (type_of_plot == "line"){
     p = ggplot(dt, aes(hour, activity)) +
       geom_line() +
