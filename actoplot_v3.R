@@ -5,6 +5,12 @@ actoplot_dam1 = function(file1,
                     num_of_plot = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
                     operation = mean, #can be sum/median
+                    DD = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                    LD = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                    LD_offset = NULL, #how much you want to shift the LD annotations by
+                    D_start = 0,
+                    D_end_L_start = 12,
+                    L_end = 24,
                     condition = NULL,
                     pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
                     time_to_round = rethomics:::hours(1) #see if can rename this to something used before
@@ -21,6 +27,7 @@ actoplot_dam1 = function(file1,
   dt[, hour := hour]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  offset = LD_offset
   if (length(unique(dt[,experiment_id])) == 1){
   dt = dt[,.(experiment_id = experiment_id,
              condition = condition,
@@ -45,20 +52,47 @@ actoplot_dam1 = function(file1,
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
   x_scale = 0:(4*num_of_plot) * 6
-  #cat("MAXHOUE", max(hour))
-  LD = 0:2
-  offset = -4
-  DD = 3:18
   if (type_of_plot == "bar"){
-    p = ggplot(dt, aes(x=hour, y=activity, width=1)) +
-      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=1,xmin = 0,xmax = (max(hour)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
-    ii=0
-    for (i in 0:(num_of_plot+1)){
-      #print(ii)
-    p = p +
-      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=1,xmin = 0+ii+offset,xmax = 12+ii+offset,ymin = -Inf,ymax = Inf,alpha = 1) +
-      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 12+ii+offset,xmax = 24+ii+offset,ymin = -Inf,ymax = Inf,alpha = 0)
-      ii = ii + (max(hour)+1)
+    p = ggplot(dt, aes(x=hour, y=activity, width=1)) 
+    if (!is.null(LD)){
+      ii=0
+      a=1
+      for (i in 0:(num_of_plot+1)){
+        #print(ii)
+        x_min1 = D_start + ii + offset
+        x_max1 = D_end_L_start + ii + offset
+        #x_min2 = L_start + ii + offset
+        x_min2 = D_end_L_start + ii + offset
+        x_max2 = L_end + ii + offset
+        cat("MAXHOUR", max(hour), (max(hour)+1)*num_of_plot, "\n")
+        if (x_min1 < 0){
+          x_min1 = 0
+        }
+        if (x_min1 > ((max(hour)+1)*num_of_plot)){
+          a = 0
+        }
+        if (x_max1 < 0){
+          x_max1 = 0
+        }
+        if (x_max1 > ((max(hour)+1)*num_of_plot)){
+          print("yes")
+          x_max1 = (max(hour)+1)*num_of_plot
+          print(x_max1)
+        }
+        cat("x_m values", x_min1, x_max1, x_min2, x_max2, "\n")
+      p = p +
+        geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                  xmin = x_min1,
+                  xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
+        geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                  xmin = x_min2,
+                  xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
+        ii = ii + (max(hour)+1)
+      }
+    }
+    if (!is.null(DD)){
+      p = p +
+        geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(hour)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
     }
     p = p +
       geom_col(position = position_nudge(x = 0.5)) +
@@ -125,12 +159,53 @@ actoplot_dam1 = function(file1,
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
       x_scale = 0:(4*num_of_plot) * 6
       if (type_of_plot == "bar"){
-        p = ggplot(summary_dt_all_animals, aes(hour, activity, width=1)) +
-          geom_col() +
+        p = ggplot(summary_dt_all_animals, aes(hour, activity, width=1)) 
+        if (!is.null(LD)){
+          ii=0
+          a=1
+          for (i in 0:(num_of_plot+1)){
+            #print(ii)
+            x_min1 = D_start + ii + offset
+            x_max1 = D_end_L_start + ii + offset
+            #x_min2 = L_start + ii + offset
+            x_min2 = D_end_L_start + ii + offset
+            x_max2 = L_end + ii + offset
+            cat("MAXHOUR", max(hour), (max(hour)+1)*num_of_plot, "\n")
+            if (x_min1 < 0){
+              x_min1 = 0
+            }
+            if (x_min1 > ((max(hour)+1)*num_of_plot)){
+              a = 0
+            }
+            if (x_max1 < 0){
+              x_max1 = 0
+            }
+            if (x_max1 > ((max(hour)+1)*num_of_plot)){
+              print("yes")
+              x_max1 = (max(hour)+1)*num_of_plot
+              print(x_max1)
+            }
+            cat("x_m values", x_min1, x_max1, x_min2, x_max2, "\n")
+            p = p +
+              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                        xmin = x_min1,
+                        xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
+              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                        xmin = x_min2,
+                        xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
+            ii = ii + (max(hour)+1)
+          }
+        }
+        if (!is.null(DD)){
+          p = p +
+            geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(hour)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+        }
+        p = p +
+          geom_col(position = position_nudge(x = 0.5)) +
           facet_grid(day_str ~ .) +
           scale_x_continuous(name="time (hours)",breaks = x_scale) +
           scale_y_continuous(name="activity") +
-          theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+          theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
           ggtitle("Overview Actogram plot of population activity over time")
       } else if (type_of_plot == "line"){
         p = ggplot(summary_dt_all_animals, aes(hour, activity)) +
@@ -210,7 +285,17 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dam1, num_of_plot = 2, type_of_plot = "bar", operation = mean, pop_overview = mean)
+acto = actoplot_dam1(dammulti1, 
+                     num_of_plot = 2, 
+                     type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
+                     LD = 0:2, 
+                     DD = 3:18, 
+                     LD_offset = -16, 
+                     D_start = 0,
+                     D_end_L_start = 14,
+                     L_end = 20,
+                     operation = sum, 
+                     pop_overview = sum)
 #acto
 
 ##DAM2##
@@ -232,6 +317,12 @@ actoplot_dam2 = function(file1,
                          num_of_plot = 2, #can be any integer
                          #mean = FALSE #change to actually use a function
                          operation = mean, #can be sum/median
+                         DD = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                         LD = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                         LD_offset = NULL, #how much you want to shift the LD annotations by
+                         D_start = 0,
+                         D_end_L_start = 12,
+                         L_end = 24,
                          #pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
                          time_to_round = rethomics:::hours(1) #see if can rename this to something used before
 ){
@@ -250,6 +341,7 @@ actoplot_dam2 = function(file1,
   dt[, hour := hour]
   dt[, day := day]
   # setkeyv(dt, c("experiment_id", "region_id", "start_date", "machine_name"))
+  offset = LD_offset
   if (length(unique(dt[,region_id])) == 1){
     dt = dt[,list(activity=operation(activity), 
                           hour=hour,
@@ -367,7 +459,16 @@ actoplot_dam2 = function(file1,
   return(dt)
 }
 
-# acto_dam2 = actoplot_dam2(dam2, num_of_plot = 2, type_of_plot = "bar", operation = mean)
+acto_dam2 = actoplot_dam2(dam2, 
+                          num_of_plot = 2, 
+                          type_of_plot = "bar", 
+                          LD = 0:2, 
+                          DD = 3:18, 
+                          LD_offset = -16, 
+                          D_start = 0,
+                          D_end_L_start = 14,
+                          L_end = 20,
+                          operation = mean)
 # acto_dam2
 
 
