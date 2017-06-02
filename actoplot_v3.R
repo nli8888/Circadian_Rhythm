@@ -287,17 +287,17 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dammulti1,
-                     num_of_plot = 2,
-                     type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
-                     LD_days = 0:2,
-                     DD_days = 3:18,
-                     LD_offset = -16,
-                     D_start = 0,
-                     D_end_L_start = 14,
-                     L_end = 20,
-                     operation = sum,
-                     pop_overview = sum)
+# acto = actoplot_dam1(dam1,
+#                      num_of_plot = 2,
+#                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
+#                      LD_days = 0:2,
+#                      DD_days = 3:12,
+#                      LD_offset = -16,
+#                      D_start = 0,
+#                      D_end_L_start = 14,
+#                      L_end = 20,
+#                      operation = sum,
+#                      pop_overview = sum)
 #acto
 
 ##DAM2##
@@ -549,7 +549,7 @@ acto_dam2 = actoplot_dam2(dam2,
                           num_of_plot = 2, 
                           type_of_plot = "bar", 
                           LD_days = 0:3, 
-                          DD_days = 4:18, 
+                          DD_days = 4:14, 
                           LD_offset = -16, 
                           D_start = 0,
                           D_end_L_start = 14,
