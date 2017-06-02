@@ -5,8 +5,8 @@ actoplot_dam1 = function(file1,
                     num_of_plot = 2, #can be any integer
                     #mean = FALSE #change to actually use a function
                     operation = mean, #can be sum/median
-                    DD = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
-                    LD = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                    DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                    LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
                     LD_offset = NULL, #how much you want to shift the LD annotations by
                     D_start = 0,
                     D_end_L_start = 12,
@@ -27,6 +27,8 @@ actoplot_dam1 = function(file1,
   dt[, hour := hour]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  LD = LD_days
+  DD = DD_days
   offset = LD_offset
   if (length(unique(dt[,experiment_id])) == 1){
   dt = dt[,.(experiment_id = experiment_id,
@@ -285,17 +287,17 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-# acto = actoplot_dam1(dammulti1, 
-#                      num_of_plot = 2, 
-#                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
-#                      LD = 0:2, 
-#                      DD = 3:18, 
-#                      LD_offset = -16, 
-#                      D_start = 0,
-#                      D_end_L_start = 14,
-#                      L_end = 20,
-#                      operation = sum, 
-#                      pop_overview = sum)
+acto = actoplot_dam1(dammulti1,
+                     num_of_plot = 2,
+                     type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
+                     LD_days = 0:2,
+                     DD_days = 3:18,
+                     LD_offset = -16,
+                     D_start = 0,
+                     D_end_L_start = 14,
+                     L_end = 20,
+                     operation = sum,
+                     pop_overview = sum)
 #acto
 
 ##DAM2##
@@ -317,8 +319,8 @@ actoplot_dam2 = function(file1,
                          num_of_plot = 2, #can be any integer
                          #mean = FALSE #change to actually use a function
                          operation = mean, #can be sum/median
-                         DD = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
-                         LD = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                         DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                         LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
                          LD_offset = NULL, #how much you want to shift the LD annotations by
                          D_start = 0,
                          D_end_L_start = 12,
@@ -341,6 +343,8 @@ actoplot_dam2 = function(file1,
   dt[, hour := hour]
   dt[, day := day]
   # setkeyv(dt, c("experiment_id", "region_id", "start_date", "machine_name"))
+  LD = LD_days
+  DD = DD_days
   offset = LD_offset
   if (length(unique(dt[,region_id])) == 1){
     dt = dt[,list(activity=operation(activity), 
@@ -544,8 +548,8 @@ actoplot_dam2 = function(file1,
 acto_dam2 = actoplot_dam2(dam2, 
                           num_of_plot = 2, 
                           type_of_plot = "bar", 
-                          LD = 0:3, 
-                          DD = 4:18, 
+                          LD_days = 0:3, 
+                          DD_days = 4:18, 
                           LD_offset = -16, 
                           D_start = 0,
                           D_end_L_start = 14,
