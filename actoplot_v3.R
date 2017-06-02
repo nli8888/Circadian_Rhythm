@@ -45,16 +45,28 @@ actoplot_dam1 = function(file1,
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
   x_scale = 0:(4*num_of_plot) * 6
-  i = 1:2
+  #cat("MAXHOUE", max(hour))
+  LD = 0:2
+  offset = -4
+  DD = 3:18
   if (type_of_plot == "bar"){
     p = ggplot(dt, aes(x=hour, y=activity, width=1)) +
-      geom_col() +
+      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=1,xmin = 0,xmax = (max(hour)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+    ii=0
+    for (i in 0:(num_of_plot+1)){
+      #print(ii)
+    p = p +
+      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=1,xmin = 0+ii+offset,xmax = 12+ii+offset,ymin = -Inf,ymax = Inf,alpha = 1) +
+      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 12+ii+offset,xmax = 24+ii+offset,ymin = -Inf,ymax = Inf,alpha = 0)
+      ii = ii + (max(hour)+1)
+    }
+    p = p +
+      geom_col(position = position_nudge(x = 0.5)) +
       facet_grid(day_str ~ .) + 
       scale_x_continuous(name="time (hours)",breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
-      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id]))) +
-      geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", i)), aes(fill=day_str), fill="grey", xmin = 0,xmax = 30,ymin = -Inf,ymax = Inf,alpha = 0.005)
+      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "line"){
     p = ggplot(dt, aes(hour, activity)) +
       geom_line() +

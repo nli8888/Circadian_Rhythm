@@ -54,7 +54,7 @@ setnames(subset_y, "lag", "period")
 upper=qnorm((1 + 0.95)/2)/sqrt(length(x[[1]])) #the way acf() does it
 #lower=0-(1.96/sqrt(length(x[[1]])))
 lower=upper*-1  #I assume
-p = ggplot(subset_y, aes(period, acf)) +
+p = ggplot(subset_y, aes(period, acf, width=1)) +
   geom_col() +
   scale_x_continuous(name="period (hours)") +
   scale_y_continuous(name="acf") +
@@ -79,7 +79,7 @@ f[10:25][which.max(p[10:25])]
 
 ##LOMB-SCARGLE PERIODOGRAM##
 library(lomb)
-lomb_periodogram = lsp(as.vector(x[[1]]),alpha=NULL,from=0,to=0.08)
+lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.08)
 
 ts_object = ts(x[[1]], frequency = 1, start = 0)
 library(bspec)
