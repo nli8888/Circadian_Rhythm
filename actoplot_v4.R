@@ -55,7 +55,7 @@ actoplot_dam1 = function(file1 = file1,
   }
   dt = dt[day>-1]
   dt = dt[, day_str := sprintf("day\n%03d", day)]
-  x_scale = 0:(8*num_of_plot) * 6
+  x_scale = 0:(12*num_of_plot) * 6
   if (type_of_plot == "bar"){
     p = ggplot(dt, aes(x=x_vals, y=activity, width=1)) 
     if (!is.null(LD)){
@@ -102,7 +102,7 @@ actoplot_dam1 = function(file1 = file1,
     p = p +
       geom_col(position = position_nudge(x = 0.5)) +
       facet_grid(day_str ~ .) + 
-      scale_x_continuous(name="time (0.5 hours)",breaks = x_scale) +
+      scale_x_continuous(name="time (0.5 hours)", breaks = x_scale) +
       scale_y_continuous(name="activity") +
       theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
@@ -291,18 +291,18 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dammulti1,
+acto = actoplot_dam1(dam1,
                      num_of_plot = 2,
                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
                      LD_days = 0:2,
                      DD_days = 3:15,
                      LD_offset = 0,
                      D_start = 0,
-                     D_end_L_start = 24,
-                     L_end = 36,
+                     D_end_L_start = 12,
+                     L_end = 24,
                      operation = mean,
                      pop_overview = mean,
-                     time_to_round = hours(0.5))
+                     time_to_round = hours(1))
 #acto
 
 ##DAM2##
@@ -405,7 +405,8 @@ actoplot_dam2 = function(file1,
             geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
                       xmin = x_min2,
                       xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
-          ii = ii + (max(x_vals)+1)
+          #ii = ii + (max(x_vals)+1)
+          ii = ii + L_end
         }
       }
       if (!is.null(DD)){
@@ -505,7 +506,8 @@ actoplot_dam2 = function(file1,
             geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
                       xmin = x_min2,
                       xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
-          ii = ii + (max(x_vals)+1)
+          #ii = ii + (max(x_vals)+1)
+          ii = ii + L_end
         }
       }
       if (!is.null(DD)){
