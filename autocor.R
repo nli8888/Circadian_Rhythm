@@ -1,7 +1,7 @@
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
 
-#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
 
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
@@ -48,7 +48,7 @@ y = data.table(lag = c(1:(length(x[[1]])-1)),
                acf = x[[1]][2:length(x[[1]])])
 
 subset_y = copy(as.data.table(y))
-subset_y = subset_y[10:30]
+subset_y = subset_y[12:36]
 setnames(subset_y, "lag", "period")
 #upper=0+(1.96/sqrt(length(x[[1]])))
 upper=qnorm((1 + 0.95)/2)/sqrt(length(x[[1]])) #the way acf() does it
@@ -69,8 +69,8 @@ which.max(subset_y[,acf]) + 9
 ff = abs(fft(x[[1]])/sqrt(length(x[[1]])))^2
 p = (4/length(x[[1]]))*ff[1:((length(x[[1]])/2)+1)]
 f = (0:(length(x[[1]])/2))/length(x[[1]])
-#level = length(x[[1]])*((1-(max(p)/sum(p)))^(length(x[[1]])-1))
-level = -2*log(1-(0.05^(1/(length(x[[1]])))))
+level = length(x[[1]])*((1-(max(p)/sum(p[0:(length(p)/2)])))^(length(x[[1]])-1))
+#level = -2*log(1-(0.05^(1/(length(x[[1]])))))
 plot(f,p,type="l")
 plot(f[10:25],p[10:25],type="l")
 which.max(p[10:25])
@@ -81,7 +81,8 @@ f[10:25][which.max(p[10:25])]
 library(lomb)
 lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.08)
 
-ts_object = ts(x[[1]], frequency = 1, start = 0)
+# ts_object = ts(x[[1]], frequency = 1, start = 0)
+ts_object = ts(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], frequency = 1, start = 0)
 library(bspec)
 welch = welchPSD(x=ts_object, seglength=100, method="mean", windowfun = hammingwindow)
 plot(welch$frequency, welch$power, log="y", type="l")
