@@ -3,48 +3,57 @@ library(shinythemes)
 library(shinydashboard)
 
 ui <- navbarPage(theme = shinytheme("flatly"),
-    title = "Circadian Rhythm",
-    tabPanel("Introduction",
-             tags$p("this is one paragraph"),
+    title = "Analysis of Circadian Rhythm",
+    id = "inTabset",
+    tabPanel("Home",
              fluidRow(
-               column(3),
-               column(5, "test")
-             )
+             column(6, offset = 3, img(src="11175406.jpg", align = "center", width = "898px"))
              ),
-    tabPanel("Navbar 1",
-             sidebarPanel(
-               fileInput("file", "File input:"),
-               textInput("txt", "Text input:", "general"),
-               sliderInput("slider", "Slider input:", 1, 100, 30),
-               tags$h5("Deafult actionButton:"),
-               actionButton("action", "Search"),
-               
-               tags$h5("actionButton with CSS class:"),
-               actionButton("action2", "Action button", class = "btn-primary")
+             fluidRow(
+               column(6, offset = 3,
+                      wellPanel(h2("Abstract"),hr(),
+                                "Circadian Rhythm is "))
              ),
-             mainPanel(
-               tabsetPanel(
-                 tabPanel("Tab 1",
-                          h4("Table"),
-                          tableOutput("table"),
-                          h4("Verbatim text output"),
-                          verbatimTextOutput("txtout"),
-                          h1("Header 1"),
-                          h2("Header 2"),
-                          h3("Header 3"),
-                          h4("Header 4"),
-                          h5("Header 5")
-                 ),
-                 tabPanel("Tab 2"),
-                 tabPanel("Tab 3")
-               )
+             fluidRow(column(1, offset = 8, 
+                    actionButton('nextpage1', 'Next Page')#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+             ))
+             ),
+    tabPanel("Introduction",
+             fluidRow(
+               column(6, offset = 3, 
+                      p("this is one paragraph"),"test")
+             ),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('prevpage1', 'Previous Page'),
+                      actionButton('nextpage2', 'Next Page')
+                      )
+             )),
+    tabPanel("Methods and Results",
+             withMathJax(),
+             fluidRow(
+               column(6, offset = 3, 
+                      helpText('An irrational number \\(\\sqrt{2}\\)
+           and a fraction $$1-\\frac{1}{2}$$'))
              )
-    ),
-    tabPanel("Navbar 2",
-             mainPanel("test"))
+             )
 )
 
 
-server <- function(input, output) {}
+server <- function(input, output, session) {
+  observeEvent(input$nextpage2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Methods and Results")
+  })
+  observeEvent(input$prevpage1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Home")
+  })
+  observeEvent(input$nextpage1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Introduction")
+  })
+}
+
 
 shinyApp(ui = ui, server = server)
