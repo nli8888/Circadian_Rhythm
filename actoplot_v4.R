@@ -104,7 +104,12 @@ actoplot_dam1 = function(file1 = file1,
       facet_grid(day_str ~ .) + 
       scale_x_continuous(name="time (0.5 hours)", breaks = x_scale) +
       scale_y_continuous(name="activity") +
-      theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+      theme(panel.spacing = unit(0, "lines"), 
+            plot.title = element_text(hjust = 0.5, size = 18), 
+            axis.text.x = element_text(size=16),
+            axis.text.y = element_text(size=10),
+            axis.title=element_text(size=14,face="bold"),
+            strip.text = element_text(face="bold", size=14)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (type_of_plot == "line"){
     p = ggplot(dt, aes(x_vals, activity)) +
@@ -269,12 +274,12 @@ actoplot_dam1 = function(file1 = file1,
       # }
     }
   }
-  print(p)
-  if (length(unique(dt[,experiment_id])) == 1){
-    return(dt)
-  } else if (length(unique(dt[,experiment_id])) > 1){
-    return(summary_dt_all_animals)
-  }
+  p
+  # if (length(unique(dt[,experiment_id])) == 1){
+  #   return(dt)
+  # } else if (length(unique(dt[,experiment_id])) > 1){
+  #   return(summary_dt_all_animals)
+  # }
 }
 ##DAM1##
 #dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
