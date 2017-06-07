@@ -3,8 +3,8 @@ library(shinythemes)
 library(shinydashboard)
 
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
-dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v4.R")
+
 # acto = actoplot_dam1(dam1ex1,
 #                      num_of_plot = 2,
 #                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
@@ -54,6 +54,8 @@ ui <- navbarPage(theme = shinytheme("flatly"),
              selectInput("dataset", label = h3("Select example data to load"), 
                          choices = c("dam1ex1", "dam1ex2"),
                          width = "20%"), 
+             actionButton('loaddata', 'Load data'),
+             br(), br(), br(),
              textOutput("ex1text"),
              hr(),
              dataTableOutput('ex1')
@@ -82,6 +84,9 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
   })
+  observeEvent(input$loaddata, {
+    dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+    dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
   datasetInput <- reactive({
     switch(input$dataset,
            "dam1ex1" = dam1ex1,
@@ -92,15 +97,18 @@ server <- function(input, output, session) {
            "dam1ex1" = "Displayed below is raw example data from DAM1 machines.",
            "dam1ex2" = "Displayed below is raw example data from DAM2 machines.")
   })
+
+
   output$ex1text <- renderText(
-    datasetText()
+    isolate(datasetText())
   )
   output$ex1 <- renderDataTable(
-      datasetInput(), options = list(
+      isolate(datasetInput()), options = list(
         lengthMenu = list(c(5, 10, 15, -1), c('5', '10', '15', 'All')),
         pageLength = 10,
         orderClasses = TRUE
     ))
+  })
   # output$ex1plot <- renderText()
 }
 
