@@ -10,6 +10,7 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 ui <- navbarPage(theme = shinytheme("flatly"),
     title = "Analysis of Circadian Rhythm",
     id = "inTabset",
+    HTML("<a name='top'></a>"),
     tabPanel("Home",
              fluidRow(
              column(6, offset = 3, img(src="11175406.jpg", align = "center", width = "898px"))
@@ -38,6 +39,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                       )
              )),
     tabPanel("Actoplot",
+             
              fluidRow(
                column(6, offset = 3,
                       h5("Below is a GUI for the function", code("actoplot()"), "with a few optional arguements available purely for demonstration.", br(), "Please be patient as it may take time to load data after pressing the button"))
@@ -54,7 +56,8 @@ ui <- navbarPage(theme = shinytheme("flatly"),
              fluidRow(
                column(8, offset = 2,
                       plotOutput("actogram", width = "100%", height = "700")
-               ))
+               )),
+             HTML("<a href='#top'>go to top</a>")
              ),
     tabPanel("Methods and Results",
              withMathJax(),
