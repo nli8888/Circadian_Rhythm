@@ -4,10 +4,13 @@ actoplot_dam1 = function(file1 = file1,
                          y = activity, #name of column in datatable you want to display on y-axis
                          type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                          num_of_plot = 2, #can be any integer
-                         #mean = FALSE #change to actually use a function
                          operation = mean, #can be sum/median
-                         DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
-                         LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                         #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                         DD_days_start = "none", #for sake of website, can't use NULL
+                         DD_days_end = "none",
+                         #LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
+                         LD_days_start = "none",
+                         LD_days_end = "none",
                          D_start = 0,
                          D_end_L_start = 12,
                          L_end = 24,
@@ -28,8 +31,18 @@ actoplot_dam1 = function(file1 = file1,
   dt[, x_vals := x_vals]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
-  LD = LD_days
+  if (DD_days_start == "none"||DD_days_end == "none"){
+    DD_days = NULL
+  } else {
+    DD_days = DD_days_start:DD_days_end
+  }
+  if (LD_days_start == "none"||LD_days_end == "none"){
+    LD_days = NULL
+  } else {
+    LD_days = LD_days_start:LD_days_end
+  }
   DD = DD_days
+  LD = LD_days
   offset = LD_offset
   if (length(unique(dt[,experiment_id])) == 1){
   dt = dt[,.(experiment_id = experiment_id,
@@ -282,7 +295,7 @@ actoplot_dam1 = function(file1 = file1,
   # }
 }
 ##DAM1##
-#dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
 #dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
@@ -296,19 +309,23 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-# acto = actoplot_dam1(dam1,
-#                      num_of_plot = 2,
-#                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
-#                      LD_days = 0:2,
-#                      DD_days = 3:15,
-#                      LD_offset = 0,
-#                      D_start = 0,
-#                      D_end_L_start = 12,
-#                      L_end = 24,
-#                      operation = mean,
-#                      pop_overview = mean,
-#                      time_to_round = hours(1))
-#acto
+acto = actoplot_dam1(dam1,
+                     num_of_plot = 2,
+                     type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
+                     #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+                     DD_days_start = 7, #for website functionality
+                     DD_days_end = 4, #for website functionality
+                     #LD_days = 0:2,
+                     LD_days_start = 0,
+                     LD_days_end = 2,
+                     LD_offset = 0,
+                     D_start = 0,
+                     D_end_L_start = 12,
+                     L_end = 24,
+                     operation = mean,
+                     pop_overview = mean,
+                     time_to_round = hours(1))
+acto
 
 ##DAM2##
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"

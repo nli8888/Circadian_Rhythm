@@ -42,7 +42,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
              
              fluidRow(
                column(6, offset = 3,
-                      h5("Below is a GUI for the function", code("actoplot()"), "with a few optional arguements available purely for demonstration.", br(), "Please be patient as it may take time to load data after pressing the button"))
+                      h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data."))
              ),
              selectInput("dataset", label = h3("Select example data to load"), 
                          choices = c("dam1ex1", "dam1ex2"),
@@ -53,11 +53,14 @@ ui <- navbarPage(theme = shinytheme("flatly"),
              uiOutput("hline"),
              dataTableOutput('ex1'),
              hr(),
-             fluidRow(
-               column(8, offset = 2,
-                      plotOutput("actogram", width = "100%", height = "700")
-               )),
-             HTML("<a href='#top'>go to top</a>")
+             sidebarLayout(uiOutput("sidePanel"),
+                           mainPanel(plotOutput("actogram", width = "100%", height = "700"))
+             ),
+             # fluidRow(
+             #   column(8, offset = 2,
+             #          plotOutput("actogram", width = "100%", height = "700")
+             #   )),
+             fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
              ),
     tabPanel("Methods and Results",
              withMathJax(),
@@ -88,20 +91,53 @@ server <- function(input, output, session) {
     withProgress(message = "loading", value = 0,{
     dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
     dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+    output$sidePanel <- renderUI(sidebarPanel(
+      sliderInput("slider1", label = h3("Number of duplicated days"),
+                  min = 1, max = 10, value = 2),
+      selectInput("select1", label = h3("Select box"),
+                  choices = list("bar" = "bar", "line" = "line",
+                                 "ribbon" = "ribbon"), selected = "bar"),
+      conditionalPanel("input.select1 == 'bar'",
+                       "DD day range",
+                       br(),
+                       column(6, selectInput("DD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
+                       column(6, selectInput("DD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
+                       "LD day range",
+                       br(),
+                       column(6, selectInput("LD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
+                       column(6, selectInput("LD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
+                       "Time when lights turn on and off",
+                       br(),
+                       fluidRow(column(4, numericInput("D_start", label = "Darkness starts", value = 0, min = 0, max = 100))),
+                       fluidRow(column(4, numericInput("D_end_L_start", label = "Darkness ends, Light starts", value = 0, min = 0, max = 100))),
+                       fluidRow(column(4, numericInput("L_ends", label = "Light ends", value = 0, min = 0, max = 100)))
+                       ),
+      conditionalPanel("input.select1 == 'line'||input.select1 == 'ribbon'", "DD and LD options only available for bar plots currently"),
+      checkboxGroupInput("checkGroup", 
+                         label = h3("Checkbox group"), 
+                         choices = list("Choice 1" = 1, 
+                                        "Choice 2" = 2, "Choice 3" = 3),
+                         selected = 1),
+      actionButton(inputId = "go",
+                   label = "Update Plot")
+    ))
     
+    data <- eventReactive(input$go, {actoplot_dam1(isolate(datasetInput()),
+                                                   num_of_plot = input$slider1,
+                                                   type_of_plot = input$select1, #currently only "bar" has LD and DD annotations available
+                                                   DD_days_start = input$DD_start,
+                                                   DD_days_end = input$DD_end,
+                                                   LD_days_start = input$LD_start,
+                                                   LD_days_end = input$LD_end,
+                                                   LD_offset = 0,
+                                                   D_start = input$D_start,
+                                                   D_end_L_start = input$D_end_L_start,
+                                                   L_end = input$L_ends,
+                                                   operation = mean,
+                                                   pop_overview = mean,
+                                                   time_to_round = hours(1))})
     output$actogram <- renderPlot({
-      actoplot_dam1(isolate(datasetInput()),
-                         num_of_plot = 2,
-                         type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
-                         LD_days = 0:2,
-                         DD_days = 3:15,
-                         LD_offset = 0,
-                         D_start = 0,
-                         D_end_L_start = 12,
-                         L_end = 24,
-                         operation = mean,
-                         pop_overview = mean,
-                         time_to_round = hours(1))
+      data()
     })
     datasetInput <- reactive({
       switch(input$dataset,
