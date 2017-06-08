@@ -4,13 +4,14 @@ actoplot_dam1 = function(file1 = file1,
                          y = activity, #name of column in datatable you want to display on y-axis
                          type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                          num_of_plot = 2, #can be any integer
-                         operation = mean, #can be sum/median
-                         #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
-                         DD_days_start = "none", #for sake of website, can't use NULL
-                         DD_days_end = "none",
-                         #LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2
-                         LD_days_start = "none",
-                         LD_days_end = "none",
+                         #operation = mean, #can be sum/median ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         operation = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2 ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         DD_days_start = "none", #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         DD_days_end = "none", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         #LD_days = NULL, #range of days that were in LD, e.g. LD = 0:2 for days 0 to 2 ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         LD_days_start = "none", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         LD_days_end = "none", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          D_start = 0,
                          D_end_L_start = 12,
                          L_end = 24,
@@ -31,6 +32,13 @@ actoplot_dam1 = function(file1 = file1,
   dt[, x_vals := x_vals]
   dt[, day := day]
   setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  if (operation == "mean"){
+    operation = mean
+  } else if (operation == "median"){
+    operation = median
+  } else if (operation == "sum"){
+    operation = sum
+  }
   if (DD_days_start == "none"||DD_days_end == "none"){
     DD_days = NULL
   } else {
@@ -322,10 +330,10 @@ acto = actoplot_dam1(dam1,
                      D_start = 0,
                      D_end_L_start = 12,
                      L_end = 24,
-                     operation = mean,
+                     operation = "sum",
                      pop_overview = mean,
                      time_to_round = hours(1))
-acto
+#acto
 
 ##DAM2##
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
