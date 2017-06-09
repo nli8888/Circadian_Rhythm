@@ -101,16 +101,16 @@ server <- function(input, output, session) {
                                  "ribbon" = "ribbon", "tile" = "tile"), selected = "bar"),
       
       conditionalPanel("input.plot_type == 'bar'",
-                       h5("DD day range:"),
-                       br(),
+                       h4("DD day range:"), p("(e.g. From 4 to 8)"),
+                       #br(),
                        column(6, selectInput("DD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
                        column(6, selectInput("DD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
-                       h5("LD day range:"),
-                       br(),
+                       h4("LD day range:"), p("(e.g. From 0 to 3)"),
+                       #br(),
                        column(6, selectInput("LD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
                        column(6, selectInput("LD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
-                       h5("Time when lights turn on and off:"),
-                       br(),
+                       h4("Time when lights turn on and off:"), p("(e.g. Darkness starts 0; Darkness ends, Light starts 12; Light ends 24)"),
+                       #br(),
                        fluidRow(
                        column(4, br(), numericInput("D_start", label = "Darkness starts", value = 0, min = 0, max = 100)),
                        column(4, numericInput("D_end_L_start", label = "Darkness ends, Light starts", value = 0, min = 0, max = 100)),
@@ -118,6 +118,7 @@ server <- function(input, output, session) {
                        fluidRow(column(4, numericInput("LD_offset", label = "Offset LD", value = 0, min = -100, max = 100)))
                        ),
       conditionalPanel("input.plot_type == 'line'||input.plot_type == 'ribbon'||input.plot_type == 'tile'", "DD and LD options only available for bar plots currently"),
+      hr(),
       actionButton(inputId = "go",
                    label = "Update Plot")
     ))
