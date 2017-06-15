@@ -3,7 +3,7 @@ library(shinythemes)
 library(shinydashboard)
 
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v4.R")
+source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v5.R")
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
@@ -32,7 +32,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
     tabPanel("Introduction",
              fluidRow(
                column(6, offset = 3, 
-                      p("this is one paragraph"),"test")
+                      "Circadian rhythms are ")
              ),
              fluidRow(
                column(2, offset = 7,
@@ -40,11 +40,16 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                       actionButton('nextpage2', 'Next Page')
                       )
              )),
+    tabPanel("Actograms",
+             fluidRow(
+               column(6, offset = 3,
+                      "One useful way of visualising activity data is via Actograms.")
+             )),
     tabPanel("Actoplot",
              
              fluidRow(
                column(6, offset = 3,
-                      h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data."))
+                      h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data. Only DAM1 data is available."))
              ),
              selectInput("dataset", label = h3("Select example data to load"), 
                          choices = c("dam1ex1", "dam1ex2", "dammulti1"),
@@ -108,6 +113,10 @@ server <- function(input, output, session) {
                   min = 1, max = 10, value = 2),
       selectInput("operation", label = h3("Operation to perform:"),
                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean"),
+      conditionalPanel("input.dataset == 'dammulti1'",
+                       selectInput("pop_overview", label = h3("Additional summary opperation to perform on population data:"),
+                                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean")),
+      
       selectInput("plot_type", label = h3("Type of plot:"),
                   choices = list("bar" = "bar", "line" = "line",
                                  "ribbon" = "ribbon", "tile" = "tile"), selected = "bar"),
@@ -147,7 +156,7 @@ server <- function(input, output, session) {
                                                    D_end_L_start = input$D_end_L_start,
                                                    L_end = input$L_ends,
                                                    operation = input$operation,
-                                                   pop_overview = mean,
+                                                   pop_overview = input$pop_overview,
                                                    time_to_round = hours(1))})
     output$actogram <- renderPlot({
       data()
