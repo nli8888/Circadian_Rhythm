@@ -317,23 +317,23 @@ PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
 
-acto = actoplot_dam1(dam1,
-                     num_of_plot = 4,
-                     type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
-                     #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
-                     DD_days_start = 7, #for website functionality
-                     DD_days_end = 4, #for website functionality
-                     #LD_days = 0:2,
-                     LD_days_start = 0,
-                     LD_days_end = 2,
-                     LD_offset = 0,
-                     D_start = 0,
-                     D_end_L_start = 12,
-                     L_end = 24,
-                     operation = "sum",
-                     pop_overview = mean,
-                     time_to_round = hours(1))
-acto
+# acto = actoplot_dam1(dam1,
+#                      num_of_plot = 4,
+#                      type_of_plot = "bar", #currently only "bar" has LD and DD annotations available
+#                      #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2
+#                      DD_days_start = 7, #for website functionality
+#                      DD_days_end = 4, #for website functionality
+#                      #LD_days = 0:2,
+#                      LD_days_start = 0,
+#                      LD_days_end = 2,
+#                      LD_offset = 0,
+#                      D_start = 0,
+#                      D_end_L_start = 12,
+#                      L_end = 24,
+#                      operation = "sum",
+#                      pop_overview = mean,
+#                      time_to_round = hours(1))
+# acto
 
 ##DAM2##
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
@@ -678,10 +678,10 @@ myethogramPlot <- function(y,data,
   y_var_name <- deparse(substitute(y))
   setnames(dt,y_var_name,"y_var")
   dt[,t_r := floor(t/summary_time_window) * summary_time_window]
-  
+
   if(!is.null(time_wrap))
     dt[,t_r := t_r %% time_wrap]
-  
+
   dt[,y_var:=as.numeric(y_var)]
   c_var_name <- deparse(substitute(condition))
   f_var_name <- deparse(substitute(facet_var))
@@ -690,13 +690,13 @@ myethogramPlot <- function(y,data,
     dt[,c_var:=TRUE]
   else
     setnames(dt, c_var_name,"c_var")
-  
-  if(f_var_name == "NULL")
-    dt[,f_var:=TRUE]
-  else
-    setnames(dt, f_var_name,"f_var")
-  
-  print(typeof(dt[,c_var]))
+
+  # if(f_var_name == "NULL")
+  #   dt[,f_var:=TRUE]
+  # else
+  #   setnames(dt, f_var_name,"f_var")
+  # 
+  # print(typeof(dt[,c_var]))
   # # if(is.numeric(dt[,c_var])){
   # #   dt[,c_var = as.character(c_var)]
   # #   warning("Condition variable is a number.
@@ -712,12 +712,12 @@ myethogramPlot <- function(y,data,
   # if(normalise_var_per_id)
   #   dt <- na.omit(dt[,y_var:=as.vector(scale(y_var)),by=key(dt)])
   # 
-  summary_dt <- dt[,list(y_var=mean(y_var)),
-                   by=c("t_r","c_var","f_var",key(dt))]
-  
+  # summary_dt <- dt[,list(y_var=mean(y_var)),
+  #                  by=c("t_r","c_var","f_var",key(dt))]
   # 
-  # 
-  summary_dt[,t_d:=t_r/time_unit_conversion(1)]
+  # # 
+  # # 
+  # summary_dt[,t_d:=t_r/time_unit_conversion(1)]
   # 
   # # if(!is.null(error_bar)){
   # #   if(!error_bar %in% c("sd", "sem", "boot_ci", "gauss_ci"))
@@ -742,16 +742,16 @@ myethogramPlot <- function(y,data,
   # #     by=.(t_r,c_var,f_var)]
   # #
   # # }
-  if(is.null(error_bar))
-    summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)]
-  # 
-  summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
-  # 
-  if(c_var_name != "NULL"){
-    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line()
-  }
-  else{
-    p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line()
+  # if(is.null(error_bar))
+  #   summary_dt_all_animals <- summary_dt[,list(y_var=mean(y_var)),by=.(t_r,c_var,f_var)]
+  # # 
+  # summary_dt_all_animals[,t_d:=t_r/time_unit_conversion(1)]
+  # # 
+  # if(c_var_name != "NULL"){
+  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var,colour=c_var,fill=c_var)) + geom_line()
+  # }
+  # else{
+  #   p <- ggplot(summary_dt_all_animals, aes(t_d,y_var)) + geom_line()
   }
   # 
   # 
@@ -771,9 +771,9 @@ myethogramPlot <- function(y,data,
   # if(f_var_name != "NULL"){
   #   p <- p + facet_grid(f_var ~ .)
   # }
-  p
-  #return(summary_dt)
-  }
+  #p
+  return(dt)
+  #}
 
 
 # plusMinusSd <- function(x){
@@ -804,4 +804,5 @@ myethogramPlot <- function(y,data,
 #   out
 # }
 
+testdt = myethogramPlot(max_velocity, sleep_sexual_dimorphism, condition = machine_name)
 #myethogramPlot(activity, dammulti, time_wrap = NULL, summary_time_window = mins(30), condition = machine_name)

@@ -605,6 +605,7 @@ actoplot_dam2 = function(file1,
 
 actoplot_etho = function(file1 = file1,
                          num_of_plot = 2, #can be any integer
+                         condition = NULL,
                          #operation = mean, #can be sum/median ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          operation = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2 ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
@@ -625,16 +626,151 @@ actoplot_etho = function(file1 = file1,
   if (num_of_plot%%1!=0){
     stop("num_of_plot must be an integer")
   }
+  
   dt = copy(as.data.table(file1))
+  to.replace <- names(which(sapply(dt, is.logical)))
+  for (var in to.replace) dt[, var:= as.numeric(get(var)), with=FALSE]
   t_round = floor(dt[,t]/(time_to_round))
   x_vals = (t_round%%(days(1)/time_to_round))
   day = (floor(dt[,t]/(rethomics::days(1))))
   dt[, t_round := t_round]
   dt[, x_vals := x_vals]
   dt[, day := day]
-  return(dt)
+  c_var_name <- deparse(substitute(condition))
+  print(c_var_name)
+  if(c_var_name == "NULL")
+    dt[,c_var:=TRUE]
+  else
+    setnames(dt, c_var_name,"c_var")
+  setkeyv(dt, c("experiment_id", "region_id", "date", "machine_name"))
+  if (operation == "mean"){
+    operation = mean
+  } else if (operation == "median"){
+    operation = median
+  } else if (operation == "sum"){
+    operation = sum
+  }
+  if (pop_overview == "mean"){
+    pop_overview = mean
+  } else if (pop_overview == "median"){
+    pop_overview = median
+  } else if (pop_overview == "sum"){
+    pop_overview = sum
+  }
+  if (DD_days_start == "none"||DD_days_end == "none"){
+    DD_days = NULL
+  } else {
+    DD_days = DD_days_start:DD_days_end
+  }
+  if (LD_days_start == "none"||LD_days_end == "none"){
+    LD_days = NULL
+  } else {
+    LD_days = LD_days_start:LD_days_end
+  }
+  DD = DD_days
+  LD = LD_days
+  offset = LD_offset
+  if (length(unique(dt[,region_id])) == 1){
+    dt = dt[,.(experiment_id = experiment_id,
+               machine_name = machine_name,
+               region_id = region_id,
+               date = date,
+               t=t,
+               y_val = operation(c_var),
+               x_vals = x_vals,
+               day = day),
+            by = t_round]
+    dt = unique(dt)
+    if (num_of_plot>1){
+      for (i in 2:num_of_plot){
+        dt_temp = copy(dt)
+        dt_temp = dt_temp[, day := day-1]
+        dt_temp = dt_temp[, x_vals := x_vals + (days(1)/time_to_round)]
+        dt = dt[day<(max(day))]
+        dt = rbind(dt, dt_temp)
+        dt = unique(dt)
+      }
+    }
+    dt = dt[day>-1]
+    dt = dt[, day_str := sprintf("day\n%03d", day)]
+    x_scale = 0:(12*num_of_plot) * 6
+    p = ggplot(dt, aes(x=x_vals, y=y_val, width=1))
+    if (!is.null(LD)){
+      ii=0
+      a=1
+      for (i in 0:(num_of_plot+1)){
+        x_min1 = D_start + ii + offset
+        x_max1 = D_end_L_start + ii + offset
+        #x_min2 = L_start + ii + offset
+        x_min2 = D_end_L_start + ii + offset
+        x_max2 = L_end + ii + offset
+        if (x_min1 < 0){
+          x_min1 = 0
+        }
+        if (x_min1 > ((max(x_vals)+1)*num_of_plot)){
+          a = 0
+        }
+        if (x_max1 < 0){
+          x_max1 = 0
+        }
+        if (x_max1 > ((max(x_vals)+1)*num_of_plot)){
+          x_max1 = (max(x_vals)+1)*num_of_plot
+        }
+        p = p +
+          geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                    xmin = x_min1,
+                    xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
+          geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                    xmin = x_min2,
+                    xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
+        #ii = ii + (max(x_vals)+1)
+        ii = ii + L_end
+      }
+    }
+    if (!is.null(DD)){
+      p = p +
+        geom_rect(data=subset(dt, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(x_vals)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+    }
+    p = p +
+      geom_col(position = position_nudge(x = 0.5)) +
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)", breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0, "lines"),
+            plot.title = element_text(hjust = 0.5, size = 18),
+            axis.text.x = element_text(size=16),
+            axis.text.y = element_text(size=10),
+            axis.title=element_text(size=14,face="bold"),
+            strip.text = element_text(face="bold", size=14)) +
+      ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
+  } else if (length(unique(dt[,region_id])) > 1){
+    summary_dt = dt[,list(y_val=operation(c_var), 
+                          x_vals=x_vals,
+                          day=day),
+                    by=c("t_round", key(dt))]
+    summary_dt = unique(summary_dt)
+    setkeyv(summary_dt, c("experiment_id", "date", "machine_name"))
+    summary_dt_all_animals = summary_dt[,list(activity=operation(activity)),
+                                        by=c("t_round", #see if can utilize key(dt)
+                                             key(summary_dt),
+                                             "x_vals",
+                                             "day")]
+    if (num_of_plot>1){
+      for (i in 2:num_of_plot){
+        dt_temp = copy(summary_dt_all_animals)
+        dt_temp = dt_temp[, day := day-1]
+        dt_temp = dt_temp[, x_vals := x_vals + (days(1)/time_to_round)]
+        summary_dt_all_animals = summary_dt_all_animals[day<(max(day))]
+        summary_dt_all_animals = rbind(summary_dt_all_animals, dt_temp)
+        summary_dt_all_animals = unique(summary_dt_all_animals)
+      }
+    }
+  }
+  #return(dt)
+  print(p)
 }
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id == 1]
-
-acto_etho = actoplot_etho(sleep_sexual_dimorphism)
+acto_etho = actoplot_etho(sleep_sexual_dimorphism,
+                          condition = moving,
+                          num_of_plot = 2)
