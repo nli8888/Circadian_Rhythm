@@ -676,7 +676,7 @@ actoplot_etho = function(file1 = file1,
                region_id = region_id,
                date = date,
                t=t,
-               y_val = operation(c_var),
+               y_vals = operation(c_var),
                x_vals = x_vals,
                day = day),
             by = t_round]
@@ -694,7 +694,7 @@ actoplot_etho = function(file1 = file1,
     dt = dt[day>-1]
     dt = dt[, day_str := sprintf("day\n%03d", day)]
     x_scale = 0:(12*num_of_plot) * 6
-    p = ggplot(dt, aes(x=x_vals, y=y_val, width=1))
+    p = ggplot(dt, aes(x=x_vals, y=y_vals, width=1))
     if (!is.null(LD)){
       ii=0
       a=1
@@ -744,13 +744,13 @@ actoplot_etho = function(file1 = file1,
             strip.text = element_text(face="bold", size=14)) +
       ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
   } else if (length(unique(dt[,region_id])) > 1){
-    summary_dt = dt[,list(y_val=operation(c_var), 
+    summary_dt = dt[,list(y_vals=operation(c_var), 
                           x_vals=x_vals,
                           day=day),
                     by=c("t_round", key(dt))]
     summary_dt = unique(summary_dt)
     setkeyv(summary_dt, c("experiment_id", "date", "machine_name"))
-    summary_dt_all_animals = summary_dt[,list(activity=operation(activity)),
+    summary_dt_all_animals = summary_dt[,list(y_vals=operation(y_vals)),
                                         by=c("t_round", #see if can utilize key(dt)
                                              key(summary_dt),
                                              "x_vals",
@@ -764,6 +764,77 @@ actoplot_etho = function(file1 = file1,
         summary_dt_all_animals = rbind(summary_dt_all_animals, dt_temp)
         summary_dt_all_animals = unique(summary_dt_all_animals)
       }
+    }
+    if (!is.null(pop_overview)){
+      summary_dt_all_animals = summary_dt_all_animals[,list(y_vals=pop_overview(y_vals)),
+                                                      by=c("t_round",
+                                                           "x_vals",
+                                                           "day")]
+      summary_dt_all_animals = summary_dt_all_animals[day>-1]
+      summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+      x_scale = 0:(8*num_of_plot) * 6
+      if (type_of_plot == "bar"){
+        p = ggplot(summary_dt_all_animals, aes(x_vals, y_vals, width=1)) 
+        if (!is.null(LD)){
+          ii=0
+          a=1
+          for (i in 0:(num_of_plot+1)){
+            #print(ii)
+            x_min1 = D_start + ii + offset
+            x_max1 = D_end_L_start + ii + offset
+            #x_min2 = L_start + ii + offset
+            x_min2 = D_end_L_start + ii + offset
+            x_max2 = L_end + ii + offset
+            cat("MAXHOUR", max(x_vals), (max(x_vals)+1)*num_of_plot, "\n")
+            if (x_min1 < 0){
+              x_min1 = 0
+            }
+            if (x_min1 > ((max(x_vals)+1)*num_of_plot)){
+              a = 0
+            }
+            if (x_max1 < 0){
+              x_max1 = 0
+            }
+            if (x_max1 > ((max(x_vals)+1)*num_of_plot)){
+              print("yes")
+              x_max1 = (max(x_vals)+1)*num_of_plot
+              print(x_max1)
+            }
+            cat("x_m values", x_min1, x_max1, x_min2, x_max2, "\n")
+            p = p +
+              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                        xmin = x_min1,
+                        xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
+              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                        xmin = x_min2,
+                        xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
+            #ii = ii + (max(x_vals)+1)
+            ii = ii + L_end
+          }
+        }
+        if (!is.null(DD)){
+          p = p +
+            geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(x_vals)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+        }
+        p = p +
+          geom_col(position = position_nudge(x = 0.5)) +
+          facet_grid(day_str ~ .) +
+          scale_x_continuous(name="time (hours)",breaks = x_scale) +
+          scale_y_continuous(name="activity") +
+          theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+          ggtitle("Overview Actogram plot of population activity over time")
+      } 
+    } else if (is.null(pop_overview)){
+      summary_dt_all_animals = summary_dt_all_animals[day>-1]
+      summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
+      x_scale = 0:(8*num_of_plot) * 6
+      p = ggplot(summary_dt_all_animals, aes(x_vals, y_vals, colour=machine_name)) +
+        geom_line() +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Actogram plot of population activity over time")
     }
   }
   #return(dt)
