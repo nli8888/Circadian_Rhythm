@@ -15,7 +15,7 @@ actoplot_dam1 = function(file1 = file1,
                          D_start = 0,
                          D_end_L_start = 12,
                          L_end = 24,
-                         LD_offset = NULL, #how much you want to shift the LD annotations by
+                         LD_offset = 0, #how much you want to shift the LD annotations by
                          condition = NULL,
                          #pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
                          pop_overview = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
@@ -656,6 +656,8 @@ actoplot_etho = function(file1 = file1,
     pop_overview = median
   } else if (pop_overview == "sum"){
     pop_overview = sum
+  } else if (pop_overview == "NULL"){
+    pop_overview = NULL
   }
   if (DD_days_start == "none"||DD_days_end == "none"){
     DD_days = NULL
@@ -670,6 +672,7 @@ actoplot_etho = function(file1 = file1,
   DD = DD_days
   LD = LD_days
   offset = LD_offset
+  print(length(unique(dt[,region_id])))
   if (length(unique(dt[,region_id])) == 1){
     dt = dt[,.(experiment_id = experiment_id,
                machine_name = machine_name,
@@ -773,75 +776,86 @@ actoplot_etho = function(file1 = file1,
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
       x_scale = 0:(8*num_of_plot) * 6
-      if (type_of_plot == "bar"){
-        p = ggplot(summary_dt_all_animals, aes(x_vals, y_vals, width=1)) 
-        if (!is.null(LD)){
-          ii=0
-          a=1
-          for (i in 0:(num_of_plot+1)){
-            #print(ii)
-            x_min1 = D_start + ii + offset
-            x_max1 = D_end_L_start + ii + offset
-            #x_min2 = L_start + ii + offset
-            x_min2 = D_end_L_start + ii + offset
-            x_max2 = L_end + ii + offset
-            cat("MAXHOUR", max(x_vals), (max(x_vals)+1)*num_of_plot, "\n")
-            if (x_min1 < 0){
-              x_min1 = 0
-            }
-            if (x_min1 > ((max(x_vals)+1)*num_of_plot)){
-              a = 0
-            }
-            if (x_max1 < 0){
-              x_max1 = 0
-            }
-            if (x_max1 > ((max(x_vals)+1)*num_of_plot)){
-              print("yes")
-              x_max1 = (max(x_vals)+1)*num_of_plot
-              print(x_max1)
-            }
-            cat("x_m values", x_min1, x_max1, x_min2, x_max2, "\n")
-            p = p +
-              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
-                        xmin = x_min1,
-                        xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
-              geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
-                        xmin = x_min2,
-                        xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
-            #ii = ii + (max(x_vals)+1)
-            ii = ii + L_end
+      p = ggplot(summary_dt_all_animals, aes(x_vals, y_vals, width=1)) 
+      if (!is.null(LD)){
+        ii=0
+        a=1
+        for (i in 0:(num_of_plot+1)){
+          #print(ii)
+          x_min1 = D_start + ii + offset
+          x_max1 = D_end_L_start + ii + offset
+          #x_min2 = L_start + ii + offset
+          x_min2 = D_end_L_start + ii + offset
+          x_max2 = L_end + ii + offset
+          cat("MAXHOUR", max(x_vals), (max(x_vals)+1)*num_of_plot, "\n")
+          if (x_min1 < 0){
+            x_min1 = 0
           }
-        }
-        if (!is.null(DD)){
+          if (x_min1 > ((max(x_vals)+1)*num_of_plot)){
+            a = 0
+          }
+          if (x_max1 < 0){
+            x_max1 = 0
+          }
+          if (x_max1 > ((max(x_vals)+1)*num_of_plot)){
+            print("yes")
+            x_max1 = (max(x_vals)+1)*num_of_plot
+            print(x_max1)
+          }
+          cat("x_m values", x_min1, x_max1, x_min2, x_max2, "\n")
           p = p +
-            geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(x_vals)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+            geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                      xmin = x_min1,
+                      xmax = x_max1, ymin = -Inf,ymax = Inf,alpha = a) +
+            geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", LD)), aes(fill=day_str), fill="grey", color="grey",size=0,
+                      xmin = x_min2,
+                      xmax = x_max2, ymin = -Inf,ymax = Inf,alpha = 0)
+          #ii = ii + (max(x_vals)+1)
+          ii = ii + L_end
         }
+      }
+      if (!is.null(DD)){
         p = p +
-          geom_col(position = position_nudge(x = 0.5)) +
-          facet_grid(day_str ~ .) +
-          scale_x_continuous(name="time (hours)",breaks = x_scale) +
-          scale_y_continuous(name="activity") +
-          theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
-          ggtitle("Overview Actogram plot of population activity over time")
-      } 
+          geom_rect(data=subset(summary_dt_all_animals, day_str == sprintf("day\n%03d", DD)), aes(fill=day_str), fill="grey", color="grey",size=0,xmin = 0,xmax = (max(x_vals)+1)*num_of_plot,ymin = -Inf,ymax = Inf,alpha = 1)
+      }
+      p = p +
+        geom_col(position = position_nudge(x = 0.5)) +
+        facet_grid(day_str ~ .) +
+        scale_x_continuous(name="time (hours)",breaks = x_scale) +
+        scale_y_continuous(name="activity") +
+        theme(panel.spacing = unit(0, "lines"), plot.title = element_text(hjust = 0.5)) +
+        ggtitle("Overview Actogram plot of population activity over time")
     } else if (is.null(pop_overview)){
       summary_dt_all_animals = summary_dt_all_animals[day>-1]
       summary_dt_all_animals = summary_dt_all_animals[, day_str := sprintf("day\n%03d", day)]
       x_scale = 0:(8*num_of_plot) * 6
       p = ggplot(summary_dt_all_animals, aes(x_vals, y_vals, colour=machine_name)) +
         geom_line() +
-        facet_grid(day_str ~ .) +
-        scale_x_continuous(name="time (hours)",breaks = x_scale) +
-        scale_y_continuous(name="activity") +
-        theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
-        ggtitle("Actogram plot of population activity over time")
+      facet_grid(day_str ~ .) +
+      scale_x_continuous(name="time (hours)",breaks = x_scale) +
+      scale_y_continuous(name="activity") +
+      theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5)) +
+      ggtitle("Actogram plot of population activity over time")
     }
   }
-  #return(dt)
+  # if (length(unique(dt[,region_id])) == 1){
+  #   return(dt)
+  # } else if (length(unique(dt[,region_id])) > 1){
+  #   return(summary_dt_all_animals)
+  # }
   print(p)
 }
 data("sleep_sexual_dimorphism")
-sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id == 1]
+sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 acto_etho = actoplot_etho(sleep_sexual_dimorphism,
                           condition = moving,
-                          num_of_plot = 2)
+                          num_of_plot = 2,
+                          pop_overview = "mean",
+                          DD_days_start = 0, #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          DD_days_end = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          LD_days_start = 1, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          LD_days_end = 2, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          D_start = 0,
+                          D_end_L_start = 12,
+                          L_end = 24,
+                          LD_offset = 0)
