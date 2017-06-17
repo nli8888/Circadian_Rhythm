@@ -3,10 +3,12 @@ library(shinythemes)
 library(shinydashboard)
 
 source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v5.R")
+source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v6.R")
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+data("sleep_sexual_dimorphism")
+sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
 ui <- navbarPage(theme = shinytheme("flatly"),
     title = "Analysis of Circadian Rhythm",
@@ -52,7 +54,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                       h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data. Only DAM1 data is available."))
              ),
              selectInput("dataset", label = h3("Select example data to load"), 
-                         choices = c("dam1ex1", "dam1ex2", "dammulti1"),
+                         choices = c("dam1ex1", "dam1ex2", "dammulti1", "ethoscope"),
                          width = "20%"), 
              actionButton('loaddata', 'Load data'),
              br(), br(), br(),
@@ -111,15 +113,21 @@ server <- function(input, output, session) {
     output$sidePanel <- renderUI(sidebarPanel(
       sliderInput("dup_num", label = h3("Number of duplicated days:"),
                   min = 1, max = 10, value = 2),
+      
       selectInput("operation", label = h3("Operation to perform:"),
                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean"),
-      conditionalPanel("input.dataset == 'dammulti1'",
-                       selectInput("pop_overview", label = h3("Additional summary opperation to perform on population data:"),
-                                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean")),
       
-      selectInput("plot_type", label = h3("Type of plot:"),
-                  choices = list("bar" = "bar", "line" = "line",
-                                 "ribbon" = "ribbon", "tile" = "tile"), selected = "bar"),
+      conditionalPanel("input.dataset == 'dammulti1'||input.dataset == 'ethoscope'",
+                       selectInput("pop_overview", label = h3("Additional summary opperation to perform on population data:"),
+                                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum", "NULL" = "NULL"), selected = "mean")),
+      
+      conditionalPanel("input.dataset != 'ethoscope'",
+                       selectInput("plot_type", label = h3("Type of plot:"),
+                                   choices = list("bar" = "bar", "line" = "line", "ribbon" = "ribbon", "tile" = "tile"), selected = "bar")),
+      
+      conditionalPanel("input.dataset == 'ethoscope'",
+                       selectInput("condition", label = h3("Y axis values to plot:"),
+                                   choices = list(moving = "moving", asleep = "asleep"), selected = "moving")),
       
       conditionalPanel("input.plot_type == 'bar'",
                        h4("DD day range:"), p("(e.g. From 4 to 8)"),
@@ -144,8 +152,10 @@ server <- function(input, output, session) {
                    label = "Plot graph")
     ))
     
-    data <- eventReactive(input$go, {actoplot_dam1(isolate(datasetInput()),
+    data <- eventReactive(input$go, {actoplot(isolate(datasetInput()),
                                                    num_of_plot = input$dup_num,
+                                              file_format = datasetFile_format(),
+                                              condition = input$condition,
                                                    type_of_plot = input$plot_type, #currently only "bar" has LD and DD annotations available
                                                    DD_days_start = input$DD_start,
                                                    DD_days_end = input$DD_end,
@@ -165,13 +175,22 @@ server <- function(input, output, session) {
       switch(input$dataset,
            "dam1ex1" = dam1ex1,
            "dam1ex2" = dam1ex2,
-           "dammulti1" = dammulti1)
+           "dammulti1" = dammulti1,
+           "ethoscope" = sleep_sexual_dimorphism)
       })
+    datasetFile_format <- reactive({
+      switch(input$dataset,
+             "dam1ex1" = "dam1",
+             "dam1ex2" = "dam1",
+             "dammulti1" = "dam1",
+             "ethoscope" = "ethoscope")
+    })
     datasetText <- reactive({
       switch(input$dataset,
              "dam1ex1" = "Displayed below is an example  raw data from DAM1 machines.",
              "dam1ex2" = "Displayed below is raw example data from DAM1 machines.",
-             "dammulti1" = "Displayed below is population ")
+             "dammulti1" = "Displayed below is DAM1 population data",
+             "ethoscope" = "Displayed below is ethoscope data")
       })
     output$hline <- renderUI(hr())
     output$ex1text <- renderText(
