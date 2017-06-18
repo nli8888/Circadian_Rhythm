@@ -25,7 +25,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                                 tags$head(
                                   tags$style(HTML("hr {border-top: 1px solid #000000;}"))
                                 ),hr(),
-                                "Circadian Rhythm is "))
+                                "Circadian Rhythms are partly endogenous oscillations in biological process that exhibit "))
              ),
              fluidRow(column(1, offset = 8, 
                     actionButton('nextpage1', 'Next Page')#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
