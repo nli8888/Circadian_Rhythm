@@ -1300,20 +1300,20 @@ actoplot_etho = function(file1 = file1,
   # }
   print(p)
 }
-data("sleep_sexual_dimorphism")
-sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
-acto_etho = actoplot(sleep_sexual_dimorphism,
-                     file_format = "ethoscope",
-                          condition = "moving",
-                          num_of_plot = 2,
-                          operation = "mean",
-                          pop_overview = "mean",
-                          DD_days_start = "none", #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          DD_days_end = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_start = 1, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_end = 2, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          D_start = 0,
-                          D_end_L_start = 12,
-                          L_end = 24,
-                          LD_offset = 0)
-acto_etho
+# data("sleep_sexual_dimorphism")
+# sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
+# acto_etho = actoplot(sleep_sexual_dimorphism,
+#                      file_format = "ethoscope",
+#                           condition = "moving",
+#                           num_of_plot = 2,
+#                           operation = "mean",
+#                           pop_overview = "mean",
+#                           DD_days_start = "none", #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           DD_days_end = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           LD_days_start = 1, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           LD_days_end = 2, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           D_start = 0,
+#                           D_end_L_start = 12,
+#                           L_end = 24,
+#                           LD_offset = 0)
+# acto_etho

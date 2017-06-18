@@ -54,7 +54,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                       h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data. Only DAM1 data is available."))
              ),
              selectInput("dataset", label = h3("Select example data to load"), 
-                         choices = c("dam1ex1", "dam1ex2", "dammulti1", "ethoscope"),
+                         choices = c("dam1ex1", "dam1ex2", "dammulti1", "dam2", "ethoscope"),
                          width = "20%"), 
              actionButton('loaddata', 'Load data'),
              br(), br(), br(),
@@ -127,7 +127,7 @@ server <- function(input, output, session) {
       
       conditionalPanel("input.dataset == 'ethoscope'",
                        selectInput("condition", label = h3("Y axis values to plot:"),
-                                   choices = list(moving = "moving", asleep = "asleep"), selected = "moving")),
+                                   choices = list(moving = "moving", asleep = "asleep", max_velocity = "max_velocity", is_interpolated = "is_interpolated"), selected = "moving")),
       
       conditionalPanel("input.plot_type == 'bar'",
                        h4("DD day range:"), p("(e.g. From 4 to 8)"),
@@ -176,6 +176,7 @@ server <- function(input, output, session) {
            "dam1ex1" = dam1ex1,
            "dam1ex2" = dam1ex2,
            "dammulti1" = dammulti1,
+           "dam2" = dam2,
            "ethoscope" = sleep_sexual_dimorphism)
       })
     datasetFile_format <- reactive({
@@ -183,6 +184,7 @@ server <- function(input, output, session) {
              "dam1ex1" = "dam1",
              "dam1ex2" = "dam1",
              "dammulti1" = "dam1",
+             "dam2" = "dam2",
              "ethoscope" = "ethoscope")
     })
     datasetText <- reactive({
@@ -190,6 +192,7 @@ server <- function(input, output, session) {
              "dam1ex1" = "Displayed below is an example  raw data from DAM1 machines.",
              "dam1ex2" = "Displayed below is raw example data from DAM1 machines.",
              "dammulti1" = "Displayed below is DAM1 population data",
+             "dam2" = "Displayed below is DAM2 data",
              "ethoscope" = "Displayed below is ethoscope data")
       })
     output$hline <- renderUI(hr())
