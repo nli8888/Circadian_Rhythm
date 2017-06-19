@@ -34,7 +34,15 @@ ui <- navbarPage(theme = shinytheme("flatly"),
     tabPanel("Introduction",
              fluidRow(
                column(6, offset = 3, 
-                      "Circadian rhythms are ")
+                      "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian”, which stems from the Latin “circa diem” or “about a day”.", actionLink("ref1", tags$sup("[1]")),
+"Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from the more obvious examples like sleep and feeding patterns throughout the dayand night, to rates of transcription and hormone production.", actionLink("ref2", tags$sup("[2]")),
+p(),
+"To maintain rhymicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons as the central pacemaker.", actionLink("ref3", tags$sup("[3]")),
+"In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN) is located in the hypothalamus of the brain and this is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", actionLink("ref4", tags$sup("[4]")),
+"Without it, all physiological and molecular rhythmicity is lost.",
+p(),
+"Though organisms as whole experience circadian rhythms, even individual cells regulate their own rhythms. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth [REF Feillet].",actionLink("ref5", tags$sup("[5]")),
+" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions. ")
              ),
              fluidRow(
                column(2, offset = 7,
@@ -87,7 +95,20 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                       )
              )
              )),
-    tabPanel("References")
+    tabPanel("References",
+             fluidRow(
+               column(6, offset = 3, HTML("<a name='ref1'></a>"),
+                      "[1] Vitaterna, M. H., Takahashi, J. S. & Turek, F. W. (2001) Overview of circadian rhythms. Alcohol Research and Health. 25 (2), 85-93.",
+                      p(),
+                      "[2] Panda, S., Hogenesch, J. B. & Kay, S. A. (2002) Circadian rhythms from flies to human. Nature. 417 (6886), 329-335.",
+                      p(),
+                      "[3] Beckwith, E. J. & Ceriani, M. F. (2015) Experimental assessment of the network properties of the Drosophila circadian clock. Journal of Comparative Neurology. 523 (6), 982-996.",
+                      p(),
+                      "[4] Bernard, S., Gonze, D., Čajavec, B., Herzel, H. & Kramer, A. (2007) Synchronization-induced rhythmicity of circadian oscillators in the suprachiasmatic nucleus. PLoS Comput Biol. 3 (4), e68.",
+                      p(),
+                      "[5] Feillet, C., Van Der Horst, Gijsbertus TJ, Levi, F., Rand, D. A. & Delaunay, F. (2015) Coupling between the circadian clock and cell cycle oscillators: implication for healthy cells and malignant growth. Frontiers in Neurology. 6 96.0000"
+                      )
+             ))
 )
 
 
@@ -207,6 +228,37 @@ server <- function(input, output, session) {
           ))
     })
   })
+  
+  observeEvent(input$ref1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref3, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref4, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref5, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
 }
 
 
