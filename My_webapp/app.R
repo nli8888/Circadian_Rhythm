@@ -16,8 +16,16 @@ ui <- navbarPage(theme = shinytheme("flatly"),
     footer = column(6, offset = 3, br(), hr(), "Nicholas Li, Imperial College London, 2017"),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
+             tags$head(tags$style(
+               type="text/css",
+               "#image img {max-width: 100%; width: 100%; height: auto}"
+             )),
              fluidRow(
-             column(6, offset = 3, img(src="11175406.jpg", align = "center", width = "898px"))
+             column(6, offset = 3, img(src="11175406.jpg", align = "center", width = "898px")
+                    ,
+                    
+                    imageOutput("image")
+                    )
              ),
              fluidRow(
                column(6, offset = 3,
@@ -41,7 +49,7 @@ p(),
 "In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN) is located in the hypothalamus of the brain and this is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", actionLink("ref4", tags$sup("[4]")),
 "Without it, all physiological and molecular rhythmicity is lost.",
 p(),
-"Though organisms as whole experience circadian rhythms, even individual cells regulate their own rhythms. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth [REF Feillet].",actionLink("ref5", tags$sup("[5]")),
+"Though organisms as whole experience circadian rhythms, even individual cells regulate their own rhythms. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",actionLink("ref5", tags$sup("[5]")),
 " At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions. ")
              ),
              fluidRow(
@@ -113,6 +121,13 @@ p(),
 
 
 server <- function(input, output, session) {
+  output$image <- renderImage({
+    return(list(
+      src = "www/11175406.jpg",
+      contentType = "image/jpeg",
+      width = "898px"
+    ))
+  }, deleteFile = FALSE)
   observeEvent(input$nextpage2, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Autocorrelation")
