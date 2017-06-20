@@ -10,10 +10,17 @@ dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
-ui <- navbarPage(theme = shinytheme("flatly"),
+ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
+    inverse = TRUE,
     id = "inTabset",
-    footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017"),column(2, offset = 4, HTML("<a href='#top'>top of page</a>")), br()),
+    collapsible = TRUE,
+    footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017"),
+                    column(2, offset = 4, 
+                           # actionButton("top", "Top of Page", onclick ="location.href='#top';")
+                           tags$b(HTML("<a href='#top'>top of page</a>"))
+                           ), 
+                    br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
              fluidRow(
@@ -38,27 +45,35 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                                 "Circadian Rhythms are partly endogenous oscillations in biological process that exhibit "))
              ),
              fluidRow(column(1, offset = 8, 
-                    actionButton('nextpage1', 'Next Page')#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+                    actionButton('homenextpage', 'Next Page')#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
              ))
              ),
+    
     tabPanel("Introduction",
              fluidRow(
-               column(6, offset = 3, 
-                      "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian” - derived from the Latin “circa diem” or “about a day”.", actionLink("ref1", tags$sup("[1]")),
-"Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from sleep and feeding patterns throughout the day and night, to rates of transcription and hormone production.", actionLink("ref2", tags$sup("[2]")),
+               column(6, offset = 3, h2("Introduction"), hr(),
+                      "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian” - derived from the Latin “circa diem” or “about a day”.", 
+                      actionLink("ref1", tags$sup("[1]")),
+"Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from sleep and feeding patterns throughout the day and night, to rates of transcription and hormone production.", 
+actionLink("ref2", tags$sup("[2]")),
 p(),
-"To maintain rhythmicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons (sLNvs) as the central pacemaker.", actionLink("ref3", tags$sup("[3]")),
-"In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN), located in the hypothalamus of the brain, is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", actionLink("ref4", tags$sup("[4]")),
+"To maintain rhythmicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons (sLNvs) as the central pacemaker.", 
+actionLink("ref3", tags$sup("[3]")),
+"In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN), located in the hypothalamus of the brain, is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", 
+actionLink("ref4", tags$sup("[4]")),
 "Without it, all physiological and molecular oscillations become arhythmic.",
 p(),
-"Though organisms as a whole experience circadian rhythms, individual cells regulate their own rhythms as well. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",actionLink("ref5", tags$sup("[5]")),
+"Though organisms as a whole experience circadian rhythms, individual cells regulate their own rhythms as well. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",
+actionLink("ref5", tags$sup("[5]")),
 " At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions.",
 p(),
 "Circadian rhythms are only partly controlled by endogenoues means, as environmental cues can also entrain and synchronize such biological rhythms to envirmental oscillations.", 
-"These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", actionLink("ref3.1", tags$sup("[3]")),
+"These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", 
+actionLink("ref3.1", tags$sup("[3]")),
 "Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom. As the sun rises during mornings and falls during evenings, daylight changes to night and temperatures oscillate, which forces entrainment on most organisms. Hence the daily rountine activities of feeding and sleep can be shown to follow such enivironmental cues.", 
 "When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can be anywhere between 18 to 32 hours, hence why entrainment by", tags$i("zeitgebers"), 
-"is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),tags$b("(Fig. 1)"),"."
+"is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),
+tags$b("(Fig. 1)"),"."
 )
              ),
               tags$head(tags$style(
@@ -75,14 +90,37 @@ p(),
                         )),
              fluidRow(br(),
                column(6, offset = 3, 
+                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpage", "next page"),") but have few software that allows practical analysis of acquired data.", 
+                      "The Gilestro Laboratory have developed their own custom equipment for observing Drosophila activity (“Ethoscopes”) and accompanying R package “rethomics” for analytics (available at http://gilestrolab.github.io/ethoscope/)", 
+                      actionLink("ref8", tags$sup("[8]")),
+                      ", but the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
                       wellPanel(tags$b("Aim"),br(),"To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory (rethomics) that helps experimentalist analyse circadian rhythm."))
              ),
              fluidRow(
                column(2, offset = 7,
-                      actionButton('prevpage1', 'Previous Page'),
-                      actionButton('nextpage2', 'Next Page')
+                      actionButton('introprevpagebutton', 'Previous Page'),
+                      actionButton('intronextpagebutton', 'Next Page')
                       )
              )),
+    tabPanel("Equipment for studying Drosophila activity",
+             fluidRow(
+               column(6, offset = 3,
+                      h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
+                      "Before analyzing data, the package must be able to import and read data from equipment commonly used by experimentalists to study circadian rhythms.", 
+                      "As Drosophila are well characterised model organisms they tend to be the chosen for most studies. Traditionally,", 
+                      tags$b("Drosophila Activity Monitors"), "(DAMs), purchasable from TriKinetics (", tags$a(href="http://www.trikinetics.com", "www.trikinetics.com", target="_blank"), ") have been used in most labs", 
+                      tags$b("(Fig. 2)"),".")
+             ),
+             tags$head(tags$style(
+               type="text/css",
+               "#image3 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             fluidRow(br(),
+                      column(6, offset = 3, 
+                             column(6, imageOutput("image3")),
+                             column(6, wellPanel(tags$b("Figure 2."), "text"))
+                      ))
+             ),
     tabPanel("Actograms",
              fluidRow(
                column(6, offset = 3,
@@ -144,7 +182,9 @@ p(),
                       p(),
                       "[6] Aschoff, J. (1981) Freerunning and entrained circadian rhythms. In: Anonymous Biological rhythms. , Springer. pp. 81-93.",
                       p(),
-                      "[7] Golombek, D. A. & Rosenstein, R. E. (2010) Physiology of circadian entrainment. Physiological Reviews. 90 (3), 1063-1102."
+                      "[7] Golombek, D. A. & Rosenstein, R. E. (2010) Physiology of circadian entrainment. Physiological Reviews. 90 (3), 1063-1102.",
+                      p(),
+                      "[8] Geissmann, Q., Rodriguez, L. G., Beckwith, E. J., French, A. S., Jamasb, A. R. & Gilestro, G. F. (2017) Ethoscopes: an open platform for high-throughput ethomics. Biorxiv. 113647."
                       )
              ))
 )
@@ -169,15 +209,30 @@ server <- function(input, output, session) {
     ))
   }, deleteFile = FALSE)
   
-  observeEvent(input$nextpage2, {
+  output$image3 <- renderImage({
+    return(list(
+      src = "www/nprot.2006.79-F4.jpg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  observeEvent(input$intronextpage, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Autocorrelation")
+                      selected = "Equipment for studying Drosophila activity")
+    HTML("<a href='#ref1'></a>")
   })
-  observeEvent(input$prevpage1, {
+  
+  observeEvent(input$intronextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Equipment for studying Drosophila activity")
+  })
+  observeEvent(input$introprevpagebutton, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Home")
   })
-  observeEvent(input$nextpage1, {
+  observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
   })
@@ -330,6 +385,12 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref7, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref8, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")
