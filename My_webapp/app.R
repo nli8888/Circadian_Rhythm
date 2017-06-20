@@ -21,9 +21,7 @@ ui <- navbarPage(theme = shinytheme("flatly"),
                "#image img {max-width: 100%; width: 100%; height: auto}"
              )),
              fluidRow(
-             column(6, offset = 3, img(src="11175406.jpg", align = "center", width = "898px")
-                    ,
-                    
+             column(6, offset = 3, #img(src="11175406.jpg", align = "center", width = "898px"),
                     imageOutput("image")
                     )
              ),
@@ -50,7 +48,21 @@ p(),
 "Without it, all physiological and molecular rhythmicity is lost.",
 p(),
 "Though organisms as whole experience circadian rhythms, even individual cells regulate their own rhythms. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",actionLink("ref5", tags$sup("[5]")),
-" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions. ")
+" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions."
+
+)
+             ),
+              tags$head(tags$style(
+                type="text/css",
+                "#image2 img {max-width: 100%; width: 100%; height: auto}"
+              )),
+             fluidRow(
+               column(6, offset = 3, 
+                        column(6, imageOutput("image2")), column(6, wellPanel(tags$b("Figure 1."), "test caption"))
+                        )),
+             fluidRow(
+               column(6, offset = 3, 
+                      "test")
              ),
              fluidRow(
                column(2, offset = 7,
@@ -124,10 +136,21 @@ server <- function(input, output, session) {
   output$image <- renderImage({
     return(list(
       src = "www/11175406.jpg",
-      contentType = "image/jpeg",
-      width = "898px"
+      contentType = "image/jpeg"
+      # ,
+      # width = "898px"
     ))
   }, deleteFile = FALSE)
+  
+  output$image2 <- renderImage({
+    return(list(
+      src = "www/F2.large.jpg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
   observeEvent(input$nextpage2, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Autocorrelation")
