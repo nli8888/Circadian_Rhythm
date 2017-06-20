@@ -13,9 +13,13 @@ sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 ui <- navbarPage(theme = shinytheme("flatly"),
     title = "Analysis of Circadian Rhythm",
     id = "inTabset",
-    footer = column(6, offset = 3, br(), hr(), "Nicholas Li, Imperial College London, 2017"),
+    footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017"),column(2, offset = 4, HTML("<a href='#top'>top of page</a>")), br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
+             fluidRow(
+               column(6, offset = 3, 
+                      wellPanel(tags$b("Note:"), "Due to the nature of R Shiny apps, your browser's 'previous-page' button will not work. This is true for all browsers. Apologies"))
+             ),
              tags$head(tags$style(
                type="text/css",
                "#image img {max-width: 100%; width: 100%; height: auto}"
@@ -40,29 +44,38 @@ ui <- navbarPage(theme = shinytheme("flatly"),
     tabPanel("Introduction",
              fluidRow(
                column(6, offset = 3, 
-                      "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian”, which stems from the Latin “circa diem” or “about a day”.", actionLink("ref1", tags$sup("[1]")),
-"Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from the more obvious examples like sleep and feeding patterns throughout the dayand night, to rates of transcription and hormone production.", actionLink("ref2", tags$sup("[2]")),
+                      "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian” - derived from the Latin “circa diem” or “about a day”.", actionLink("ref1", tags$sup("[1]")),
+"Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from sleep and feeding patterns throughout the day and night, to rates of transcription and hormone production.", actionLink("ref2", tags$sup("[2]")),
 p(),
-"To maintain rhymicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons as the central pacemaker.", actionLink("ref3", tags$sup("[3]")),
-"In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN) is located in the hypothalamus of the brain and this is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", actionLink("ref4", tags$sup("[4]")),
-"Without it, all physiological and molecular rhythmicity is lost.",
+"To maintain rhythmicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons (sLNvs) as the central pacemaker.", actionLink("ref3", tags$sup("[3]")),
+"In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN), located in the hypothalamus of the brain, is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", actionLink("ref4", tags$sup("[4]")),
+"Without it, all physiological and molecular oscillations become arhythmic.",
 p(),
-"Though organisms as whole experience circadian rhythms, even individual cells regulate their own rhythms. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",actionLink("ref5", tags$sup("[5]")),
-" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions."
-
+"Though organisms as a whole experience circadian rhythms, individual cells regulate their own rhythms as well. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",actionLink("ref5", tags$sup("[5]")),
+" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions.",
+p(),
+"Circadian rhythms are only partly controlled by endogenoues means, as environmental cues can also entrain and synchronize such biological rhythms to envirmental oscillations.", 
+"These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", actionLink("ref3.1", tags$sup("[3]")),
+"Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom. As the sun rises during mornings and falls during evenings, daylight changes to night and temperatures oscillate, which forces entrainment on most organisms. Hence the daily rountine activities of feeding and sleep can be shown to follow such enivironmental cues.", 
+"When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can be anywhere between 18 to 32 hours, hence why entrainment by", tags$i("zeitgebers"), 
+"is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),tags$b("(Fig. 1)"),"."
 )
              ),
               tags$head(tags$style(
                 type="text/css",
                 "#image2 img {max-width: 100%; width: 100%; height: auto}"
               )),
-             fluidRow(
+             fluidRow(br(),
                column(6, offset = 3, 
-                        column(6, imageOutput("image2")), column(6, wellPanel(tags$b("Figure 1."), "test caption"))
+                        column(6, imageOutput("image2")), 
+                      column(6, wellPanel(tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
+                                          "in this case light (where the sun icon represents light and moon represents darkness). Black bars represent variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
+                                          "Bottom half panel: however, when the", tags$i("zeitgeber"), "is taken away, the organisms sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
+                                          "Extracted from Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]"))))
                         )),
-             fluidRow(
+             fluidRow(br(),
                column(6, offset = 3, 
-                      "test")
+                      wellPanel(tags$b("Aim"),br(),"To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory (rethomics) that helps experimentalist analyse circadian rhythm."))
              ),
              fluidRow(
                column(2, offset = 7,
@@ -81,23 +94,24 @@ p(),
                column(6, offset = 3,
                       h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data. Only DAM1 data is available."))
              ),
-             selectInput("dataset", label = h3("Select example data to load"), 
+             selectInput("dataset", label = h3("1) Select example data to load"), 
                          choices = c("dam1ex1", "dam1ex2", "dammulti1", "dam2", "ethoscope"),
                          width = "20%"), 
              actionButton('loaddata', 'Load data'),
-             br(), br(), br(),
-             h5(textOutput("ex1text")),
-             uiOutput("hline"),
-             dataTableOutput('ex1'),
              hr(),
+             # br(), br(), br(),
              sidebarLayout(uiOutput("sidePanel"),
                            mainPanel(plotOutput("actogram", width = "100%", height = "700"))
              ),
+             
+             h5(textOutput("ex1text")),
+             uiOutput("hline"),
+             dataTableOutput('ex1')
              # fluidRow(
              #   column(8, offset = 2,
              #          plotOutput("actogram", width = "100%", height = "700")
              #   )),
-             fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
+             # fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
              ),
     navbarMenu(title = "Other Methods",
     tabPanel("Autocorrelation",
@@ -126,7 +140,11 @@ p(),
                       p(),
                       "[4] Bernard, S., Gonze, D., Čajavec, B., Herzel, H. & Kramer, A. (2007) Synchronization-induced rhythmicity of circadian oscillators in the suprachiasmatic nucleus. PLoS Comput Biol. 3 (4), e68.",
                       p(),
-                      "[5] Feillet, C., Van Der Horst, Gijsbertus TJ, Levi, F., Rand, D. A. & Delaunay, F. (2015) Coupling between the circadian clock and cell cycle oscillators: implication for healthy cells and malignant growth. Frontiers in Neurology. 6 96.0000"
+                      "[5] Feillet, C., Van Der Horst, Gijsbertus TJ, Levi, F., Rand, D. A. & Delaunay, F. (2015) Coupling between the circadian clock and cell cycle oscillators: implication for healthy cells and malignant growth. Frontiers in Neurology. 6 96.0000",
+                      p(),
+                      "[6] Aschoff, J. (1981) Freerunning and entrained circadian rhythms. In: Anonymous Biological rhythms. , Springer. pp. 81-93.",
+                      p(),
+                      "[7] Golombek, D. A. & Rosenstein, R. E. (2010) Physiology of circadian entrainment. Physiological Reviews. 90 (3), 1063-1102."
                       )
              ))
 )
@@ -169,7 +187,7 @@ server <- function(input, output, session) {
     dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
     dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
     
-    output$sidePanel <- renderUI(sidebarPanel(
+    output$sidePanel <- renderUI(sidebarPanel(h3("2) Plot graph"),
       sliderInput("dup_num", label = h3("Number of duplicated days:"),
                   min = 1, max = 10, value = 2),
       
@@ -211,7 +229,8 @@ server <- function(input, output, session) {
                    label = "Plot graph")
     ))
     
-    data <- eventReactive(input$go, {actoplot(isolate(datasetInput()),
+    data <- eventReactive(input$go, {withProgress(message = "loading", value = 0,{
+      actoplot(isolate(datasetInput()),
                                                    num_of_plot = input$dup_num,
                                               file_format = datasetFile_format(),
                                               condition = input$condition,
@@ -226,7 +245,8 @@ server <- function(input, output, session) {
                                                    L_end = input$L_ends,
                                                    operation = input$operation,
                                                    pop_overview = input$pop_overview,
-                                                   time_to_round = hours(1))})
+                                                   time_to_round = hours(1))
+     })})
     output$actogram <- renderPlot({
       data()
     })
@@ -285,6 +305,12 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref3.1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
   observeEvent(input$ref4, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
@@ -297,6 +323,17 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref6, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref7, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
 }
 
 
