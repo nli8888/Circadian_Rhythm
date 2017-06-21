@@ -9,6 +9,7 @@ PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
+
 ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
     position = "fixed-top",
@@ -16,14 +17,15 @@ ui <- navbarPage(theme = shinytheme("readable"),
     id = "inTabset",
     collapsible = TRUE,
     
-    footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017"),
+    footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017", br(), br(), br()),
                     column(2, offset = 4, 
-                           # actionButton("top", "Top of Page", onclick ="location.href='#top';")
-                           tags$b(HTML("<a href='#top'>top of page</a>"))
+                           actionButton("top", "Top of Page", onclick="$('html,body').scrollTop(0);")
+                           # tags$b(HTML("<a href='#top'>top of page</a>"))
                            ), 
                     br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
+             onclick="$('html,body').scrollTop(0);",
              tags$style(type="text/css", "body {padding-top: 70px;}"),
              fluidRow(
                column(6, offset = 3, 
@@ -47,7 +49,7 @@ ui <- navbarPage(theme = shinytheme("readable"),
                                 "Circadian Rhythms are partly endogenous oscillations in biological process that exhibit "))
              ),
              fluidRow(column(1, offset = 8, 
-                    actionButton('homenextpage', 'Next Page')#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+                    actionButton('homenextpage', 'Next Page', onclick="$('html,body').scrollTop(0);")#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
              ))
              ),
     
@@ -92,19 +94,21 @@ tags$b("(Fig. 1)"),"."
                         )),
              fluidRow(br(),
                column(6, offset = 3, 
-                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpage", "next page"),") but have few software that allows practical analysis of acquired data.", 
-                      "The Gilestro Laboratory have developed their own custom equipment for observing animal activity in the lab (“Ethoscopes”) and accompanying R package “rethomics” for analytics (available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
+                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpagelink", "next page", onclick="$('html,body').scrollTop(0);"),") but have few software that allows practical analysis of acquired data.", 
+                      "Recently, the Gilestro Laboratory have developed and published their own custom equipment, named “Ethoscopes”, for observing animal activity in the lab and accompanying R package “rethomics” for analytics (publicly available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
-                      ", but the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
+                      ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
                       wellPanel(tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") and helps experimentalist analyse circadian rhythm.'))
              ),
              fluidRow(
                column(2, offset = 7,
-                      actionButton('introprevpagebutton', 'Previous Page'),
-                      actionButton('intronextpagebutton', 'Next Page')
+                      actionButton('introprevpagebutton', 'Previous Page', onclick="$('html,body').scrollTop(0);"),
+                      actionButton('intronextpagebutton', 'Next Page', onclick="$('html,body').scrollTop(0);")
                       )
              )),
     tabPanel("Equipment Acquisition",
+             onclick="$('html,body').scrollTop(0);",
+      #title=actionLink("EquimentAcquisitionTab", "Equipment Acquisition", onclick="$('html,body').scrollTop(0);"),
              fluidRow(
                column(6, offset = 3,
                       h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
@@ -122,14 +126,14 @@ tags$b("(Fig. 1)"),"."
                              column(6, imageOutput("image3")),
                              column(6, wellPanel(tags$b("Figure 2."), 
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
-                                                 "Typically, the tubes are centered in the middle and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source detect the beam. Each time the beam is broken by", 
-                                                 tags$i("Drosophila"), "in the way is recorded.",
+                                                 "Typically, the tubes are centered in the middle, and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source of the beam detect it. The number of times the beam is broken by", 
+                                                 tags$i("Drosophila"), "crossing it over a certain period is recorded.",
                                                  "Credit: Rosato, E. & Kyriacou, C. P. (2006)", actionLink("ref9", tags$sup("[9]"))
                                                  ))
                       )),
              fluidRow(br(),
                       column(6, offset = 3,
-                             "Older DAM models record data in DAM1 format, where individual files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single file.", 
+                             "Older DAM models record data in DAM1 format, where individual (.txt) files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single  (.txt) file.", 
                              "“Rethomics” possesses the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
                              p(),
                              "2 were developed:",
@@ -279,10 +283,15 @@ server <- function(input, output, session) {
     tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
   })
   
-  observeEvent(input$intronextpage, {
+  observeEvent(input$EquimentAcquisitionTab, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Equipment Acquistion")
+  })
+  
+  observeEvent(input$intronextpagelink, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Equipment Acquisition")
-    HTML("<a href='#ref1'></a>")
+    #HTML("<a href='#ref1'></a>")
   })
   
   observeEvent(input$intronextpagebutton, {
