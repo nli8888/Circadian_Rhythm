@@ -88,7 +88,7 @@ tags$b("(Fig. 1)"),"."
                       column(6, wellPanel(tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
                                           "in this case light (where the sun icon represents light and moon represents darkness). Black bars represent variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
                                           "Bottom half panel: however, when the", tags$i("zeitgeber"), "is taken away, the organisms sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
-                                          "Extracted from Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]"))))
+                                          "Credit: Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]"))))
                         )),
              fluidRow(br(),
                column(6, offset = 3, 
@@ -109,7 +109,7 @@ tags$b("(Fig. 1)"),"."
                column(6, offset = 3,
                       h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
                       "Before analyzing data, the package must be able to import and read data from equipment commonly used by experimentalists to study circadian rhythms.", 
-                      "As Drosophila are well characterised model organisms they tend to be the chosen for most studies. Traditionally,", 
+                      "As", tags$i("Drosophila"), "are well characterised model organisms they tend to be chosen for most studies. Traditionally,", 
                       tags$b("Drosophila Activity Monitors"), "(DAMs), purchasable from TriKinetics (", tags$a(href="http://www.trikinetics.com", "http://www.trikinetics.com", target="_blank"), ") have been used in most labs", 
                       tags$b("(Fig. 2)"),".")
              ),
@@ -123,24 +123,50 @@ tags$b("(Fig. 1)"),"."
                              column(6, wellPanel(tags$b("Figure 2."), 
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
                                                  "Typically, the tubes are centered in the middle and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source detect the beam. Each time the beam is broken by", 
-                                                 tags$i("Drosophila"), "in the way is recorded."))
+                                                 tags$i("Drosophila"), "in the way is recorded.",
+                                                 "Credit: Rosato, E. & Kyriacou, C. P. (2006)", actionLink("ref9", tags$sup("[9]"))
+                                                 ))
                       )),
              fluidRow(br(),
                       column(6, offset = 3,
                              "Older DAM models record data in DAM1 format, where individual files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single file.", 
-                             "“Rethomics” possesses a function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to developing functions for reading DAM1 data.",
+                             "“Rethomics” possesses the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
                              p(),
                              "2 were developed:",
                              tags$ul(
-                               tags$li("One for reading single file individual data  -", code("DAM1_single_reader()"), "where the primiary argument is the directory path of the DAM1 file;"),
-                               tags$li("One for multiple files population data -", code("DAM1_multi_reader()"), "where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
+                               tags$li("One for reading a single file (individual data)  -", code("DAM1_single_reader()"), "where the primiary argument is the directory path of the DAM1 file;"),
+                               tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader()"), "where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
                              ),
                              p(),
                              "For more documentation and source code please refer to", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
                              p(),
-                             HTML('<iframe width="640" height="375" class="embed-responsive-item  m-x-auto d-block" src="https://www.youtube.com/embed/5oWGBUMJON8" frameborder="0" allowfullscreen></iframe>')
-                               
-                             ))
+                             "Additionally, as aforementioned Geissmann", tags$i("et al."), "(2017) from the Gilestro Laboratory have developed their own equipment for studying Drosophila called Ethoscopes and as such, “rethomics” can already import raw ethoscope data directly.", 
+                             actionLink("ref8.1", tags$sup("[8]")),
+                             "Ethoscope machines are designed for higher throughput analysis of animal activity compared to DAM", tags$b("(Fig 3)"), "."
+                             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image4 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             column(8, offset = 2, imageOutput("image4"))
+                             )
+                      ),
+             fluidRow(
+                      column(6, offset = 3,
+                             wellPanel(tags$b("Figure 3. a)"), 
+                                       "Blown-up view of a prototypical ethoscope. The upper case contains a Raspberry Pi and its HD camera which tracks and records animal behaviours in the arena. The lower case contains infrared lights and support for the experimental arena. Custom arena designs can be made as long as they fit the required dimensions, which allow for flexible experimental design. For", 
+                                       tags$i("Drosophila,"), "the arena is typically designed to equip the same transparent tubes used in DAM, with all tubes laid out horizontally to allow full video tracking.",
+                                       tags$b("b)"), "Rendered model of fully assembled product with actual size dimensions shown. Guide slits allow the arena to slide and lock into position.",
+                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]"))
+                                       )
+                             )),
+             fluidRow(
+               column(6, offset = 3, 
+                      HTML('<iframe width="768" height="432" class="embed-responsive-item  m-x-auto d-block" src="https://www.youtube.com/embed/5oWGBUMJON8" frameborder="0" allowfullscreen></iframe>')
+               )
+             )
              ),
     tabPanel("Actograms",
              fluidRow(
@@ -204,7 +230,9 @@ tags$b("(Fig. 1)"),"."
                       p(),
                       "[7] Golombek, D. A. & Rosenstein, R. E. (2010) Physiology of circadian entrainment. Physiological Reviews. 90 (3), 1063-1102.",
                       p(),
-                      "[8] Geissmann, Q., Rodriguez, L. G., Beckwith, E. J., French, A. S., Jamasb, A. R. & Gilestro, G. F. (2017) Ethoscopes: an open platform for high-throughput ethomics. Biorxiv. 113647."
+                      "[8] Geissmann, Q., Rodriguez, L. G., Beckwith, E. J., French, A. S., Jamasb, A. R. & Gilestro, G. F. (2017) Ethoscopes: an open platform for high-throughput ethomics. Biorxiv. 113647.",
+                      p(),
+                      "[9] Rosato, E. & Kyriacou, C. P. (2006) Analysis of locomotor activity rhythms in Drosophila. Nature Protocols. 1 (2), 559-568."
                       )
              ))
 )
@@ -238,6 +266,15 @@ server <- function(input, output, session) {
     ))
   }, deleteFile = FALSE)
   
+  output$image4 <- renderImage({
+    return(list(
+      src = "www/ethoscope1.png",
+      contentType = "image/png"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
   output$video <- renderUI({
     tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
   })
@@ -252,10 +289,12 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, "inTabset",
                       selected = "Equipment Acquisition")
   })
+  
   observeEvent(input$introprevpagebutton, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Home")
   })
+  
   observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
@@ -419,6 +458,25 @@ server <- function(input, output, session) {
                       selected = "References")
     HTML("<a href='#ref1'></a>")
   })
+  
+  observeEvent(input$ref8.1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref9, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref8.2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
 }
 
 
