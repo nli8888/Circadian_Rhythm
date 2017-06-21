@@ -9,12 +9,13 @@ PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
-
 ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
+    position = "fixed-top",
     inverse = TRUE,
     id = "inTabset",
     collapsible = TRUE,
+    
     footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017"),
                     column(2, offset = 4, 
                            # actionButton("top", "Top of Page", onclick ="location.href='#top';")
@@ -23,6 +24,7 @@ ui <- navbarPage(theme = shinytheme("readable"),
                     br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
+             tags$style(type="text/css", "body {padding-top: 70px;}"),
              fluidRow(
                column(6, offset = 3, 
                       wellPanel(tags$b("Note:"), "Due to the nature of R Shiny apps, your browser's 'previous-page' button will not work. This is true for all browsers. Apologies"))
@@ -102,7 +104,7 @@ tags$b("(Fig. 1)"),"."
                       actionButton('intronextpagebutton', 'Next Page')
                       )
              )),
-    tabPanel("Equipment for studying Drosophila activity",
+    tabPanel("Equipment Acquisition",
              fluidRow(
                column(6, offset = 3,
                       h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
@@ -220,13 +222,13 @@ server <- function(input, output, session) {
   
   observeEvent(input$intronextpage, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Equipment for studying Drosophila activity")
+                      selected = "Equipment Acquisition")
     HTML("<a href='#ref1'></a>")
   })
   
   observeEvent(input$intronextpagebutton, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Equipment for studying Drosophila activity")
+                      selected = "Equipment Acquisition")
   })
   observeEvent(input$introprevpagebutton, {
     updateTabsetPanel(session, "inTabset",
