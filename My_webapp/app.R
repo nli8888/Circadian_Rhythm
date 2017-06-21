@@ -93,10 +93,10 @@ tags$b("(Fig. 1)"),"."
              fluidRow(br(),
                column(6, offset = 3, 
                       "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpage", "next page"),") but have few software that allows practical analysis of acquired data.", 
-                      "The Gilestro Laboratory have developed their own custom equipment for observing Drosophila activity (“Ethoscopes”) and accompanying R package “rethomics” for analytics (available at http://gilestrolab.github.io/ethoscope/)", 
+                      "The Gilestro Laboratory have developed their own custom equipment for observing animal activity in the lab (“Ethoscopes”) and accompanying R package “rethomics” for analytics (available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
                       ", but the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
-                      wellPanel(tags$b("Aim"),br(),"To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory (rethomics) that helps experimentalist analyse circadian rhythm."))
+                      wellPanel(tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") and helps experimentalist analyse circadian rhythm.'))
              ),
              fluidRow(
                column(2, offset = 7,
@@ -110,7 +110,7 @@ tags$b("(Fig. 1)"),"."
                       h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
                       "Before analyzing data, the package must be able to import and read data from equipment commonly used by experimentalists to study circadian rhythms.", 
                       "As Drosophila are well characterised model organisms they tend to be the chosen for most studies. Traditionally,", 
-                      tags$b("Drosophila Activity Monitors"), "(DAMs), purchasable from TriKinetics (", tags$a(href="http://www.trikinetics.com", "www.trikinetics.com", target="_blank"), ") have been used in most labs", 
+                      tags$b("Drosophila Activity Monitors"), "(DAMs), purchasable from TriKinetics (", tags$a(href="http://www.trikinetics.com", "http://www.trikinetics.com", target="_blank"), ") have been used in most labs", 
                       tags$b("(Fig. 2)"),".")
              ),
              tags$head(tags$style(
@@ -120,8 +120,27 @@ tags$b("(Fig. 1)"),"."
              fluidRow(br(),
                       column(6, offset = 3, 
                              column(6, imageOutput("image3")),
-                             column(6, wellPanel(tags$b("Figure 2."), "text"))
-                      ))
+                             column(6, wellPanel(tags$b("Figure 2."), 
+                                                 "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
+                                                 "Typically, the tubes are centered in the middle and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source detect the beam. Each time the beam is broken by", 
+                                                 tags$i("Drosophila"), "in the way is recorded."))
+                      )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             "Older DAM models record data in DAM1 format, where individual files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single file.", 
+                             "“Rethomics” possesses a function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to developing functions for reading DAM1 data.",
+                             p(),
+                             "2 were developed:",
+                             tags$ul(
+                               tags$li("One for reading single file individual data  -", code("DAM1_single_reader()"), "where the primiary argument is the directory path of the DAM1 file;"),
+                               tags$li("One for multiple files population data -", code("DAM1_multi_reader()"), "where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
+                             ),
+                             p(),
+                             "For more documentation and source code please refer to", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
+                             p(),
+                             HTML('<iframe width="640" height="375" class="embed-responsive-item  m-x-auto d-block" src="https://www.youtube.com/embed/5oWGBUMJON8" frameborder="0" allowfullscreen></iframe>')
+                               
+                             ))
              ),
     tabPanel("Actograms",
              fluidRow(
@@ -139,14 +158,13 @@ tags$b("(Fig. 1)"),"."
                          width = "20%"), 
              actionButton('loaddata', 'Load data'),
              hr(),
+             dataTableOutput('ex1'),
              # br(), br(), br(),
-             sidebarLayout(uiOutput("sidePanel"),
-                           mainPanel(plotOutput("actogram", width = "100%", height = "700"))
-             ),
-             
              h5(textOutput("ex1text")),
              uiOutput("hline"),
-             dataTableOutput('ex1')
+             sidebarLayout(uiOutput("sidePanel"),
+                           mainPanel(plotOutput("actogram", width = "100%", height = "700"))
+             )
              # fluidRow(
              #   column(8, offset = 2,
              #          plotOutput("actogram", width = "100%", height = "700")
@@ -219,6 +237,10 @@ server <- function(input, output, session) {
       # width = "500px"
     ))
   }, deleteFile = FALSE)
+  
+  output$video <- renderUI({
+    tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
+  })
   
   observeEvent(input$intronextpage, {
     updateTabsetPanel(session, "inTabset",
