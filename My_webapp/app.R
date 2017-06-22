@@ -12,21 +12,21 @@ sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
 ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
-    position = "fixed-top",
+    # position = "fixed-top",
     inverse = TRUE,
     id = "inTabset",
     collapsible = TRUE,
     
     footer = column(6, offset = 3, br(), hr(), column(6, "Nicholas Li, Imperial College London, 2017", br(), br(), br()),
                     column(2, offset = 4, 
-                           actionButton("top", "Top of Page", onclick="$('html,body').scrollTop(0);")
+                           actionButton("top", "Top of Page", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
                            # tags$b(HTML("<a href='#top'>top of page</a>"))
                            ), 
                     br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
-             onclick="$('html,body').scrollTop(0);",
-             tags$style(type="text/css", "body {padding-top: 70px;}"),
+             # tags$style(type="text/css", "body {padding-top: 70px;}"),
+             onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
              fluidRow(
                column(6, offset = 3, 
                       wellPanel(tags$b("Note:"), "Due to the nature of R Shiny apps, your browser's 'previous-page' button will not work. This is true for all browsers. Apologies"))
@@ -49,7 +49,7 @@ ui <- navbarPage(theme = shinytheme("readable"),
                                 "Circadian Rhythms are partly endogenous oscillations in biological process that exhibit "))
              ),
              fluidRow(column(1, offset = 8, 
-                    actionButton('homenextpage', 'Next Page', onclick="$('html,body').scrollTop(0);")#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+                    actionButton('homenextpage', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
              ))
              ),
     
@@ -94,7 +94,7 @@ tags$b("(Fig. 1)"),"."
                         )),
              fluidRow(br(),
                column(6, offset = 3, 
-                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpagelink", "next page", onclick="$('html,body').scrollTop(0);"),") but have few software that allows practical analysis of acquired data.", 
+                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpagelink", "next page", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),") but have few software that allows practical analysis of acquired data.", 
                       "Recently, the Gilestro Laboratory have developed and published their own custom equipment, named “Ethoscopes”, for observing animal activity in the lab and accompanying R package “rethomics” for analytics (publicly available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
                       ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
@@ -102,12 +102,12 @@ tags$b("(Fig. 1)"),"."
              ),
              fluidRow(
                column(2, offset = 7,
-                      actionButton('introprevpagebutton', 'Previous Page', onclick="$('html,body').scrollTop(0);"),
-                      actionButton('intronextpagebutton', 'Next Page', onclick="$('html,body').scrollTop(0);")
+                      actionButton('introprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('intronextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
                       )
              )),
     tabPanel("Equipment Acquisition",
-             onclick="$('html,body').scrollTop(0);",
+             onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
       #title=actionLink("EquimentAcquisitionTab", "Equipment Acquisition", onclick="$('html,body').scrollTop(0);"),
              fluidRow(
                column(6, offset = 3,
@@ -134,7 +134,7 @@ tags$b("(Fig. 1)"),"."
              fluidRow(br(),
                       column(6, offset = 3,
                              "Older DAM models record data in DAM1 format, where individual (.txt) files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single  (.txt) file.", 
-                             "“Rethomics” possesses the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
+                             "“Rethomics” includes the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
                              p(),
                              "2 were developed:",
                              tags$ul(
@@ -144,7 +144,7 @@ tags$b("(Fig. 1)"),"."
                              p(),
                              "For more documentation and source code please refer to", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
                              p(),
-                             "Additionally, as aforementioned Geissmann", tags$i("et al."), "(2017) from the Gilestro Laboratory have developed their own equipment for studying Drosophila called Ethoscopes and as such, “rethomics” can already import raw ethoscope data directly.", 
+                             "Additionally, as aforementioned Geissmann", tags$i("et al."), "(2017) from the Gilestro Laboratory have developed their own equipment for studying Drosophila called “Ethoscopes” and as such, “rethomics” can already import raw ethoscope data directly.", 
                              actionLink("ref8.1", tags$sup("[8]")),
                              "Ethoscope machines are designed for higher throughput analysis of animal activity compared to DAM", tags$b("(Fig 3)"), "."
                              )),
@@ -166,11 +166,23 @@ tags$b("(Fig. 1)"),"."
                                        "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]"))
                                        )
                              )),
+      fluidRow(column(6, offset = 3,
+                      "Ethoscopes offer more dynamical experimentation and does not have the same limitations as DAM. While DAM can only measure the number of times",
+                      tags$i("Drosophila,"), "has crossed the infrared beam, ethoscopes can record all activity using its HD camera and video tracking software. Therefore, behaviours that would otherwise not be captured by DAM, such as micro-movements (grooming, eating etc.), can be observed and distinguished from sleeping or walking.",
+                      p(), "Below is a short video demonstrating ethoscopes; for more details and tutorials on ethoscopes, please visit:", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"),
+                      p()
+                      )),
              fluidRow(
                column(6, offset = 3, 
                       HTML('<iframe width="768" height="432" class="embed-responsive-item  m-x-auto d-block" src="https://www.youtube.com/embed/5oWGBUMJON8" frameborder="0" allowfullscreen></iframe>')
                )
-             )
+             ),
+      fluidRow(
+        column(2, offset = 7,
+               actionButton('equipprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+               actionButton('equipnextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+        )
+      )
              ),
     tabPanel("Actograms",
              fluidRow(
@@ -302,6 +314,16 @@ server <- function(input, output, session) {
   observeEvent(input$introprevpagebutton, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Home")
+  })
+  
+  observeEvent(input$equipprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Introduction")
+  })
+  
+  observeEvent(input$equipnextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Actograms")
   })
   
   observeEvent(input$homenextpage, {
