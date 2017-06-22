@@ -88,8 +88,8 @@ tags$b("(Fig. 1)"),"."
                column(6, offset = 3, 
                         column(6, imageOutput("image2")), 
                       column(6, wellPanel(tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
-                                          "in this case light (where the sun icon represents light and moon represents darkness). Black bars represent variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
-                                          "Bottom half panel: however, when the", tags$i("zeitgeber"), "is taken away, the organisms sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
+                                          ", in this case light (where the sun icon represents light and moon represents darkness). Black bars represent the variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
+                                          "Bottom half panel: however, when the", tags$i("zeitgeber"), "is removed, the organism's sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
                                           "Credit: Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]"))))
                         )),
              fluidRow(br(),
@@ -138,7 +138,7 @@ tags$b("(Fig. 1)"),"."
                              p(),
                              "2 were developed:",
                              tags$ul(
-                               tags$li("One for reading a single file (individual data)  -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;"),
+                               tags$li("One for reading a single file (individual data) -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;"),
                                tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader(dir)"), ", where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
                              ),
                              p(),
