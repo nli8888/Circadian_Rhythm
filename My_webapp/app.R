@@ -36,8 +36,9 @@ ui <- navbarPage(theme = shinytheme("readable"),
                "#image img {max-width: 100%; width: 100%; height: auto}"
              )),
              fluidRow(
+               # column(3, div(style = "height:313px;")),
              column(6, offset = 3, #img(src="11175406.jpg", align = "center", width = "898px"),
-                    imageOutput("image")
+                    imageOutput("image", height = "auto")
                     )
              ),
              fluidRow(
@@ -86,7 +87,7 @@ tags$b("(Fig. 1)"),"."
               )),
              fluidRow(br(),
                column(6, offset = 3, 
-                        column(6, imageOutput("image2")), 
+                        column(6, imageOutput("image2", height = "100%")), 
                       column(6, wellPanel(tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
                                           ", in this case light (where the sun icon represents light and moon represents darkness). Black bars represent the variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
                                           "Bottom half panel: however, when the", tags$i("zeitgeber"), "is removed, the organism's sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
@@ -123,7 +124,7 @@ tags$b("(Fig. 1)"),"."
              )),
              fluidRow(br(),
                       column(6, offset = 3, 
-                             column(6, imageOutput("image3")),
+                             column(6, imageOutput("image3", height = "auto")),
                              column(6, wellPanel(tags$b("Figure 2."), 
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
                                                  "Typically, the tubes are centered in the middle, and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source of the beam detect it. The number of times the beam is broken by", 
@@ -154,7 +155,7 @@ tags$b("(Fig. 1)"),"."
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                             column(8, offset = 2, imageOutput("image4"))
+                             column(8, offset = 2, imageOutput("image4", height = "100%"))
                              )
                       ),
              fluidRow(
@@ -197,7 +198,17 @@ tags$b("(Fig. 1)"),"."
                       "A procress has a circadian rhythm if it has an entrainable endogenous rhythmicity with a period of approximately 24 hours. There does not seem to be an absolute range for how close to 24 hours the period needs to be to be deemed circadian in the field.", 
                       "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial."
                       )
+             ),
+             tags$head(tags$style(
+               type="text/css",
+               "#image5 img {max-width: 100%; width: 100%; height: auto}"
              )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                      column(4, imageOutput("image5", height = "auto")),
+                      column(8, wellPanel(tags$b("Figure 4.")))
+                      ))
+             ),
     tabPanel("Actoplot",
              
              fluidRow(
@@ -294,6 +305,15 @@ server <- function(input, output, session) {
   output$image4 <- renderImage({
     return(list(
       src = "www/ethoscope1.png",
+      contentType = "image/png"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image5 <- renderImage({
+    return(list(
+      src = "www/mouse_actogram.png",
       contentType = "image/png"
       # ,
       # width = "500px"
