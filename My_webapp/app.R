@@ -75,7 +75,7 @@ p(),
 "These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", 
 actionLink("ref3.1", tags$sup("[3]")),
 "Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom. As the sun rises during mornings and falls during evenings, daylight changes to night and temperatures oscillate, which forces entrainment on most organisms. Hence the daily rountine activities of feeding and sleep can be shown to follow such enivironmental cues.", 
-"When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can be anywhere between 18 to 32 hours, hence why entrainment by", tags$i("zeitgebers"), 
+"When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can even deviate by a few hours, hence why entrainment by", tags$i("zeitgebers"), 
 "is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),
 tags$b("(Fig. 1)"),"."
 )
@@ -138,8 +138,8 @@ tags$b("(Fig. 1)"),"."
                              p(),
                              "2 were developed:",
                              tags$ul(
-                               tags$li("One for reading a single file (individual data)  -", code("DAM1_single_reader()"), "where the primiary argument is the directory path of the DAM1 file;"),
-                               tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader()"), "where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
+                               tags$li("One for reading a single file (individual data)  -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;"),
+                               tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader(dir)"), ", where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
                              ),
                              p(),
                              "For more documentation and source code please refer to", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
@@ -187,7 +187,16 @@ tags$b("(Fig. 1)"),"."
     tabPanel("Actograms",
              fluidRow(
                column(6, offset = 3,
-                      "One useful way of visualising activity data is via Actograms.")
+                      h2("Analysing circadian rhythms using Actograms"), hr(),
+                      "Now that raw data can be read and imported, it can be processed and analyzed. Three main questions are asked about the data:",
+                      tags$ul(
+                        tags$li("if the data appears rhythmic, is it circadian?"),
+                        tags$li("what is the period of the rhythmicity?"),
+                        tags$li("how strong is the rhythmic signal, or what is the power of the period?")
+                      ),
+                      "A procress has a circadian rhythm if it has an entrainable endogenous rhythmicity with a period of approximately 24 hours. There does not seem to be an absolute range for how close to 24 hours the period needs to be to be deemed circadian in the field.", 
+                      "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial."
+                      )
              )),
     tabPanel("Actoplot",
              
