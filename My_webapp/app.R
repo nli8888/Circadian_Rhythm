@@ -185,6 +185,7 @@ tags$b("(Fig. 1)"),"."
         )
       )
              ),
+navbarMenu(title="Visual Analysis",
     tabPanel("Actograms",
              fluidRow(
                column(6, offset = 3,
@@ -244,8 +245,8 @@ tags$b("(Fig. 1)"),"."
              #          plotOutput("actogram", width = "100%", height = "700")
              #   )),
              # fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
-             ),
-    navbarMenu(title = "Other Methods",
+             )),
+    navbarMenu(title = "Quantitative Analysis",
     tabPanel("Autocorrelation",
              withMathJax(),
              fluidRow(
@@ -329,7 +330,7 @@ server <- function(input, output, session) {
   
   output$image5 <- renderImage({
     return(list(
-      src = "www/mouse_actogram.png",
+      src = "www/f1_actogram.png",
       contentType = "image/png"
       # ,
       # width = "500px"
