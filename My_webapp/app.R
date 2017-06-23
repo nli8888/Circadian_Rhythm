@@ -108,7 +108,7 @@ tags$b("(Fig. 1)"),"."
                       )
              )),
     tabPanel("Equipment Acquisition",
-             onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
+             # onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
       #title=actionLink("EquimentAcquisitionTab", "Equipment Acquisition", onclick="$('html,body').scrollTop(0);"),
              fluidRow(
                column(6, offset = 3,
@@ -196,7 +196,19 @@ tags$b("(Fig. 1)"),"."
                         tags$li("how strong is the rhythmic signal, or what is the power of the period?")
                       ),
                       "A procress has a circadian rhythm if it has an entrainable endogenous rhythmicity with a period of approximately 24 hours. There does not seem to be an absolute range for how close to 24 hours the period needs to be to be deemed circadian in the field.", 
-                      "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial."
+                      "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial.",
+                      p(),
+                      "One of the most common ways of analyzing circadian rhythms is through graphical representation and visual inspection of the data via an actogram",
+                      "(", tags$b("Fig. 4"), ").", actionLink("ref10", tags$sup("[10]")),
+                      "Actograms plot time on the x-axis and the variable of interest, such as activity (e.g. the number of times", 
+                      tags$i("Drosophila"), "crossed the beam), on the y-axis. The time component of the data is also vertically split into separate days, with each sucessive day following the preceding one a line below. Therefore the range of the x-axis is typically limited to [0, 24] hours.",
+                      p(),
+                      "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
+                        "This means there will be duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
+                        "The purpose being that this is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the period of rhythmicity.", 
+                        "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
+                        actionLink("ref10.1", tags$sup("[10;")), actionLink("ref11", tags$sup("11]"))
+                        
                       )
              ),
              tags$head(tags$style(
@@ -205,8 +217,8 @@ tags$b("(Fig. 1)"),"."
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                      column(4, imageOutput("image5", height = "auto")),
-                      column(8, wellPanel(tags$b("Figure 4.")))
+                      column(6, imageOutput("image5", height = "auto")),
+                      column(6, wellPanel(tags$b("Figure 4.")))
                       ))
              ),
     tabPanel("Actoplot",
@@ -268,7 +280,11 @@ tags$b("(Fig. 1)"),"."
                       p(),
                       "[8] Geissmann, Q., Rodriguez, L. G., Beckwith, E. J., French, A. S., Jamasb, A. R. & Gilestro, G. F. (2017) Ethoscopes: an open platform for high-throughput ethomics. Biorxiv. 113647.",
                       p(),
-                      "[9] Rosato, E. & Kyriacou, C. P. (2006) Analysis of locomotor activity rhythms in Drosophila. Nature Protocols. 1 (2), 559-568."
+                      "[9] Rosato, E. & Kyriacou, C. P. (2006) Analysis of locomotor activity rhythms in Drosophila. Nature Protocols. 1 (2), 559-568.",
+                      p(),
+                      "[10] Refinetti, R., Cornélissen, G. & Halberg, F. (2007) Procedures for numerical analysis of circadian rhythms. Biological Rhythm Research. 38 (4), 275-325.",
+                      p(),
+                      "[11] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
                       )
              ))
 )
@@ -537,6 +553,23 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref10, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref10.1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref11, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
 }
 
 
