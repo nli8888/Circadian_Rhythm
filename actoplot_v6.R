@@ -1454,4 +1454,5 @@ acto_etho = actoplot(dam1,
                           D_end_L_start = 12,
                           L_end = 24,
                           LD_offset = -4)
+acto_etho = acto_etho + annotate(geom="segment", x=seq(0, 48, 1), xend=seq(0, 48, 1), y = 0, yend=1)
 acto_etho
