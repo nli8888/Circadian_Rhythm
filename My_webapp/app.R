@@ -41,7 +41,7 @@ ui <- navbarPage(theme = shinytheme("readable"),
                     imageOutput("image", height = "auto")
                     )
              ),
-             fluidRow(
+             fluidRow(br(),
                column(6, offset = 3,
                       wellPanel(h2("Abstract"),
                                 tags$head(
@@ -158,7 +158,7 @@ tags$b("(Fig. 1)"),"."
                              column(8, offset = 2, imageOutput("image4", height = "100%"))
                              )
                       ),
-             fluidRow(
+             fluidRow(br(),
                       column(6, offset = 3,
                              wellPanel(tags$b("Figure 3. a)"), 
                                        "Blown-up view of a prototypical ethoscope. The upper case contains a Raspberry Pi and its HD camera which tracks and records animal behaviours in the arena. The lower case contains infrared lights and support for the experimental arena. Custom arena designs can be made as long as they fit the required dimensions, which allow for flexible experimental design. For", 
