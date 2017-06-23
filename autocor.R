@@ -60,7 +60,7 @@ p = ggplot(subset_y, aes(period, acf, width=1)) +
   scale_y_continuous(name="acf") +
   theme(plot.title = element_text(hjust = 0.5)) +
   ggtitle("Correlogram of acf over period") +
-  geom_hline(yintercept = upper) + geom_hline(yintercept = lower)
+  geom_hline(yintercept = upper, linetype = 2) + geom_hline(yintercept = lower, linetype = 2)
 p
 which.max(subset_y[,acf]) + 9
 
