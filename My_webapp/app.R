@@ -208,7 +208,7 @@ navbarMenu(title="Visual Analysis",
                         "This means there will be duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
                         "The purpose being that this is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the period of rhythmicity.", 
                         "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
-                        actionLink("ref10.1", tags$sup("[10;")), actionLink("ref11", tags$sup("11]"))
+                        actionLink("ref10.1", tags$sup("[10;")), actionLink("ref11", tags$sup("11]")), "(see", actionLink("actogramspagelink", "workd example", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"), ")"
                         
                       )
              ),
@@ -218,8 +218,8 @@ navbarMenu(title="Visual Analysis",
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                      column(6, imageOutput("image5", height = "auto")),
-                      column(6, wellPanel(tags$b("Figure 4.")))
+                      column(8, imageOutput("image5", height = "auto")),
+                      column(4, wellPanel(tags$b("Figure 4.")))
                       ))
              ),
     tabPanel("Actoplot",
@@ -245,7 +245,13 @@ navbarMenu(title="Visual Analysis",
              #          plotOutput("actogram", width = "100%", height = "700")
              #   )),
              # fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
-             )),
+             ),
+    tabPanel("Worked Example", value = "actogram example",
+             fluidRow(column(6, offset = 3,
+                             h2("Worked Example"), hr(),
+                             actionLink("actoexample", "Back to Actograms", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+                             )))
+    ),
     navbarMenu(title = "Quantitative Analysis",
     tabPanel("Autocorrelation",
              withMathJax(),
@@ -375,6 +381,16 @@ server <- function(input, output, session) {
   observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
+  })
+  
+  observeEvent(input$actogramspagelink, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "actogram example")
+  })
+  
+  observeEvent(input$actoexample, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Actograms")
   })
   
   observeEvent(input$loaddata, {
