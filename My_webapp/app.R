@@ -38,7 +38,9 @@ ui <- navbarPage(theme = shinytheme("readable"),
              fluidRow(
                # column(3, div(style = "height:313px;")),
              column(6, offset = 3, #img(src="11175406.jpg", align = "center", width = "898px"),
+                    # HTML('<a href="f1_actogram.png" target="_blank">'),
                     imageOutput("image", height = "auto")
+                    # ,HTML("</a>")
                     )
              ),
              fluidRow(br(),

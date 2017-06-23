@@ -898,21 +898,23 @@ actoplot = function(file1 = file1,
   #   return(summary_dt_all_animals)
   # }
 }
-##DAM1##
+##DAM1## DELETE THESE ONES; NO LONGER NEEDED
 # dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
-PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
 # PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 # PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 # PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
 # PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
 # PATH5 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Ces"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 #dammulti2 = DAM1_multi_reader(PATH2, time_format = "min")
 #dammulti3 = DAM1_multi_reader(PATH3, time_format = "min")
 #dammulti4 = DAM1_multi_reader(PATH4, time_format = "min")
 #dammulti5 = DAM1_multi_reader(PATH5, time_format = "min")
 #dammulti = rbind(dammulti1, dammulti2)
+
+#RUN THESE BELOW
+# dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
+#PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
+#dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 
 # acto = actoplot_dam1(dammulti1,
 #                      num_of_plot = 4,
@@ -1437,22 +1439,22 @@ actoplot_etho = function(file1 = file1,
 }
 # data("sleep_sexual_dimorphism")
 # sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
-acto_etho = actoplot(dam1,
-                     file_format = "dam1",
-                          condition = "moving",
-                          num_of_plot = 2,
-                          type_of_plot = "bar",
-                     plot_xlab = "time (hours)",
-                     plot_ylab = "activty",
-                          operation = "mean",
-                          pop_overview = "mean",
-                          DD_days_start = 4, #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          DD_days_end = 17, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_start = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_end = 3, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          D_start = 0,
-                          D_end_L_start = 12,
-                          L_end = 24,
-                          LD_offset = -4)
-acto_etho = acto_etho + annotate(geom="segment", x=seq(0, 48, 1), xend=seq(0, 48, 1), y = 0, yend=1)
-acto_etho
+# acto_etho = actoplot(dam1,
+#                      file_format = "dam1",
+#                           condition = "moving",
+#                           num_of_plot = 2,
+#                           type_of_plot = "bar",
+#                      plot_xlab = "time (hours)",
+#                      plot_ylab = "activty",
+#                           operation = "mean",
+#                           pop_overview = "mean",
+#                           DD_days_start = 4, #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           DD_days_end = 17, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           LD_days_start = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           LD_days_end = 3, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+#                           D_start = 0,
+#                           D_end_L_start = 12,
+#                           L_end = 24,
+#                           LD_offset = -4)
+# # acto_etho = acto_etho + annotate(geom="segment", x=seq(0, 48, 1), xend=seq(0, 48, 1), y = 0, yend=1)
+# acto_etho
