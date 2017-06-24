@@ -59,28 +59,29 @@ ui <- navbarPage(theme = shinytheme("readable"),
     tabPanel("Introduction",
              fluidRow(
                column(6, offset = 3, h2("Introduction"), hr(),
+                      HTML('<p style="font-size:18px">'),
                       "Circadian rhythms are partly endogenous oscillations in biological processes that exhibit an approximately 24 hour cycle. Hence the name “Circadian” - derived from the Latin “circa diem” or “about a day”.", 
                       actionLink("ref1", tags$sup("[1]")),
 "Circadian rhythms are important in many biological aspects as many physiological and molecular activities follow such oscillations. This ranges from sleep and feeding patterns throughout the day and night, to rates of transcription and hormone production.", 
 actionLink("ref2", tags$sup("[2]")),
-p(),
+br(),br(),
 "To maintain rhythmicity, circadian rhythms are regulated by circadian clocks. In Drosophila melanogaster, physiological circadian rhythms are regulated by a network of about 150 neurons with the small ventral lateral neurons (sLNvs) as the central pacemaker.", 
 actionLink("ref3", tags$sup("[3]")),
 "In humans, a group of 20,000 neurons called the suprachiasmatic nucleus (SCN), located in the hypothalamus of the brain, is considered as the master circadian clock. As well as controlling its own set of rhythmic processes, it also synchronises all other body clocks in the organism.", 
 actionLink("ref4", tags$sup("[4]")),
 "Without it, all physiological and molecular oscillations become arhythmic.",
-p(),
+br(),br(),
 "Though organisms as a whole experience circadian rhythms, individual cells regulate their own rhythms as well. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",
 actionLink("ref5", tags$sup("[5]")),
 " At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions.",
-p(),
+br(),br(),
 "Circadian rhythms are only partly controlled by endogenoues means, as environmental cues can also entrain and synchronize such biological rhythms to envirmental oscillations.", 
 "These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", 
 actionLink("ref3.1", tags$sup("[3]")),
 "Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom. As the sun rises during mornings and falls during evenings, daylight changes to night and temperatures oscillate, which forces entrainment on most organisms. Hence the daily rountine activities of feeding and sleep can be shown to follow such enivironmental cues.", 
 "When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can even deviate by a few hours, hence why entrainment by", tags$i("zeitgebers"), 
 "is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),
-tags$b("(Fig. 1)"),"."
+tags$b("(Fig. 1)"),".", HTML('</p>')
 )
              ),
               tags$head(tags$style(
@@ -138,15 +139,16 @@ tags$b("(Fig. 1)"),"."
                       column(6, offset = 3,
                              "Older DAM models record data in DAM1 format, where individual (.txt) files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single  (.txt) file.", 
                              "“Rethomics” includes the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
-                             p(),
+                             br(),br(),
                              "2 were developed:",
                              tags$ul(
                                tags$li("One for reading a single file (individual data) -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;"),
                                tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader(dir)"), ", where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
                              ),
-                             p(),
-                             "For more documentation and source code please refer to", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
-                             p(),
+                             br(),br(),
+                             "To be compatible to “rethomics”, data is read into", code("data.table()"), "format using the R package", tags$a(href="https://cran.r-project.org/web/packages/data.table/", "data.table", target="_blank"), ".",
+                             "For more documentation and source code visit", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
+                             br(),br(),
                              "Additionally, as aforementioned Geissmann", tags$i("et al."), "(2017) from the Gilestro Laboratory have developed their own equipment for studying Drosophila called “Ethoscopes” and as such, “rethomics” can already import raw ethoscope data directly.", 
                              actionLink("ref8.1", tags$sup("[8]")),
                              "Ethoscope machines are designed for higher throughput analysis of animal activity compared to DAM", tags$b("(Fig 3)"), "."
@@ -157,7 +159,10 @@ tags$b("(Fig. 1)"),"."
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                             column(8, offset = 2, imageOutput("image4", height = "100%"))
+                             column(8, offset = 2, 
+                                    HTML('<a href="ethoscope1.png" target="_blank">'),
+                                    imageOutput("image4", height = "100%"),
+                                    HTML('</a>'))
                              )
                       ),
              fluidRow(br(),
@@ -166,14 +171,14 @@ tags$b("(Fig. 1)"),"."
                                        "Blown-up view of a prototypical ethoscope. The upper case contains a Raspberry Pi and its HD camera which tracks and records animal behaviours in the arena. The lower case contains infrared lights and support for the experimental arena. Custom arena designs can be made as long as they fit the required dimensions, which allow for flexible experimental design. For", 
                                        tags$i("Drosophila,"), "the arena is typically designed to equip the same transparent tubes used in DAM, with all tubes laid out horizontally to allow full video tracking.",
                                        tags$b("b)"), "Rendered model of fully assembled product with actual size dimensions shown. Guide slits allow the arena to slide and lock into position.",
-                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]"))
+                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]")), "Click image to enlarge."
                                        )
                              )),
       fluidRow(column(6, offset = 3,
                       "Ethoscopes offer more dynamical experimentation and does not have the same limitations as DAM. While DAM can only measure the number of times",
                       tags$i("Drosophila,"), "has crossed the infrared beam, ethoscopes can record all activity using its HD camera and video tracking software. Therefore, behaviours that would otherwise not be captured by DAM, such as micro-movements (grooming, eating etc.), can be observed and distinguished from sleeping or walking.",
-                      p(), "Below is a short video demonstrating ethoscopes; for more details and tutorials on ethoscopes, please visit:", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"),
-                      p()
+                      br(),br(), "Below is a short video demonstrating ethoscopes; for more details and tutorials on ethoscopes, please visit:", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"),
+                      br(),br()
                       )),
              fluidRow(
                column(6, offset = 3, 
@@ -200,15 +205,15 @@ navbarMenu(title="Visual Analysis",
                       ),
                       "A procress has a circadian rhythm if it has an entrainable endogenous rhythmicity with a period of approximately 24 hours. There does not seem to be an absolute range for how close to 24 hours the period needs to be to be deemed circadian in the field.", 
                       "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial.",
-                      p(),
+                      br(),br(),
                       "One of the most common ways of analyzing circadian rhythms is through graphical representation and visual inspection of the data via an actogram",
                       "(", tags$b("Fig. 4"), ").", actionLink("ref10", tags$sup("[10]")),
                       "Actograms plot time on the x-axis and the variable of interest, such as activity (e.g. the number of times", 
                       tags$i("Drosophila"), "crossed the beam), on the y-axis. The time component of the data is also vertically split into separate days, with each sucessive day following the preceding one a line below. Therefore the range of the x-axis is typically limited to [0, 24] hours.",
-                      p(),
+                      br(),br(),
                       "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
                         "This means there will be duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
-                        "The purpose being that this is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the period of rhythmicity.", 
+                        "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the period of rhythmicity.", 
                         "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
                         actionLink("ref10.1", tags$sup("[10;")), actionLink("ref11", tags$sup("11]")), "(see", actionLink("actogramspagelink", "workd example", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"), ")"
                         
@@ -225,6 +230,12 @@ navbarMenu(title="Visual Analysis",
                       ))
              ),
     tabPanel("Actoplot",
+             fluidRow(column(6, offset = 3,
+                             h2("Worked Example"), hr(),
+                             actionLink("actoexample", "Back to Actograms", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+             ))
+             ),
+    tabPanel("Demo",
              
              fluidRow(
                column(6, offset = 3,
@@ -247,12 +258,7 @@ navbarMenu(title="Visual Analysis",
              #          plotOutput("actogram", width = "100%", height = "700")
              #   )),
              # fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
-             ),
-    tabPanel("Worked Example", value = "actogram example",
-             fluidRow(column(6, offset = 3,
-                             h2("Worked Example"), hr(),
-                             actionLink("actoexample", "Back to Actograms", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
-                             )))
+             )
     ),
     navbarMenu(title = "Quantitative Analysis",
     tabPanel("Autocorrelation",
@@ -387,7 +393,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$actogramspagelink, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "actogram example")
+                      selected = "Actoplot")
   })
   
   observeEvent(input$actoexample, {
