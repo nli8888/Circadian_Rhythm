@@ -12,7 +12,7 @@ sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
 ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
-    # position = "fixed-top",
+    position = "fixed-top",
     inverse = TRUE,
     id = "inTabset",
     collapsible = TRUE,
@@ -25,8 +25,8 @@ ui <- navbarPage(theme = shinytheme("readable"),
                     br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
-             # tags$style(type="text/css", "body {padding-top: 70px;}"),
-             onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
+             tags$style(type="text/css", "body {padding-top: 70px;}"),
+             # onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
              fluidRow(
                column(6, offset = 3, 
                       wellPanel(tags$b("Note:"), "Due to the nature of R Shiny apps, your browser's 'previous-page' button will not work. This is true for all browsers. Apologies"))
@@ -91,10 +91,12 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
              fluidRow(br(),
                column(6, offset = 3, 
                         column(6, imageOutput("image2", height = "100%")), 
-                      column(6, wellPanel(tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
+                      column(6, wellPanel(HTML('<p style="font-size:18px">'),
+                                          tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
                                           ", in this case light (where the sun icon represents light and moon represents darkness). Black bars represent the variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
                                           "Bottom half panel: however, when the", tags$i("zeitgeber"), "is removed, the organism's sleep pattern deviates to its own endogenous rhythm and is describe as “free-running”.",
-                                          "Credit: Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]"))))
+                                          "Credit: Golombek, D. A. & Rosenstein, R. E. (2010)", actionLink("ref7", tags$sup("[7]")), HTML('</p>')
+                                          ))
                         )),
              fluidRow(br(),
                column(6, offset = 3, 
@@ -110,7 +112,7 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                       actionButton('intronextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
                       )
              )),
-    tabPanel("Equipment Acquisition",
+    tabPanel("Data Acquisition",
              # onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
       #title=actionLink("EquimentAcquisitionTab", "Equipment Acquisition", onclick="$('html,body').scrollTop(0);"),
              fluidRow(
@@ -127,7 +129,11 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
              )),
              fluidRow(br(),
                       column(6, offset = 3, 
-                             column(6, imageOutput("image3", height = "auto")),
+                             column(6, 
+                                    HTML('<a href="nprot.2006.79-F4.jpg" target="_blank">'),
+                                    imageOutput("image3", height = "auto"),
+                                    HTML('</a>')
+                                    ),
                              column(6, wellPanel(tags$b("Figure 2."), 
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
                                                  "Typically, the tubes are centered in the middle, and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source of the beam detect it. The number of times the beam is broken by", 
@@ -265,14 +271,17 @@ navbarMenu(title="Visual Analysis",
              withMathJax(),
              fluidRow(
                column(6, offset = 3, 
-                      h3("Autocorrelation"), "An actogram is useful for qualitative analysis, but often more quantitative methods are needed for decisive conclusions. One way is autocorrelation. ",
+                      h3("Autocorrelation"), "An actogram is useful for visual analysis, but is often subjective and therefore more quantitative methods are needed for decisive conclusions. One way is autocorrelation, where time-series data . ",
                       "Mathematically it is defined as:",
                       helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})(x_{t+1}-\\bar x_{(2)})}{\\sqrt{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})^2 \\sum_\\limits{t=1}^{N-1} (x_{t+1}-\\bar x_{(2)})^2}}}$$"),
                       "where", 
                       helpText("$$\\large{\\bar x_{(1)} = \\sum_\\limits{t=1}^{N-1} x_t/(N-1)}$$"),
                       "is the mean of of the first set of observation in each of the (N-1) pairs and", HTML("<span style='font-size:130%'>x&#772<sub>(2)</sub></span>"), "is the mean of the second set.", "Without showing all the steps, Chatifield (2003) demonstrates that the equation above can be conveniently made less complicated by approximating to",
                       helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x)(x_{t+1}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t - \\bar x)^2}}$$"),
-                      "as", HTML("<span style='font-size:130%'>x&#772<sub>(1)</sub> &#8776 x&#772<sub>(2)</sub></span>"), ", and by dropping the factor N/(N-1) since it is close to 1 for large N."
+                      "as", HTML("<span style='font-size:130%'>x&#772<sub>(1)</sub> &#8776 x&#772<sub>(2)</sub></span>"), ", and by dropping the factor N/(N-1) since it is close to 1 for large N.",
+                      "The autocorrelation coefficient at lag", tags$i("k"), "is defined as:",
+                      helpText("$$\\large{r_k = \\frac{\\sum_\\limits{t=1}^{N-k} (x_t-\\bar x)(x_{t+k}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t-\\bar x)^2}}$$"),
+                      helpText("$$\\large{\\bar x = \\sum_\\limits{t=1}^{N} x_t/N}$$")
                       )
              )
              )),
@@ -301,7 +310,13 @@ navbarMenu(title="Visual Analysis",
                       p(),
                       "[11] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
                       )
-             ))
+             )),
+tags$script(" $(document).ready(function () {
+         $('#inTabset a[data-toggle=\"tab\"]').bind('click', function (e) {
+            $(document).load().scrollTop(0);
+            });
+            
+            });")
 )
 
 
@@ -357,18 +372,18 @@ server <- function(input, output, session) {
   
   observeEvent(input$EquimentAcquisitionTab, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Equipment Acquistion")
+                      selected = "Data Acquistion")
   })
   
   observeEvent(input$intronextpagelink, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Equipment Acquisition")
+                      selected = "Data Acquisition")
     #HTML("<a href='#ref1'></a>")
   })
   
   observeEvent(input$intronextpagebutton, {
     updateTabsetPanel(session, "inTabset",
-                      selected = "Equipment Acquisition")
+                      selected = "Data Acquisition")
   })
   
   observeEvent(input$introprevpagebutton, {

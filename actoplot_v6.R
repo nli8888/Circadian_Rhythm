@@ -914,7 +914,7 @@ actoplot = function(file1 = file1,
 #RUN THESE BELOW
 # dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 
 # acto = actoplot_dam1(dammulti1,
 #                      num_of_plot = 4,
@@ -1439,15 +1439,15 @@ actoplot_etho = function(file1 = file1,
 }
 # data("sleep_sexual_dimorphism")
 # sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
-acto_etho = actoplot(dammulti1,
-                     file_format = "dam1",
+acto_etho = actoplot(dam2,
+                     file_format = "dam2",
                           condition = "moving",
                           num_of_plot = 2,
                           type_of_plot = "bar",
                      plot_xlab = "time (hours)",
                      plot_ylab = "activty",
                           operation = "mean",
-                          pop_overview = "mean",
+                          pop_overview = "NULL",
                           DD_days_start = 4, #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                           DD_days_end = 17, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                           LD_days_start = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
