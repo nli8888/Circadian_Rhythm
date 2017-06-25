@@ -104,7 +104,9 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                         )),
              fluidRow(br(),
                column(6, offset = 3, HTML('<p style="font-size:18px">'),
-                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpagelink", "next page", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),") but have few software that allows practical analysis of acquired data.", 
+                      "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see next page)", 
+                      # actionLink("intronextpagelink", "next page", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      "but have few software that allows practical analysis of acquired data.", 
                       "Recently, the Gilestro Laboratory have developed and published their own custom equipment, named “Ethoscopes”, for observing animal activity in the lab and accompanying R package “rethomics” for analytics (publicly available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
                       ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(), HTML('</p>'),
@@ -144,7 +146,7 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
                                                  "Typically, the tubes are centered in the middle, and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source of the beam detect it. The number of times the beam is broken by", 
                                                  tags$i("Drosophila"), "crossing it over a certain period is recorded.",
-                                                 "Credit: Rosato, E. & Kyriacou, C. P. (2006)", actionLink("ref9", tags$sup("[9]")), HTML('</p>')
+                                                 "Credit: Rosato, E. & Kyriacou, C. P. (2006).", actionLink("ref9", tags$sup("[9]")), HTML('</p>')
                                                  ))
                       )),
              fluidRow(br(),
@@ -185,7 +187,7 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                                        "Blown-up view of a prototypical ethoscope. The upper case contains a Raspberry Pi and its HD camera which tracks and records animal behaviours in the arena. The lower case contains infrared lights and support for the experimental arena. Custom arena designs can be made as long as they fit the required dimensions, which allow for flexible experimental design. For", 
                                        tags$i("Drosophila,"), "the arena is typically designed to equip the same transparent tubes used in DAM, with all tubes laid out horizontally to allow full video tracking.",
                                        tags$b("b)"), "Rendered model of fully assembled product with actual size dimensions shown. Guide slits allow the arena to slide and lock into position.",
-                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]")), "Click image to enlarge.", HTML('</p>')
+                                       "Credit: Geissmann", tags$i("et al."), "(2017).", actionLink("ref8.2", tags$sup("[8]")), "Click image to enlarge.", HTML('</p>')
                                        )
                              )),
       fluidRow(column(6, offset = 3, HTML('<p style="font-size:18px">'),
@@ -226,38 +228,52 @@ navbarMenu(title="Visual Analysis",
                       "Actograms plot time on the x-axis and the variable of interest, such as activity (e.g. the number of times", 
                       tags$i("Drosophila"), "crossed the beam), on the y-axis. The time component of the data is also vertically split into separate days, with each sucessive day following the preceding one a line below. Therefore the range of the x-axis is typically limited to [0, 24] hours.",
                       br(),br(),
-                      "As light is a common", tags$i("zeitgeber"), "it is usually experimented with and therefore annotated on actograms as well. Experiments are run under different conditions of light refer to as:", actionLink("ref11", tags$sup("[11]")),
+                      "As light is a common", tags$i("zeitgeber"), "it is usually experimented with and therefore annotated on actograms as well. Experiments are run under different conditions of light refer to as:", actionLink("ref11", tags$sup("[11]")), HTML('</p>'), 
                       tags$ul(
-                        tags$li("LL – constant continuous illumination;"),
-                        tags$li("DD – constant continuous darkness;"),
-                        tags$li("LD – a regular alternation of light and darkness at a constant interval throughout each day, typically 12 hours of light then 12 hours of darkness;")
+                        tags$li(HTML('<p style="font-size:18px">'), "LL – constant continuous illumination;", HTML('</p>')),
+                        tags$li(HTML('<p style="font-size:18px">'),"DD – constant continuous darkness;", HTML('</p>')),
+                        tags$li(HTML('<p style="font-size:18px">'),"LD – a regular alternation of light and darkness at a constant interval throughout each day, typically 12 hours of light then 12 hours of darkness;", HTML('</p>'))
                       ), 
-                      "On actograms, durations of DD and LD are commonly annotated via shading in of the defined region to indicate that period of data being in (alternating) darkness.",
-                      br(),br(),
-                      "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
-                      "There will be a duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
-                      "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the periodicity.",
-                      "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
-                      actionLink("ref10.1", tags$sup("[10;")), actionLink("ref12", tags$sup("12]")), 
-                      br(),br(),
-                      "This is shown in", tags$b("Fig. 5"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of about 25 hours instead of 24.",
-                      tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
-                      actionLink("ref3.2", tags$sup("[3]"))
-                        
-                      )
-             ),
+               HTML('<p style="font-size:18px">'),"On actograms, durations of DD and LD are commonly annotated via shading in of the defined region to indicate that period of data being in (alternating) darkness.", HTML('</p>')
+               )),
              tags$head(tags$style(
                type="text/css",
                "#image5 img {max-width: 100%; width: 100%; height: auto}"
              )),
+             fluidRow(
+               column(6, offset = 3, 
+                             column(6, HTML('<a href="f1_actogram.png" target="_blank">'),
+                                    imageOutput("image5", height = "auto"), HTML('</a>')),
+                      column(6, wellPanel(HTML('<p style="font-size:18px">'), 
+                                          tags$b("Figure 4."),
+                                          "Double-plotted actogram of wild-type mouse locomotor activity entrained under a 12:12 LD (12 hour light, 12 hour dark)  cycle followed by DD (constant darkness). The bar on top represents the LD lighting schedule in Zeitgeber time (ZT). White boxes indicate light, dark boxes indicate darkness. Credit: Yang",
+                                          tags$i("et al."), "(2012).",
+                                          actionLink("ref12", tags$sup("[12]")),  "Click image to enlarge.",
+                                          HTML('</p>')))
+                      )),
+             fluidRow(
+               column(6, offset = 3, br(),
+                      HTML('<p style="font-size:18px">'),
+                      "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
+                      "There will be a duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
+                      "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the periodicity.",
+                      "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
+                      actionLink("ref10.1", tags$sup("[10;")), actionLink("ref13", tags$sup("13]")), 
+                      br(),br(),
+                      "This is shown in", tags$b("Fig. 5"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of approximately 25 hours instead of 24.",
+                      tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
+                      actionLink("ref3.2", tags$sup("[3]")),
+                      HTML('</p>')
+                      )
+             ),
+             
              tags$head(tags$style(
                type="text/css",
                "#image6 img {max-width: 100%; width: 100%; height: auto}"
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                      column(8, offset = 2, HTML('<a href="f1_actogram.png" target="_blank">'),
-                             imageOutput("image5", height = "auto"), HTML('</a>'),br(),
+                      column(8, offset = 2, 
                              HTML('<a href="tim_sggRNAi_analyzed.png" target="_blank">'), 
                              imageOutput("image6", height = "auto"), HTML('</a>')
                              
@@ -265,8 +281,22 @@ navbarMenu(title="Visual Analysis",
                       )),
              fluidRow(br(),
                       column(6, offset = 3,
-                             wellPanel(tags$b("Figure 5.")))
+                             wellPanel(
+                               HTML('<p style="font-size:18px">'),
+                               tags$b("Figure 5."), "Double-plotted actogram of ", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"),
+                               "activity data from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")), "plotted using", code("actoplot()"), "(see next page).",
+                               "Knock-down was achieved using RNAi of", tags$i("sgg"), "with a UAS-", tags$i("sgg"), tags$sup("RNAi"), "and", tags$i("timeless (tim)"), "gene-GAL4 system.",
+                               "Entrained under 12:12 LD cycle followed by DD. Additional annotations of manual analysis of periodicity shown for LD and DD phases.", "Click image to enlarge.",
+                               HTML('</p>')
+                               ))
                
+             ),
+             fluidRow(
+               column(6, offset = 3,
+                      HTML('<p style="font-size:18px">'),
+                      "Actograms have been traditionally used to plot animal activity data, but can be theoretically used on any other time-series data.",
+                      HTML('</p>')
+                      )
              )
              ),
     tabPanel("Actoplot",
@@ -305,14 +335,22 @@ navbarMenu(title="Visual Analysis",
              withMathJax(),
              fluidRow(
                column(6, offset = 3, 
-                      h3("Autocorrelation"), "An actogram is useful for visual analysis, but is often subjective and therefore more quantitative methods are needed for decisive conclusions. One way is autocorrelation, where time-series data . ",
-                      "Mathematically it is defined as:",
-                      helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})(x_{t+1}-\\bar x_{(2)})}{\\sqrt{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})^2 \\sum_\\limits{t=1}^{N-1} (x_{t+1}-\\bar x_{(2)})^2}}}$$"),
-                      "where", 
-                      helpText("$$\\large{\\bar x_{(1)} = \\sum_\\limits{t=1}^{N-1} x_t/(N-1)}$$"),
-                      "is the mean of of the first set of observation in each of the (N-1) pairs and", HTML("<span style='font-size:130%'>x&#772<sub>(2)</sub></span>"), "is the mean of the second set.", "Without showing all the steps, Chatifield (2003) demonstrates that the equation above can be conveniently made less complicated by approximating to",
-                      helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x)(x_{t+1}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t - \\bar x)^2}}$$"),
-                      "as", HTML("<span style='font-size:130%'>x&#772<sub>(1)</sub> &#8776 x&#772<sub>(2)</sub></span>"), ", and by dropping the factor N/(N-1) since it is close to 1 for large N.",
+                      h2("Detection of Rhythmicity and Periodicity using Autocorrelation"), hr(),
+                      # "Mathematically it is defined as:",
+                      # helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})(x_{t+1}-\\bar x_{(2)})}{\\sqrt{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x_{(1)})^2 \\sum_\\limits{t=1}^{N-1} (x_{t+1}-\\bar x_{(2)})^2}}}$$"),
+                      # "where", 
+                      # helpText("$$\\large{\\bar x_{(1)} = \\sum_\\limits{t=1}^{N-1} x_t/(N-1)}$$"),
+                      # "is the mean of of the first set of observation in each of the (N-1) pairs and", HTML("<span style='font-size:130%'>x&#772<sub>(2)</sub></span>"), "is the mean of the second set.", "Without showing all the steps, Chatifield (2003) demonstrates that the equation above can be conveniently made less complicated by approximating to",
+                      # helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x)(x_{t+1}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t - \\bar x)^2}}$$"),
+                      # "as", HTML("<span style='font-size:130%'>x&#772<sub>(1)</sub> &#8776 x&#772<sub>(2)</sub></span>"), ", and by dropping the factor N/(N-1) since it is close to 1 for large N.",
+                      "An actogram is useful for visual analysis, but is often subjective and therefore more quantitative methods are needed for decisive conclusions. As the data is a time-series, one way is though autocorrelation, where the correlation coefficient",
+                      tags$i("(r)"), "of the data set compared to itself is calculated via standard correlation analysis, point by point, from beginning to end. The data set is then lagged by one time interval and compared to the original data set again.",
+                      "Given", tags$i("N"), "data points", HTML('(<em>x</em><sub>1</sub>,...,<em>x</em><sub><em>N</em></sub>)'), "there will be", HTML("<em>N</em>-1"), "pairs of observations,", 
+                      HTML('(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>),'), HTML('(<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>),'), "...,", HTML('(<em>x</em><sub><em>N</em>-1</sub>,<em>x</em><sub><em>N</em></sub>).'),
+                      br(),br(),
+                      "The process is repeated with each repeat using the original data and data that is further lagged by one interval. However, as with each successive lag a pair of observations is removed, meaning the power of the test gradually decreases, autocorrelation is usually performed up to a limit of", 
+                      HTML("<em>N</em>/3."), "[REF Chatfield]",
+                      br(),br(),
                       "The autocorrelation coefficient at lag", tags$i("k"), "is defined as:",
                       helpText("$$\\large{r_k = \\frac{\\sum_\\limits{t=1}^{N-k} (x_t-\\bar x)(x_{t+k}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t-\\bar x)^2}}$$"),
                       helpText("$$\\large{\\bar x = \\sum_\\limits{t=1}^{N} x_t/N}$$")
@@ -344,7 +382,9 @@ navbarMenu(title="Visual Analysis",
                       p(),
                       "[11] Refinetti, R. (2016) Circadian physiology. , CRC press.",
                       p(),
-                      "[12] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
+                      "[12] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801.",
+                      p(),
+                      "[13] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
                       )
              )),
 tags$script(" $(document).ready(function () {
@@ -591,6 +631,12 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref3.3, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
   observeEvent(input$ref4, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
@@ -658,6 +704,12 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref12, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref13, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")
