@@ -110,7 +110,7 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                       "Recently, the Gilestro Laboratory have developed and published their own custom equipment, named “Ethoscopes”, for observing animal activity in the lab and accompanying R package “rethomics” for analytics (publicly available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
                       ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(), HTML('</p>'),
-                      wellPanel(HTML('<p style="font-size:18px">'),tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") and helps experimentalist analyse circadian rhythm.',HTML('</p>'))
+                      wellPanel(HTML('<p style="font-size:18px">'),tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") that helps experimentalist analyse circadian rhythm and to demostrate other methods commonly used.',HTML('</p>'))
                       )
              ),
              fluidRow(
@@ -234,7 +234,13 @@ navbarMenu(title="Visual Analysis",
                         tags$li(HTML('<p style="font-size:18px">'),"DD – constant continuous darkness;", HTML('</p>')),
                         tags$li(HTML('<p style="font-size:18px">'),"LD – a regular alternation of light and darkness at a constant interval throughout each day, typically 12 hours of light then 12 hours of darkness;", HTML('</p>'))
                       ), 
-               HTML('<p style="font-size:18px">'),"On actograms, durations of DD and LD are commonly annotated via shading in of the defined region to indicate that period of data being in (alternating) darkness.", HTML('</p>')
+               HTML('<p style="font-size:18px">'),
+               "On actograms, durations of DD and LD are commonly annotated via shading in of the defined region to indicate that period of data being in (alternating) darkness.", 
+               br(), br(),
+               "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
+               "There will be a duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.",
+               actionLink("ref12", tags$sup("[12]")),
+               HTML('</p>')
                )),
              tags$head(tags$style(
                type="text/css",
@@ -248,17 +254,16 @@ navbarMenu(title="Visual Analysis",
                                           tags$b("Figure 4."),
                                           "Double-plotted actogram of wild-type mouse locomotor activity entrained under a 12:12 LD (12 hour light, 12 hour dark)  cycle followed by DD (constant darkness). The bar on top represents the LD lighting schedule in Zeitgeber time (ZT). White boxes indicate light, dark boxes indicate darkness. Credit: Yang",
                                           tags$i("et al."), "(2012).",
-                                          actionLink("ref12", tags$sup("[12]")),  "Click image to enlarge.",
+                                          actionLink("ref13", tags$sup("[13]")),  "Click image to enlarge.",
                                           HTML('</p>')))
                       )),
              fluidRow(
                column(6, offset = 3, br(),
                       HTML('<p style="font-size:18px">'),
-                      "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
-                      "There will be a duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
+                      
                       "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the periodicity.",
                       "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
-                      actionLink("ref10.1", tags$sup("[10;")), actionLink("ref13", tags$sup("13]")), 
+                      actionLink("ref10.1", tags$sup("[10]")), 
                       br(),br(),
                       "This is shown in", tags$b("Fig. 5"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of approximately 25 hours instead of 24.",
                       tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
@@ -348,12 +353,21 @@ navbarMenu(title="Visual Analysis",
                       "Given", tags$i("N"), "data points", HTML('(<em>x</em><sub>1</sub>,...,<em>x</em><sub><em>N</em></sub>)'), "there will be", HTML("<em>N</em>-1"), "pairs of observations,", 
                       HTML('(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>),'), HTML('(<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>),'), "...,", HTML('(<em>x</em><sub><em>N</em>-1</sub>,<em>x</em><sub><em>N</em></sub>).'),
                       br(),br(),
-                      "The process is repeated with each repeat using the original data and data that is further lagged by one interval. However, as with each successive lag a pair of observations is removed, meaning the power of the test gradually decreases, autocorrelation is usually performed up to a limit of", 
+                      "The process is repeated with each repeat using the original data and data that is further lagged by one interval. However, as with each successive lag a pair of observations is removed, meaning that the power of the test gradually decreases, autocorrelation is usually performed up to a limit of", 
                       HTML("<em>N</em>/3."), "[REF Chatfield]",
                       br(),br(),
                       "The autocorrelation coefficient at lag", tags$i("k"), "is defined as:",
                       helpText("$$\\large{r_k = \\frac{\\sum_\\limits{t=1}^{N-k} (x_t-\\bar x)(x_{t+k}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t-\\bar x)^2}}$$"),
-                      helpText("$$\\large{\\bar x = \\sum_\\limits{t=1}^{N} x_t/N}$$")
+                      "where,",
+                      helpText("$$\\large{\\bar x = \\sum_\\limits{t=1}^{N} x_t/N}$$"),
+                      "is the overall mean.", br(),br(),
+                      tags$i("r"),"will be 1 at the start due to perfect correlation of data against self but will then decrease as the data becomes out of register with itself as lag increases.", 
+                      "However, if there is a regular rhythmicity then the peaks and troughs in the amplitude of the data will slip back into register and r will increase again when the lag approximates the period of the data.[REF Levine]",
+                      "Plotting the correlation coefficients against lag in a correlogram can identify rhythmicity and the period. Rhythmic data will create sinusoidal oscillations on the correlogram with decreasing amplitude as lag increases",
+                      tags$b("Fig 7a and 7b"), 
+                      ", and any local maxima peaks above the chosen confidence interval can be considered as statistically significant multiples of the period", 
+                      ".[REF Chatfield; Levine]", 
+                      "Chatfield (2016) describes the 95% confidence interval as", HTML('&plusmn;2/&radic;<em>N</em>')
                       )
              )
              )),
@@ -382,9 +396,10 @@ navbarMenu(title="Visual Analysis",
                       p(),
                       "[11] Refinetti, R. (2016) Circadian physiology. , CRC press.",
                       p(),
-                      "[12] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801.",
+                      "[12] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186.",
                       p(),
-                      "[13] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
+                      "[13] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801."
+                      
                       )
              )),
 tags$script(" $(document).ready(function () {
