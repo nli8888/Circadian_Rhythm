@@ -240,7 +240,7 @@ navbarMenu(title="Visual Analysis",
                       "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
                       actionLink("ref10.1", tags$sup("[10;")), actionLink("ref12", tags$sup("12]")), 
                       br(),br(),
-                      "This is shown in", tags$b("Fig. 4b"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of about 25 hours instead of 24.",
+                      "This is shown in", tags$b("Fig. 5"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of about 25 hours instead of 24.",
                       tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
                       actionLink("ref3.2", tags$sup("[3]"))
                         
@@ -265,7 +265,7 @@ navbarMenu(title="Visual Analysis",
                       )),
              fluidRow(br(),
                       column(6, offset = 3,
-                             wellPanel(tags$b("Figure 4.")))
+                             wellPanel(tags$b("Figure 5.")))
                
              )
              ),
