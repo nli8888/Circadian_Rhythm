@@ -46,9 +46,9 @@ summary_dt_all_animals = summary_dt_all_animals[,list(activity=mean(activity)),
                                                      "day")]
 #x = acf(dt[,activity], ci=0.95, lag.max= 3900)
 ##for LD
-x = acf(summary_dt_all_animals[1:72, activity], ci = 0.95, plot=1, lag.max = 72)
+# x = acf(summary_dt_all_animals[1:72, activity], main = "", xlim = c(12,36), xlab = "Lag / period (hours)", ylab = "Correlation Coefficient", ci = 0.95, plot=1, lag.max = 72)
 ##for DD
-# x = acf(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], ci=0.95, plot = 1, lag.max=(length(summary_dt_all_animals[,activity])))
+x = acf(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], ci=0.95, plot = 1, xlim = c(12,36), main = "", xlab = "Lag / period (hours)", ylab = "Correlation Coefficient", lag.max=(length(summary_dt_all_animals[,activity])))
 y = data.table(lag = c(1:(length(x[[1]])-1)),
                #period = seq(0, length(summary_dt_all_animals[,activity])),
                acf = x[[1]][2:length(x[[1]])])
@@ -60,12 +60,12 @@ setnames(subset_y, "lag", "period")
 upper=qnorm((1 + 0.95)/2)/sqrt(length(x[[1]])) #the way acf() does it
 #lower=0-(1.96/sqrt(length(x[[1]])))
 lower=upper*-1  #I assume
-p = ggplot(subset_y, aes(period, acf, width=1)) +
+p = ggplot(subset_y, aes(period, acf, width=.75)) +
   geom_col() +
-  scale_x_continuous(name="period (hours)", breaks = seq(0, 40, 5)) +
-  scale_y_continuous(name="acf") +
+  scale_x_continuous(name="period (hours)", breaks = seq(0, 40, 2)) +
+  scale_y_continuous(name="Correlation Coefficient") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  ggtitle("Correlogram of acf over period") +
+  # ggtitle("Correlogram of acf over period") +
   geom_hline(yintercept = upper, linetype = 2) + geom_hline(yintercept = lower, linetype = 2)
 p
 which.max(subset_y[,acf]) + 9
@@ -85,7 +85,7 @@ f[10:25][which.max(p[10:25])]
 
 ##LOMB-SCARGLE PERIODOGRAM##
 library(lomb)
-lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.08)
+lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.5)
 
 # ts_object = ts(x[[1]], frequency = 1, start = 0)
 ts_object = ts(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], frequency = 1, start = 0)
