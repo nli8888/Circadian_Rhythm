@@ -90,7 +90,11 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
               )),
              fluidRow(br(),
                column(6, offset = 3, 
-                        column(6, imageOutput("image2", height = "100%")), 
+                        column(6,
+                               HTML('<a href="F2.large.jpg" target="_blank">'),
+                               imageOutput("image2", height = "100%"),
+                               HTML('</a>')
+                               ), 
                       column(6, wellPanel(HTML('<p style="font-size:18px">'),
                                           tags$b("Figure 1."), "A diagram to demostrate rhythmic entrainment to a", tags$i("zeitgeber"), 
                                           ", in this case light (where the sun icon represents light and moon represents darkness). Black bars represent the variable being examined, such as “sleep” in this example. Top half panel: typically, sleep beings when darkness occurs and stops when light returns. The sleep pattern follows that of the oscillation of light with the same phase and period.", 
@@ -99,12 +103,13 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                                           ))
                         )),
              fluidRow(br(),
-               column(6, offset = 3, 
+               column(6, offset = 3, HTML('<p style="font-size:18px">'),
                       "Experimentalists have methods of studying the aspects of circadian rhythms mentioned above", "(see", actionLink("intronextpagelink", "next page", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),") but have few software that allows practical analysis of acquired data.", 
                       "Recently, the Gilestro Laboratory have developed and published their own custom equipment, named “Ethoscopes”, for observing animal activity in the lab and accompanying R package “rethomics” for analytics (publicly available at", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"), ")", 
                       actionLink("ref8", tags$sup("[8]")),
-                      ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(),
-                      wellPanel(tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") and helps experimentalist analyse circadian rhythm.'))
+                      ". But the package lacks any specific functions related to circadian rhythm analysis.", br(), br(), HTML('</p>'),
+                      wellPanel(HTML('<p style="font-size:18px">'),tags$b("Aim"),br(),'To develop an R package that is compatible with an already existing package developed by Gilestro Laboratory ("rethomics") and helps experimentalist analyse circadian rhythm.',HTML('</p>'))
+                      )
              ),
              fluidRow(
                column(2, offset = 7,
@@ -118,10 +123,11 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
              fluidRow(
                column(6, offset = 3,
                       h2("Equipment for studying", tags$i("Drosophila"), "activity"), hr(),
+                      HTML('<p style="font-size:18px">'),
                       "Before analyzing data, the package must be able to import and read data from equipment commonly used by experimentalists to study circadian rhythms.", 
                       "As", tags$i("Drosophila"), "are well characterised model organisms they tend to be chosen for most studies. Traditionally,", 
                       tags$b("Drosophila Activity Monitors"), "(DAMs), purchasable from TriKinetics (", tags$a(href="http://www.trikinetics.com", "http://www.trikinetics.com", target="_blank"), ") have been used in most labs", 
-                      tags$b("(Fig. 2)"),".")
+                      tags$b("(Fig. 2)"),".",HTML('</p>'))
              ),
              tags$head(tags$style(
                type="text/css",
@@ -134,30 +140,31 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                                     imageOutput("image3", height = "auto"),
                                     HTML('</a>')
                                     ),
-                             column(6, wellPanel(tags$b("Figure 2."), 
+                             column(6, wellPanel(HTML('<p style="font-size:18px">'),tags$b("Figure 2."), 
                                                  "Drosophila Activity Monitor (DAM) pictured. DAMs consist of 32 holding docks that can each be equipped with approximately 5mm diameter wide transparent tubes big enough to accommodate", tags$i("Drosophila."), 
                                                  "Typically, the tubes are centered in the middle, and where the DAM holds the tube is an infrared beam that spans across the tube. Sensors at the opposite side of the tube facing the source of the beam detect it. The number of times the beam is broken by", 
                                                  tags$i("Drosophila"), "crossing it over a certain period is recorded.",
-                                                 "Credit: Rosato, E. & Kyriacou, C. P. (2006)", actionLink("ref9", tags$sup("[9]"))
+                                                 "Credit: Rosato, E. & Kyriacou, C. P. (2006)", actionLink("ref9", tags$sup("[9]")), HTML('</p>')
                                                  ))
                       )),
              fluidRow(br(),
                       column(6, offset = 3,
+                             HTML('<p style="font-size:18px">'),
                              "Older DAM models record data in DAM1 format, where individual (.txt) files are created for each individual animal. Whereas newer DAM models record data in DAM2 format, where data for all 32 animals are stored in a single  (.txt) file.", 
                              "“Rethomics” includes the function", code("loadDAM2Data()"), "to read DAM2 data format but does not have one for DAM1. Therefore, the initial step was to develop functions for reading DAM1 data.",
                              br(),br(),
-                             "2 were developed:",
+                             "2 were developed:",  HTML('</p>'),
                              tags$ul(
-                               tags$li("One for reading a single file (individual data) -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;"),
-                               tags$li("One for reading multiple files (population data) -", code("DAM1_multi_reader(dir)"), ", where the primary argument is the directory path of the folder contatining all the DAM1 files of interest")
+                               tags$li(HTML('<p style="font-size:18px">'),"One for reading a single file (individual data) -", code("DAM1_single_reader(file)"), ", where the primiary argument is the directory path of the DAM1 file;",HTML('</p>')),
+                               tags$li(HTML('<p style="font-size:18px">'),"One for reading multiple files (population data) -", code("DAM1_multi_reader(dir)"), ", where the primary argument is the directory path of the folder contatining all the DAM1 files of interest",HTML('</p>'))
                              ),
-                             br(),br(),
+                             br(),br(),HTML('<p style="font-size:18px">'),
                              "To be compatible to “rethomics”, data is read into", code("data.table()"), "format using the R package", tags$a(href="https://cran.r-project.org/web/packages/data.table/", "data.table", target="_blank"), ".",
                              "For more documentation and source code visit", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
                              br(),br(),
                              "Additionally, as aforementioned Geissmann", tags$i("et al."), "(2017) from the Gilestro Laboratory have developed their own equipment for studying Drosophila called “Ethoscopes” and as such, “rethomics” can already import raw ethoscope data directly.", 
                              actionLink("ref8.1", tags$sup("[8]")),
-                             "Ethoscope machines are designed for higher throughput analysis of animal activity compared to DAM", tags$b("(Fig 3)"), "."
+                             "Ethoscope machines are designed for higher throughput analysis of animal activity compared to DAM", tags$b("(Fig 3)"), ".",  HTML('</p>')
                              )),
              tags$head(tags$style(
                type="text/css",
@@ -173,18 +180,19 @@ tags$b("(Fig. 1)"),".", HTML('</p>')
                       ),
              fluidRow(br(),
                       column(6, offset = 3,
-                             wellPanel(tags$b("Figure 3. a)"), 
+                             wellPanel(HTML('<p style="font-size:18px">'),
+                               tags$b("Figure 3. a)"), 
                                        "Blown-up view of a prototypical ethoscope. The upper case contains a Raspberry Pi and its HD camera which tracks and records animal behaviours in the arena. The lower case contains infrared lights and support for the experimental arena. Custom arena designs can be made as long as they fit the required dimensions, which allow for flexible experimental design. For", 
                                        tags$i("Drosophila,"), "the arena is typically designed to equip the same transparent tubes used in DAM, with all tubes laid out horizontally to allow full video tracking.",
                                        tags$b("b)"), "Rendered model of fully assembled product with actual size dimensions shown. Guide slits allow the arena to slide and lock into position.",
-                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]")), "Click image to enlarge."
+                                       "Credit: Geissmann", tags$i("et al."), "(2017)", actionLink("ref8.2", tags$sup("[8]")), "Click image to enlarge.", HTML('</p>')
                                        )
                              )),
-      fluidRow(column(6, offset = 3,
+      fluidRow(column(6, offset = 3, HTML('<p style="font-size:18px">'),
                       "Ethoscopes offer more dynamical experimentation and does not have the same limitations as DAM. While DAM can only measure the number of times",
                       tags$i("Drosophila,"), "has crossed the infrared beam, ethoscopes can record all activity using its HD camera and video tracking software. Therefore, behaviours that would otherwise not be captured by DAM, such as micro-movements (grooming, eating etc.), can be observed and distinguished from sleeping or walking.",
                       br(),br(), "Below is a short video demonstrating ethoscopes; for more details and tutorials on ethoscopes, please visit:", tags$a(href="http://gilestrolab.github.io/ethoscope/", "http://gilestrolab.github.io/ethoscope/", target="_blank"),
-                      br(),br()
+                      br(),br(), HTML('</p>')
                       )),
              fluidRow(
                column(6, offset = 3, 
@@ -203,12 +211,13 @@ navbarMenu(title="Visual Analysis",
              fluidRow(
                column(6, offset = 3,
                       h2("Analysing circadian rhythms using Actograms"), hr(),
-                      "Now that raw data can be read and imported, it can be processed and analyzed. Three main questions are asked about the data:",
+                      HTML('<p style="font-size:18px">'),
+                      "Now that raw data can be read and imported, it can be processed and analyzed. Some questions that are asked are:", HTML('</p>'),
                       tags$ul(
-                        tags$li("if the data appears rhythmic, is it circadian?"),
-                        tags$li("what is the period of the rhythmicity?"),
-                        tags$li("how strong is the rhythmic signal, or what is the power of the period?")
-                      ),
+                        tags$li(HTML('<p style="font-size:18px">'),"if the data appears rhythmic, is it circadian?",HTML('</p>')),
+                        tags$li(HTML('<p style="font-size:18px">'),"what is the period of the rhythmicity?",HTML('</p>')),
+                        tags$li(HTML('<p style="font-size:18px">'),"what is the power of the period?",HTML('</p>'))
+                      ), HTML('<p style="font-size:18px">'),
                       "A procress has a circadian rhythm if it has an entrainable endogenous rhythmicity with a period of approximately 24 hours. There does not seem to be an absolute range for how close to 24 hours the period needs to be to be deemed circadian in the field.", 
                       "As with most interpretations of biological data there does appear to be an aspect of arbitary and subjectiveness, and therefore analyzing the data is non-trivial.",
                       br(),br(),
@@ -217,11 +226,23 @@ navbarMenu(title="Visual Analysis",
                       "Actograms plot time on the x-axis and the variable of interest, such as activity (e.g. the number of times", 
                       tags$i("Drosophila"), "crossed the beam), on the y-axis. The time component of the data is also vertically split into separate days, with each sucessive day following the preceding one a line below. Therefore the range of the x-axis is typically limited to [0, 24] hours.",
                       br(),br(),
+                      "As light is a common", tags$i("zeitgeber"), "it is usually experimented with and therefore annotated on actograms as well. Experiments are run under different conditions of light refer to as:", actionLink("ref11", tags$sup("[11]")),
+                      tags$ul(
+                        tags$li("LL – constant continuous illumination;"),
+                        tags$li("DD – constant continuous darkness;"),
+                        tags$li("LD – a regular alternation of light and darkness at a constant interval throughout each day, typically 12 hours of light then 12 hours of darkness;")
+                      ), 
+                      "On actograms, durations of DD and LD are commonly annotated via shading in of the defined region to indicate that period of data being in (alternating) darkness.",
+                      br(),br(),
                       "Furthermore, actograms may be multi-plotted where the x-axis is extended by a factor and the data duplicated accordingly. For example, a double-plotted actogram will have a x-axis of 48 hours instead of 24, and plot 2 days worth of data on each horizontal line instead of one.", 
-                        "This means there will be duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
-                        "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the period of rhythmicity.", 
-                        "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
-                        actionLink("ref10.1", tags$sup("[10;")), actionLink("ref11", tags$sup("11]")), "(see", actionLink("actogramspagelink", "workd example", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"), ")"
+                      "There will be a duplicated redundancy of data where the data of the “second day” will be plotted on the second half of each line, as well as the first half of each following line, and so on.", 
+                      "This is helpful in visualising non-24 hour rhythms; manual analysis of the vertical alignment of data provides information about the periodicity.",
+                      "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
+                      actionLink("ref10.1", tags$sup("[10;")), actionLink("ref12", tags$sup("12]")), 
+                      br(),br(),
+                      "This is shown in", tags$b("Fig. 4b"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of about 25 hours instead of 24.",
+                      tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
+                      actionLink("ref3.2", tags$sup("[3]"))
                         
                       )
              ),
@@ -229,11 +250,24 @@ navbarMenu(title="Visual Analysis",
                type="text/css",
                "#image5 img {max-width: 100%; width: 100%; height: auto}"
              )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image6 img {max-width: 100%; width: 100%; height: auto}"
+             )),
              fluidRow(br(),
                       column(6, offset = 3,
-                      column(8, imageOutput("image5", height = "auto")),
-                      column(4, wellPanel(tags$b("Figure 4.")))
-                      ))
+                      column(8, offset = 2, HTML('<a href="f1_actogram.png" target="_blank">'),
+                             imageOutput("image5", height = "auto"), HTML('</a>'),br(),
+                             HTML('<a href="tim_sggRNAi_analyzed.png" target="_blank">'), 
+                             imageOutput("image6", height = "auto"), HTML('</a>')
+                             
+                             )
+                      )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             wellPanel(tags$b("Figure 4.")))
+               
+             )
              ),
     tabPanel("Actoplot",
              fluidRow(column(6, offset = 3,
@@ -308,7 +342,9 @@ navbarMenu(title="Visual Analysis",
                       p(),
                       "[10] Refinetti, R., Cornélissen, G. & Halberg, F. (2007) Procedures for numerical analysis of circadian rhythms. Biological Rhythm Research. 38 (4), 275-325.",
                       p(),
-                      "[11] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
+                      "[11] Refinetti, R. (2016) Circadian physiology. , CRC press.",
+                      p(),
+                      "[12] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186."
                       )
              )),
 tags$script(" $(document).ready(function () {
@@ -366,6 +402,15 @@ server <- function(input, output, session) {
     ))
   }, deleteFile = FALSE)
   
+  output$image6 <- renderImage({
+    return(list(
+      src = "www/tim_sggRNAi_analyzed.png",
+      contentType = "image/png"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
   output$video <- renderUI({
     tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
   })
@@ -404,11 +449,6 @@ server <- function(input, output, session) {
   observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
-  })
-  
-  observeEvent(input$actogramspagelink, {
-    updateTabsetPanel(session, "inTabset",
-                      selected = "Actoplot")
   })
   
   observeEvent(input$actoexample, {
@@ -545,6 +585,12 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref3.2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
   observeEvent(input$ref4, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
@@ -606,6 +652,12 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref11, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref12, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")
