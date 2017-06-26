@@ -289,7 +289,7 @@ navbarMenu(title="Visual Analysis",
                              wellPanel(
                                HTML('<p style="font-size:18px">'),
                                tags$b("Figure 5."), "Double-plotted actogram of ", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"),
-                               "activity data from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")), "plotted using", code("actoplot()"), "(see next page).",
+                               "DAM1 activity data from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")), "plotted using", code("actoplot()"), "(see next page).",
                                "Knock-down was achieved using RNAi of", tags$i("sgg"), "with a UAS-", tags$i("sgg"), tags$sup("RNAi"), "and", tags$i("timeless (tim)"), "gene-GAL4 system.",
                                "Entrained under 12:12 LD cycle followed by DD. Additional annotations of manual analysis of periodicity shown for LD and DD phases.", "Click image to enlarge.",
                                HTML('</p>')
@@ -321,7 +321,14 @@ navbarMenu(title="Visual Analysis",
                          width = "20%"), 
              actionButton('loaddata', 'Load data'),
              hr(),
-             dataTableOutput('ex1'),
+             fluidRow(
+               column(6, offset = 3,
+                    
+                      dataTableOutput('ex1')
+                      
+                      )
+             ),
+             # dataTableOutput('ex1'),
              # br(), br(), br(),
              h5(textOutput("ex1text")),
              uiOutput("hline"),
@@ -407,7 +414,8 @@ tags$script(" $(document).ready(function () {
             $(document).load().scrollTop(0);
             });
             
-            });")
+            });"),
+tags$head(tags$style(HTML('.modal-lg {width: 1000px;}')))
 )
 
 
@@ -518,7 +526,7 @@ server <- function(input, output, session) {
     
     output$sidePanel <- renderUI(sidebarPanel(h3("2) Plot graph"),
       sliderInput("dup_num", label = h3("Number of duplicated days:"),
-                  min = 1, max = 10, value = 2),
+                  min = 1, max = 10, value = 2), actionButton("help", "?"),
       
       selectInput("operation", label = h3("Operation to perform:"),
                   choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean"),
@@ -611,9 +619,16 @@ server <- function(input, output, session) {
         isolate(datasetInput()), options = list(
           lengthMenu = list(c(5, 10, 15, -1), c('5', '10', '15', 'All')),
           pageLength = 10,
-          orderClasses = TRUE
+          orderClasses = TRUE,
+          scrollX = TRUE
           ))
     })
+  })
+  
+  observeEvent(input$help, {
+    showModal(modalDialog(size = "l",
+      title = "title", "testtesttesttesttesttesttesttesttesttesttesttesttesttesttestte",br(),"sttesttesttesttesttesttesttesttesttesttestt",br(),"esttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest" 
+    ))
   })
   
   observeEvent(input$ref1, {
