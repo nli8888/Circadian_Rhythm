@@ -2,11 +2,14 @@ library(shiny)
 library(shinythemes)
 library(shinydashboard)
 
-source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v6.R")
+# source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
+# source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v6.R")
 
-PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+source("./DAM1_reader.R")
+source("./actoplot_v6.R")
+
+# PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
@@ -521,8 +524,10 @@ server <- function(input, output, session) {
   
   observeEvent(input$loaddata, {
     withProgress(message = "loading", value = 0,{
-    dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
-    dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+    # dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+    # dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
+      dam1ex1 = DAM1_single_reader("./www/DAM1_data/220714esM035C01.txt")
+      dam1ex2 = DAM1_single_reader("./www/DAM1_data/220714esM035C02.txt")
     
     output$sidePanel <- renderUI(sidebarPanel(h3("2) Plot graph"),
       sliderInput("dup_num", label = h3("Number of duplicated days:"),

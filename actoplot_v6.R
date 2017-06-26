@@ -1,4 +1,6 @@
-source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
+# source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
+source("./DAM1_reader.R")
+
 
 actoplot = function(file1 = file1,
                          file_format = "dam1", #"dam2", "ethoscope"
@@ -913,8 +915,11 @@ actoplot = function(file1 = file1,
 
 #RUN THESE BELOW
 # dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
-PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
-# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+dam1 = DAM1_single_reader("./www/DAM1_data/220714esM037C08.txt")
+
+# PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
+PATH1 = "./www/DAM1_data"
+dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 
 # acto = actoplot_dam1(dammulti1,
 #                      num_of_plot = 4,
@@ -937,7 +942,8 @@ PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Proje
 ##DAM2##
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M002_merged.txt"
 #file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2015-08-05_M010_merged.txt"  
-file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+# file1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Anne_DAM2_Data/2016-11-20_M012_merged.txt"
+file1 = "./2016-11-20_M012_merged.txt"
 query = data.table(path=file1,
                    start_date="2016-11-21_00-00-00", 
                    stop_date="2016-12-07", 
