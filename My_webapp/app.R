@@ -2,11 +2,11 @@ library(shiny)
 library(shinythemes)
 library(shinydashboard)
 
-# source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
-# source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v6.R")
+source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/DAM1_reader.R")
+source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/actoplot_v6.R")
 
-source("./DAM1_reader.R")
-source("./actoplot_v6.R")
+# source("./DAM1_reader.R")
+# source("./actoplot_v6.R")
 
 # PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 # dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
@@ -281,7 +281,7 @@ navbarMenu(title="Visual Analysis",
              )),
              fluidRow(br(),
                       column(6, offset = 3,
-                      column(8, offset = 2, 
+                      column(8, offset = 2, tags$b("a)"), br(),
                              HTML('<a href="tim_sggRNAi_analyzed.png" target="_blank">'), 
                              imageOutput("image6", height = "auto"), HTML('</a>')
                              
