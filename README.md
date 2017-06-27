@@ -1,9 +1,11 @@
 # Circadian_Rhythm
-MSc Data Analysis Project (Project 2)
+Current Tempory Documentation for:
 
-TESTTEST
+DAM1_single_reader();
 
-ADDITIONAL TEST
+DAM1_multi_reader();
 
-TEST X3
+acto_plot();
+
+
 
