@@ -8,8 +8,8 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 # source("./DAM1_reader.R")
 # source("./actoplot_v6.R")
 
-# PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
-# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
 sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
 
@@ -52,7 +52,19 @@ ui <- navbarPage(theme = shinytheme("readable"),
                                 tags$head(
                                   tags$style(HTML("hr {border-top: 1px solid #000000;}"))
                                 ),hr(),
-                                "Circadian Rhythms are partly endogenous oscillations in biological process that exhibit "))
+                                HTML('<p style="font-size:18px">'),
+                                "Circadian rhythms are important in many biological aspects from the molecular level, such as regulation of the cell cycle, to physiological activities, like sleeping patterns. Deregulation of biological processes that experience circadian rhythms have been shown to be detrimental to the functionality and health of the organism in question.",
+"Therefore, studying circadian rhythms are of great interest and can offer insight into how such processes are regulated.",br(), "Demonstrated in this website are techniques that experimentalists commonly use to study circadian rhythms via Drosophila Activity Monitors (DAMs) and recently developed custom machinery “Ethoscopes” from the Gilestro Laboratory (Imperial College London).", 
+"Also shown are the analysis of acquired data using common methods such as visual analysis via actograms, and quantitative analysis via autocorrelation and periodograms. Furthermore demonstrated, is a custom R package developed with the aim of helping experimentalists import and process raw data which can then be visualised and analysed via actograms.",
+HTML('</p>')
+),
+h2("Lay Summary"), hr(),
+HTML('<p style="font-size:18px">'),
+"Circadian rhythms are any semi-endogenous rhythms that follow a period of about 24 hours. Hence the name “circadian”, which comes from the Latin phrase of “about a day”. The periodicity can be entrained (or enforced) by environmental factors, known as", tags$i("zeitgebers,"), 
+"German for “time-giver”.  The most common example being light/darkness. Circadian rhythms occur in many different biological aspects from the molecular level to physiological states, such as sleeping patterns for example, and therefore is quite important in biology and needs to be studied.", 
+"Shown in this website are some of the few common ways of analysing circadian rhythm data from visual methods to more quantitative calculations. In addition, a custom R package has been developed to help experimentalists visualise and inspect raw data gathered from typical experimental procedures.",
+HTML('</p>')
+)
              ),
              fluidRow(column(1, offset = 8, 
                     actionButton('homenextpage', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")#, style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
@@ -255,7 +267,7 @@ navbarMenu(title="Visual Analysis",
                                     imageOutput("image5", height = "auto"), HTML('</a>')),
                       column(6, wellPanel(HTML('<p style="font-size:18px">'), 
                                           tags$b("Figure 4."),
-                                          "Double-plotted actogram of wild-type mouse locomotor activity entrained under a 12:12 LD (12 hour light, 12 hour dark)  cycle followed by DD (constant darkness). The bar on top represents the LD lighting schedule in Zeitgeber time (ZT). White boxes indicate light, dark boxes indicate darkness. Credit: Yang",
+                                          "Double-plotted actogram of wild-type mouse locomotor activity entrained under a 12:12 LD (12 hour light, 12 hour dark) cycle for 7 days followed by 20 days of DD (constant darkness). The bar on top represents the LD lighting schedule in Zeitgeber time (ZT). White boxes indicate light, dark boxes indicate darkness. Credit: Yang",
                                           tags$i("et al."), "(2012).",
                                           actionLink("ref13", tags$sup("[13]")),  "Click image to enlarge.",
                                           HTML('</p>')))
@@ -268,7 +280,8 @@ navbarMenu(title="Visual Analysis",
                       "Vertically straight alignments suggests a 24 hour period, while drifts to the left indicate a cycle shorter than 24 hours and drifts to the right indicate a cycle longer than 24 hours.",
                       actionLink("ref10.1", tags$sup("[10]")), 
                       br(),br(),
-                      "This is shown in", tags$b("Fig. 5"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of approximately 25 hours instead of 24.",
+                      "This is shown in", tags$b("Fig. 5a"), ", where once in DD, the", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"), "experiences an endogenous period of approximately 25 hours instead of 24.", tags$b("Fig. 5b"),
+                      "The rhythm of the wild-type ", tags$i("Drosophila"), "in DD can be seen to be less regular and in fact drifting away from 24 hours but not to the same extent as the mutant.",
                       tags$i("Sgg"), "is a protein kinase and together with other kinases regulates the localisation and stability of core clock proteins PERIOD (PER) and TIMELESS (TIM). Knock-downs causes deregulation of the entire circadian network.",
                       actionLink("ref3.2", tags$sup("[3]")),
                       HTML('</p>')
@@ -279,11 +292,22 @@ navbarMenu(title="Visual Analysis",
                type="text/css",
                "#image6 img {max-width: 100%; width: 100%; height: auto}"
              )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image7 img {max-width: 100%; width: 100%; height: auto}"
+             )),
              fluidRow(br(),
-                      column(6, offset = 3,
-                      column(8, offset = 2, tags$b("a)"), br(),
+                      column(8, offset = 2,
+                      column(6, 
+                             HTML('<p style="font-size:18px">'), tags$b("a)"), HTML('</p>'),
+                             # br(),
                              HTML('<a href="tim_sggRNAi_analyzed.png" target="_blank">'), 
-                             imageOutput("image6", height = "auto"), HTML('</a>')
+                             imageOutput("image6", height = "auto"), HTML('</a>')),
+                      column(6,
+                             HTML('<p style="font-size:18px">'), tags$b("b)"), HTML('</p>'),
+                             # br(),
+                             HTML('<a href="tim_WT_analyzed.png" target="_blank">'), 
+                             imageOutput("image7", height = "auto"), HTML('</a>')
                              
                              )
                       )),
@@ -291,10 +315,14 @@ navbarMenu(title="Visual Analysis",
                       column(6, offset = 3,
                              wellPanel(
                                HTML('<p style="font-size:18px">'),
-                               tags$b("Figure 5."), "Double-plotted actogram of ", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"),
-                               "DAM1 activity data from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")), "plotted using", code("actoplot()"), "(see next page).",
+                               tags$b("Figure 5. a)"), "Double-plotted actogram of ", tags$i("shaggy (sgg)"), "gene knock-down mutant", tags$i("Drosophila"),
+                               "DAM1 activity data plotted using", code("actoplot()"), "(see next page).",
                                "Knock-down was achieved using RNAi of", tags$i("sgg"), "with a UAS-", tags$i("sgg"), tags$sup("RNAi"), "and", tags$i("timeless (tim)"), "gene-GAL4 system.",
-                               "Entrained under 12:12 LD cycle followed by DD. Additional annotations of manual analysis of periodicity shown for LD and DD phases.", "Click image to enlarge.",
+                               "Entrained under 12:12 LD cycle for 4 days followed by 14 days of DD.", 
+                               tags$b("b)"), "Double-plotted actogram of wild-type", tags$i("Drosophila"), "DAM1 activity data. Entrained under 12:12 LD cycle for 3 days followed by 16 days of DD.", 
+                               "All data acquired from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")),
+                               "Additional annotations of manual analysis of periodicity shown for LD and DD phases.", 
+                               "Click image to enlarge.",
                                HTML('</p>')
                                ))
                
@@ -305,44 +333,164 @@ navbarMenu(title="Visual Analysis",
                       "Actograms have been traditionally used to plot animal activity data, but can be theoretically used on any other time-series data.",
                       HTML('</p>')
                       )
+             ),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('actogramprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('actogramnextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
              )
              ),
     tabPanel("Actoplot",
              fluidRow(column(6, offset = 3,
-                             h2("Worked Example"), hr(),
-                             actionLink("actoexample", "Back to Actograms", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
-             ))
+                             h2("Actoplot"), hr(),
+                             HTML('<p style="font-size:18px">'),
+                             "Standalone programs that plot actograms, such as", tags$a(href="http://actogramj.neurofly.de/", "Actogram J", target="_blank"), "and", tags$a(href="http://actimetrics.com/products/clocklab/", "ClockLab", target="_blank"),
+                             " already exist but they are not easily accessible nor intuitive to import and process raw data. Nor are they compatible with any programming language. As part of the package, a custom function", code("actoplot()"), "was developed for DAM1, DAM2, and ethoscope data.",
+                             "Actoplot is built using",  tags$a(href="https://cran.r-project.org/web/packages/ggplot2/index.html", "ggplot2", target="_blank"), "and is therefore completely modular and compatible with any ggplot2 arguments and functions.",
+                             br(),br(),
+                             code("actoplot()"), "can plot DAM1, DAM2 and ethoscope data that are stored as", code("data.tables()"), 
+                             "and has 4 different plot types (bar, line, ribbon, and tile) for the user to choose from", tags$b("(Fig. 6)"), ". For details on these plots, refer to the", tags$a(href="http://ggplot2.tidyverse.org/reference/", "ggplot2 documentation.", target="_blank"),
+                             "The user can define any arbitary number of duplicated days for multiplots as long as there is sufficient data.",
+                             HTML('</p>')
+                             # actionLink("actoexample", "Back to Actograms", onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+             )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             wellPanel(
+                               HTML('<p style="font-size:18px">'),
+                               tags$b("Figure 6."), "Example", tags$b("a)"), "bar, and", tags$b("b)"), "line double-plotted actograms, and", tags$b("c)"), "ribbon, and", tags$b("d)"), "tile quadruple-plotted actograms created from",
+                               code("actoplot()"), "Data from Beckwith and Ceriani (2015)", actionLink("ref3.4", tags$sup("[3]")), "was used. Also shown in", tags$b("e)"), "is  population ethoscope data with all individuals shown separately on the same plot, generated from pre-packaged data in “rethomics”.",
+                               HTML('</p>')
+                             ))
+                      
+             ),
+             tags$head(tags$style(
+               type="text/css",
+               "#image8 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image9 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image10 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image11 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image12 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             column(6, 
+                                    HTML('<p style="font-size:18px">'), tags$b("a)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="Bar_plot_example.jpeg" target="_blank">'), 
+                                    imageOutput("image8", height = "auto"), HTML('</a>')),
+                             column(6,
+                                    HTML('<p style="font-size:18px">'), tags$b("b)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="Line_plot_example.jpeg" target="_blank">'), 
+                                    imageOutput("image9", height = "auto"), HTML('</a>')
+                                    
+                             )
+                      )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             column(6, 
+                                    HTML('<p style="font-size:18px">'), tags$b("c)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="Ribbon_plot_example.jpeg" target="_blank">'), 
+                                    imageOutput("image10", height = "auto"), HTML('</a>')),
+                             column(6,
+                                    HTML('<p style="font-size:18px">'), tags$b("d)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="Tile_plot_example.jpeg" target="_blank">'), 
+                                    imageOutput("image11", height = "auto"), HTML('</a>')
+                                    
+                             )
+                      )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             column(6, 
+                                    HTML('<p style="font-size:18px">'), tags$b("e)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="Ethoscope_plot_example.jpeg" target="_blank">'), 
+                                    imageOutput("image12", height = "auto"), HTML('</a>'))
+                      )),
+             fluidRow(br(),
+                      column(6, offset = 3,
+                             HTML('<p style="font-size:18px">'),
+                             code("actoplot()"), "can handle individual and population data and can utilize existing functions, such as", code("mean()"), 
+                             "as arguments to summarise data points between desired intervals before plotting. Alternatively, for population data the user can choose to visualise all individual data from the population without summarising on one plot", 
+                             tags$b("(Fig. 6e)"), "It also has built-in arguments for LD and DD annotation as seen previously in", tags$b("Fig. 5"),
+                             br(),br(),
+                             "See next page for demonstration.",
+                             br(),br(),
+                             "For more documentation and source code visit", tags$a(href="https://github.com/nli8888/Circadian_Rhythm", "https://github.com/nli8888/Circadian_Rhythm", target="_blank"),
+                             HTML('</p>')
+                             )),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('actoplotprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('actoplotnextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
+             )
              ),
     tabPanel("Demo",
              
              fluidRow(
                column(6, offset = 3,
-                      h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is more flexible.", br(), "Please be patient as it may take time to load data. Only DAM1 data is available."))
+                      h5("Below is a GUI for the function", code("actoplot()"), "with limited optional arguements available purely for demonstration. The full function is designed to be used in code and is more flexible.", br(), "Please be patient as it may take time to load data."))
              ),
-             selectInput("dataset", label = h3("1) Select example data to load"), 
-                         choices = c("dam1ex1", "dam1ex2", "dammulti1", "dam2", "ethoscope"),
-                         width = "20%"), 
-             actionButton('loaddata', 'Load data'),
              hr(),
-             fluidRow(
-               column(6, offset = 3,
-                    
-                      dataTableOutput('ex1')
-                      
-                      )
+             sidebarLayout(sidebarPanel(
+             selectInput("dataset", label = h3("1) Select example data to load"), 
+                         choices = c("dam1 individual", "dam1 population", "dam2", "ethoscope"
+                                     # , "dam1ex2"
+                                     )
+                         #width = "20%"
+                         ),
+             
+             actionButton('loaddata', 'Load data'),
+             h5(p("After selecting please click load data.")),
+             h5(textOutput("ex1text")),
+             h2(uiOutput("ex2text"))
+             
              ),
+             mainPanel(dataTableOutput('ex1'))
+             ),
+             # hr(),
+             # fluidRow(
+             #   column(6, offset = 3,
+             #        
+             #          dataTableOutput('ex1')
+             #          
+             #          )
+             # ),
              # dataTableOutput('ex1'),
              # br(), br(), br(),
-             h5(textOutput("ex1text")),
+             
              uiOutput("hline"),
              sidebarLayout(uiOutput("sidePanel"),
-                           mainPanel(plotOutput("actogram", width = "100%", height = "700"))
-             )
+                           mainPanel(plotOutput("actogram", width = "100%", height = "800px"))
+             ),
              # fluidRow(
              #   column(8, offset = 2,
              #          plotOutput("actogram", width = "100%", height = "700")
              #   )),
              # fluidRow(column(2, offset = 7, HTML("<a href='#top'>top of page</a>")))
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('demoprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('demonextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
+             )
              )
     ),
     navbarMenu(title = "Quantitative Analysis",
@@ -358,26 +506,35 @@ navbarMenu(title="Visual Analysis",
                       # "is the mean of of the first set of observation in each of the (N-1) pairs and", HTML("<span style='font-size:130%'>x&#772<sub>(2)</sub></span>"), "is the mean of the second set.", "Without showing all the steps, Chatifield (2003) demonstrates that the equation above can be conveniently made less complicated by approximating to",
                       # helpText("$$\\large{r=\\frac{\\sum_\\limits{t=1}^{N-1} (x_t-\\bar x)(x_{t+1}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t - \\bar x)^2}}$$"),
                       # "as", HTML("<span style='font-size:130%'>x&#772<sub>(1)</sub> &#8776 x&#772<sub>(2)</sub></span>"), ", and by dropping the factor N/(N-1) since it is close to 1 for large N.",
+                      HTML('<p style="font-size:18px">'),
                       "An actogram is useful for visual analysis, but is often subjective and therefore more quantitative methods are needed for decisive conclusions. As the data is a time-series, one way is though autocorrelation, where the correlation coefficient",
                       tags$i("(r)"), "of the data set compared to itself is calculated via standard correlation analysis, point by point, from beginning to end. The data set is then lagged by one time interval and compared to the original data set again.",
                       "Given", tags$i("N"), "data points", HTML('(<em>x</em><sub>1</sub>,...,<em>x</em><sub><em>N</em></sub>)'), "there will be", HTML("<em>N</em>-1"), "pairs of observations,", 
                       HTML('(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>),'), HTML('(<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>),'), "...,", HTML('(<em>x</em><sub><em>N</em>-1</sub>,<em>x</em><sub><em>N</em></sub>).'),
                       br(),br(),
                       "The process is repeated with each repeat using the original data and data that is further lagged by one interval. However, as with each successive lag a pair of observations is removed, meaning that the power of the test gradually decreases, autocorrelation is usually performed up to a limit of", 
-                      HTML("<em>N</em>/3."), "[REF Chatfield]",
+                      HTML("<em>N</em>/3."), actionLink("ref14", tags$sup("[14]")),
                       br(),br(),
                       "The autocorrelation coefficient at lag", tags$i("k"), "is defined as:",
+                      HTML('</p>'),
                       helpText("$$\\large{r_k = \\frac{\\sum_\\limits{t=1}^{N-k} (x_t-\\bar x)(x_{t+k}-\\bar x)}{\\sum_\\limits{t=1}^{N} (x_t-\\bar x)^2}}$$"),
-                      "where,",
+                      HTML('<p style="font-size:18px">'),
+                      "where,", HTML('</p>'),
                       helpText("$$\\large{\\bar x = \\sum_\\limits{t=1}^{N} x_t/N}$$"),
+                      HTML('<p style="font-size:18px">'),
                       "is the overall mean.", br(),br(),
                       tags$i("r"),"will be 1 at the start due to perfect correlation of data against self but will then decrease as the data becomes out of register with itself as lag increases.", 
-                      "However, if there is a regular rhythmicity then the peaks and troughs in the amplitude of the data will slip back into register and r will increase again when the lag approximates the period of the data.[REF Levine]",
+                      "However, if there is a regular rhythmicity then the peaks and troughs in the amplitude of the data will slip back into register and r will increase again when the lag approximates the period of the data.", actionLink("ref15", tags$sup("[15]")),
+                      br(),br(),
                       "Plotting the correlation coefficients against lag in a correlogram can identify rhythmicity and the period. Rhythmic data will create sinusoidal oscillations on the correlogram with decreasing amplitude as lag increases",
-                      tags$b("Fig 7a and 7b"), 
-                      ", and any local maxima peaks above the chosen confidence interval can be considered as statistically significant multiples of the period", 
-                      ".[REF Chatfield; Levine]", 
-                      "Chatfield (2016) describes the 95% confidence interval as", HTML('&plusmn;2/&radic;<em>N</em>')
+                      tags$b("(Fig 7a and 7b)"), 
+                      ", and any local maxima peaks above the chosen confidence interval can be considered as statistically significant multiples of the period.", 
+                      actionLink("ref14.1", tags$sup("[14;")), actionLink("ref15.1", tags$sup("15]")),
+                      "Chatfield (2016) describes the 95% confidence interval as", HTML('&plusmn;2/&radic;<em>N</em>'),
+                      br(),br(),
+                      "In", tags$b("Fig. 7c"), "statistically significant peaks appear at 12, 24, and 36, suggesting a circadian period of 24 hours, while a local maxima peak at 25 hours is seen in", tags$b("Fig. 7d"), 
+                      "agreeing with the actogram analysis in", tags$b("Fig. 5")
+                      HTML('</p>')
                       )
              )
              )),
@@ -408,8 +565,11 @@ navbarMenu(title="Visual Analysis",
                       p(),
                       "[12] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186.",
                       p(),
-                      "[13] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801."
-                      
+                      "[13] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801.",
+                      p(),
+                      "[14] Chatfield, C. (2016) The analysis of time series: an introduction. , CRC press.",
+                      p(),
+                      "[15] Levine, J. D., Funes, P., Dowse, H. B. & Hall, J. C. (2002) Signal analysis of behavioral and molecular cycles. BMC Neuroscience. 3 (1), 1."
                       )
              )),
 tags$script(" $(document).ready(function () {
@@ -477,6 +637,60 @@ server <- function(input, output, session) {
     ))
   }, deleteFile = FALSE)
   
+  output$image7 <- renderImage({
+    return(list(
+      src = "www/tim_WT_analyzed.png",
+      contentType = "image/png"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image8 <- renderImage({
+    return(list(
+      src = "www/Bar_plot_example.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image9 <- renderImage({
+    return(list(
+      src = "www/Line_plot_example.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image10 <- renderImage({
+    return(list(
+      src = "www/Ribbon_plot_example.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image11 <- renderImage({
+    return(list(
+      src = "www/Tile_plot_example.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image12 <- renderImage({
+    return(list(
+      src = "www/Ethoscope_plot_example.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
   output$video <- renderUI({
     tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
   })
@@ -512,6 +726,36 @@ server <- function(input, output, session) {
                       selected = "Actograms")
   })
   
+  observeEvent(input$actogramprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Data Acquisition")
+  })
+  
+  observeEvent(input$actogramnextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Actoplot")
+  })
+  
+  observeEvent(input$actoplotprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Actograms")
+  })
+  
+  observeEvent(input$actoplotnextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Demo")
+  })
+  
+  observeEvent(input$demoprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Actoplot")
+  })
+  
+  observeEvent(input$demonextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Autocorrelation")
+  })
+  
   observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
@@ -524,48 +768,87 @@ server <- function(input, output, session) {
   
   observeEvent(input$loaddata, {
     withProgress(message = "loading", value = 0,{
-    # dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+    dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
     # dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
-      dam1ex1 = DAM1_single_reader("./www/DAM1_data/220714esM035C01.txt")
-      dam1ex2 = DAM1_single_reader("./www/DAM1_data/220714esM035C02.txt")
+      # dam1ex1 = DAM1_single_reader("./www/DAM1_data/220714esM035C01.txt")
+      # dam1ex2 = DAM1_single_reader("./www/DAM1_data/220714esM035C02.txt")
     
-    output$sidePanel <- renderUI(sidebarPanel(h3("2) Plot graph"),
-      sliderInput("dup_num", label = h3("Number of duplicated days:"),
-                  min = 1, max = 10, value = 2), actionButton("help", "?"),
       
-      selectInput("operation", label = h3("Operation to perform:"),
-                  choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean"),
+    output$sidePanel <- renderUI(sidebarPanel(h3("2) Plot graph"), h5("Select parameters and then click 'Plot graph' at the bottom. The plot will appear on the right."),
+                                              textInput("plot_title", label = tags$b("Title of graph"), value = "Actogram plotted using actoplot()"),
+                                              textInput("plot_xlab", label = tags$b("x-axis label"), value = "time (hours)"),
+                                              textInput("plot_ylab", label = tags$b("y-axis label"), value = "activity"),
+                                              
+      fluidRow(
+        column(11, 
+               sliderInput("dup_num", label = h4("Number of duplicated days:"),
+                  min = 1, max = 10, value = 2)), column(1, actionButton("help_dup_num", "?"))
+        ), 
       
-      conditionalPanel("input.dataset == 'dammulti1'||input.dataset == 'ethoscope'",
-                       selectInput("pop_overview", label = h3("Additional summary opperation to perform on population data:"),
+      fluidRow(
+        column(11,
+      selectInput("operation", label = h4("Operation to perform:"),
+                  choices = list("mean" = "mean", "median" = "median", "sum" = "sum"), selected = "mean")),column(1, actionButton("help_operation", "?"))
+      ),
+      
+      conditionalPanel("input.dataset == 'dam1 population'||input.dataset == 'ethoscope'",
+                       fluidRow(
+                         column(11,
+                       selectInput("pop_overview", label = h4("Additional summary opperation to perform on population data:"),
                                    choices = list("mean" = "mean", "median" = "median", "sum" = "sum", "NULL" = "NULL"), selected = "mean")),
+                       column(1, actionButton("help_pop_overview", "?"))
+                       )
+                       ),
       
-      conditionalPanel("input.dataset != 'ethoscope'",
-                       selectInput("plot_type", label = h3("Type of plot:"),
+      conditionalPanel("input.pop_overview == 'NULL'", 
+                       HTML('<p style="font-size:18px">'),
+                       "When 'summary operation' is 'NULL' only line plot formats are allowed currently.",
+                       HTML('</p>')
+      ),
+      
+      conditionalPanel("input.dataset != 'ethoscope'&&input.pop_overview != 'NULL'",
+                       fluidRow(
+                         column(11,
+                       selectInput("plot_type", label = h4("Type of plot:"),
                                    choices = list("bar" = "bar", "line" = "line", "ribbon" = "ribbon", "tile" = "tile"), selected = "bar")),
+                       column(1, actionButton("help_plot_type", "?"))
+                       )
+                       ),
       
       conditionalPanel("input.dataset == 'ethoscope'",
-                       selectInput("condition", label = h3("Y axis values to plot:"),
+                       fluidRow(
+                         column(11,
+                       selectInput("condition", label = h4("Y axis values to plot:"),
                                    choices = list(moving = "moving", asleep = "asleep", max_velocity = "max_velocity", is_interpolated = "is_interpolated"), selected = "moving")),
+                       column(1, actionButton("help_condition", "?"))
+                       )
+                       ),
       
-      conditionalPanel("input.plot_type == 'bar'",
-                       h4("DD day range:"), p("(e.g. From 4 to 8)"),
+      conditionalPanel("input.plot_type == 'bar'&&input.pop_overview != 'NULL'",
+                       fluidRow(column(11, h4("DD day range:")), column(1, actionButton("help_DD", "?"))),
+                       p("(e.g. From 4 to 8)"),
                        #br(),
                        column(6, selectInput("DD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
                        column(6, selectInput("DD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
-                       h4("LD day range:"), p("(e.g. From 0 to 3)"),
+                       fluidRow(column(11, h4("LD day range:")), column(1, actionButton("help_LD", "?"))),
+                       p("(e.g. From 0 to 3)"),
                        #br(),
                        column(6, selectInput("LD_start", label = "From", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
                        column(6, selectInput("LD_end", label = "to", selected = NULL, choices = list(NULL = "none",0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))),
-                       h4("Time when lights turn on and off:"), p("(e.g. Darkness starts 0; Darkness ends, Light starts 12; Light ends 24)"),
+                       fluidRow(column(11, h4("Time when lights turn on and off:")),  column(1, actionButton("help_LD_time", "?"))),
+                       p("(e.g. Darkness starts 0; Darkness ends, Light starts 12; Light ends 24)"),
                        #br(),
                        fluidRow(
                        column(4, br(), numericInput("D_start", label = "Darkness starts", value = 0, min = 0, max = 100)),
-                       column(4, numericInput("D_end_L_start", label = "Darkness ends, Light starts", value = 0, min = 0, max = 100)),
-                       column(4, br(), numericInput("L_ends", label = "Light ends", value = 0, min = 0, max = 100))),
+                       column(4, numericInput("D_end_L_start", label = "Darkness ends, Light starts", value = 12, min = 0, max = 100)),
+                       column(4, br(), numericInput("L_ends", label = "Light ends", value = 24, min = 0, max = 100))),
                        fluidRow(column(4, numericInput("LD_offset", label = "Offset LD", value = 0, min = -100, max = 100)))
                        ),
-      conditionalPanel("input.plot_type == 'line'||input.plot_type == 'ribbon'||input.plot_type == 'tile'", "DD and LD options only available for bar plots currently"),
+      conditionalPanel("input.plot_type == 'line'||input.plot_type == 'ribbon'||input.plot_type == 'tile'", 
+                       HTML('<p style="font-size:18px">'),
+                       "DD and LD options only available for bar plots currently",
+                       HTML('</p>')
+                       ),
       hr(),
       actionButton(inputId = "go",
                    label = "Plot graph")
@@ -574,8 +857,11 @@ server <- function(input, output, session) {
     data <- eventReactive(input$go, {withProgress(message = "loading", value = 0,{
       actoplot(isolate(datasetInput()),
                                                    num_of_plot = input$dup_num,
-                                              file_format = datasetFile_format(),
-                                              condition = input$condition,
+                                                   plot_title = input$plot_title,
+                                                   plot_xlab = input$plot_xlab,
+                                                   plot_ylab = input$plot_ylab,
+                                                   file_format = datasetFile_format(),
+                                                   condition = input$condition,
                                                    type_of_plot = input$plot_type, #currently only "bar" has LD and DD annotations available
                                                    DD_days_start = input$DD_start,
                                                    DD_days_end = input$DD_end,
@@ -594,45 +880,122 @@ server <- function(input, output, session) {
     })
     datasetInput <- reactive({
       switch(input$dataset,
-           "dam1ex1" = dam1ex1,
+           "dam1 individual" = dam1ex1,
            "dam1ex2" = dam1ex2,
-           "dammulti1" = dammulti1,
+           "dam1 population" = dammulti1,
            "dam2" = dam2,
            "ethoscope" = sleep_sexual_dimorphism)
       })
     datasetFile_format <- reactive({
       switch(input$dataset,
-             "dam1ex1" = "dam1",
+             "dam1 individual" = "dam1",
              "dam1ex2" = "dam1",
-             "dammulti1" = "dam1",
+             "dam1 population" = "dam1",
              "dam2" = "dam2",
              "ethoscope" = "ethoscope")
     })
     datasetText <- reactive({
       switch(input$dataset,
-             "dam1ex1" = "Displayed below is an example  raw data from DAM1 machines.",
-             "dam1ex2" = "Displayed below is raw example data from DAM1 machines.",
-             "dammulti1" = "Displayed below is DAM1 population data",
-             "dam2" = "Displayed below is DAM2 data",
-             "ethoscope" = "Displayed below is ethoscope data")
+             "dam1 individual" = "Displayed on the right is raw DAM1 individual data. Increase the number of entries to expand and explore the data if desired.",
+             "dam1ex2" = "Displayed below is raw example data from DAM1 machines. Increase the number of entries to expand and explore the data if desired.",
+             "dam1 population" = "Displayed on the right is raw DAM1 population data. Increase the number of entries to expand and explore the data if desired.",
+             "dam2" = "Displayed on the right is raw DAM2 data. Increase the number of entries to expand and explore the data if desired.",
+             "ethoscope" = "Displayed on the right is raw ethoscope data. Increase the number of entries to expand and explore the data if desired.")
       })
     output$hline <- renderUI(hr())
     output$ex1text <- renderText(
       isolate(datasetText())
       )
+    output$ex2text <- renderUI(
+      HTML('<h5>Plot an actogram of the data using the side panel below with either already selected default options or user chosen ones.</h5>
+           
+           <h2>&darr;</h2>')
+    )
     output$ex1 <- renderDataTable(
         isolate(datasetInput()), options = list(
-          lengthMenu = list(c(5, 10, 15, -1), c('5', '10', '15', 'All')),
-          pageLength = 10,
+          lengthMenu = list(c(5, 10, 15, 20), c('5', '10', '15', '20')),
+          pageLength = 5,
           orderClasses = TRUE,
           scrollX = TRUE
           ))
     })
   })
   
-  observeEvent(input$help, {
-    showModal(modalDialog(size = "l",
-      title = "title", "testtesttesttesttesttesttesttesttesttesttesttesttesttesttestte",br(),"sttesttesttesttesttesttesttesttesttesttestt",br(),"esttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest" 
+  observeEvent(input$help_dup_num, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+      title = "Number of duplicated days", 
+      HTML('<p style="font-size:18px">'),
+      "The number of days the data is to be duplicated by. E.g. for single-plotted actograms (1 day), there is no duplication and only 24 hours of data is shown along the x-axis.", 
+      "For double-plotted actograms (2 days), 48 hours worth of data is shown along the x-axis. In", code("actoplot"), "any integer can be used as an argument but here it is limited to 10 days.",
+      HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_operation, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "Operation to perform", 
+                          HTML('<p style="font-size:18px">'),
+                          "What operation to perform on the raw data.", "Plotting every single value for every single second would not be visually informative. Therefore the data is usually summarised per every hour or user chosen time interval (Not available in thi GUI)",
+                          "In", code("actoplot"), "the user can use any existing function such as", code("mean()"), "as the arguement. Here options are limited.",
+                          HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_pop_overview, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "Additional summary opperation to perform on population data", 
+                          HTML('<p style="font-size:18px">'),
+                          "For population data, further summary statistical operations can be performed on the multiple individuals to summarise the data even further",
+                          "Like 'Operation to perform', existing functions can be used as an argument in", code("actoplot()"), ". Here options are also limited.", "NOTE: if 'NULL' is chosen then population data will not be summarised and will all appear separately on the plot. Currently this forces the plot to be in line plot format for practical visibility.",
+                          HTML('</p>')
+    ))
+  })
+    
+  observeEvent(input$help_plot_type, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "Type of plot", 
+                          HTML('<p style="font-size:18px">'),
+                          "For DAM1 and DAM2 data currently, users can choose the aesthetic format of the plot from: bar; line; ribbon; and tile.",
+                          HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_condition, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "Y axis values to plot", 
+                          HTML('<p style="font-size:18px">'),
+                          'For ethoscope data, multiple variables are recorded, such as if the animal is "moving" or "asleep" and therefore which variable to be plotted can be chosen.', 
+                          "For more information on ethoscopes and its data format please refer to the documentation.",
+                          HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_DD, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "DD day range", 
+                          HTML('<p style="font-size:18px">'),
+                          "The days during which the experiment was conducted in DD (constant darkness) specified from and to. To select only 1 day then both 'from' and 'to' need to be set to the desired day.",
+                          HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_LD, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "LD day range", 
+                          HTML('<p style="font-size:18px">'),
+                          "The days during which the experiment was conducted in LD (alternating light and darkness) specified from and to. To select only 1 day then both 'from' and 'to' need to be set to the desired day. NOTE: overlapping DD annotations will overwrite any existing LD annotations underneath.",
+                          HTML('</p>')
+    ))
+  })
+  
+  observeEvent(input$help_LD_time, {
+    showModal(modalDialog(size = "l", easyClose = TRUE,
+                          title = "Time when lights turn on and off", 
+                          HTML('<p style="font-size:18px">'),
+                          "For LD, the time (in hours) of when the darkness alternates to light can be set.", 
+                          "It is advise for values to be kept in the order of (Darkness starts) < (Darkness ends, Light starts) < (Light ends) for full functionality.", "Standard 12:12 hour LD is given in the example and as default.",
+                          "Offset LD is to shift the annotations left or right and is the easiest method of moving them to the desired time points. E.g. under standard 12:12 LD an 'offset LD' of 12 will fully alternate the light to darkness and vice versa.",
+                          HTML('</p>')
     ))
   })
   
@@ -667,6 +1030,12 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref3.3, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref3.4, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")
@@ -745,6 +1114,30 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref13, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref14, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref14.1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref15, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref15.1, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")

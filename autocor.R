@@ -2,10 +2,10 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 
 #dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
 #dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
+# dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
-dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 
 # PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 # PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
@@ -85,7 +85,7 @@ f[10:25][which.max(p[10:25])]
 
 ##LOMB-SCARGLE PERIODOGRAM##
 library(lomb)
-lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.1,main = "")
+lomb_periodogram = lsp(as.vector(x[[1]]),alpha=0.05,from=0,to=0.05,main = "")
 
 # ts_object = ts(x[[1]], frequency = 1, start = 0)
 # ts_object = ts(summary_dt_all_animals[73:length(summary_dt_all_animals[,t_round]),activity], frequency = 1, start = 0)

@@ -11,7 +11,7 @@ actoplot = function(file1 = file1,
                          operation = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          plot_title = "",
                          plot_xlab = "time",
-                         plot_ylab = "activty",
+                         plot_ylab = "activity",
                          #DD_days = NULL, #range of days that were in DD, e.g. LD = 0:2 for days 0 to 2 ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          DD_days_start = "none", #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          DD_days_end = "none", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
@@ -151,7 +151,7 @@ actoplot = function(file1 = file1,
       theme(axis.text.x = element_text(size=16))+
       theme(axis.text.y = element_blank())+
       theme(axis.ticks.y = element_blank())+
-      theme(axis.title=element_text(size=14,face="bold"))+
+      theme(axis.title=element_text(size=16,face="bold"))+
       theme(strip.text = element_text(face="bold", size=14)) +
       ggtitle(plot_title)
       # ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
@@ -166,7 +166,7 @@ actoplot = function(file1 = file1,
       theme(plot.title = element_text(hjust = 0.5, size = 18))+
       theme(axis.text.x = element_text(size=16))+
       theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-      theme(axis.title=element_text(size=14,face="bold"))+
+      theme(axis.title=element_text(size=16,face="bold"))+
       theme(strip.text = element_text(face="bold", size=14)) +
       ggtitle(plot_title)
       # ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
@@ -181,7 +181,7 @@ actoplot = function(file1 = file1,
       theme(plot.title = element_text(hjust = 0.5, size = 18))+
       theme(axis.text.x = element_text(size=16))+
       theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-      theme(axis.title=element_text(size=14,face="bold"))+
+      theme(axis.title=element_text(size=16,face="bold"))+
       theme(strip.text = element_text(face="bold", size=14)) +
       ggtitle(plot_title)
       # ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
@@ -197,7 +197,7 @@ actoplot = function(file1 = file1,
       theme(axis.text.x = element_text(size=16))+
       theme(axis.text.y = element_blank()) + 
       theme(axis.ticks.y= element_blank())+
-      theme(axis.title=element_text(size=14,face="bold"))+
+      theme(axis.title=element_text(size=16,face="bold"))+
       theme(strip.text = element_text(face="bold", size=14)) +
       ggtitle(plot_title) +
       # labs(title="Overview of individual activity pattern over time",x="time", y="activity") +
@@ -287,7 +287,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -302,7 +302,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -317,7 +317,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -332,7 +332,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           # theme(panel.spacing = unit(0.2, "lines"), plot.title = element_text(hjust = 0.5), axis.ticks.y = element_blank()) +
           labs(title="Overview Actogram plot of population activity over time",x="time", y="") #+
@@ -352,7 +352,7 @@ actoplot = function(file1 = file1,
         theme(plot.title = element_text(hjust = 0.5, size = 18))+
         theme(axis.text.x = element_text(size=16))+
         theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-        theme(axis.title=element_text(size=14,face="bold"))+
+        theme(axis.title=element_text(size=16,face="bold"))+
         theme(strip.text = element_text(face="bold", size=14)) +
         ggtitle(plot_title)
         # ggtitle("Actogram plot of population activity over time")
@@ -612,7 +612,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -627,7 +627,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -642,7 +642,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -657,7 +657,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           labs(title="Overview Actogram plot of population activity over time",x="time", y="") #+
         #guides(fill=guide_legend(title="activity"))
@@ -782,7 +782,7 @@ actoplot = function(file1 = file1,
         theme(plot.title = element_text(hjust = 0.5, size = 18))+
         theme(axis.text.x = element_text(size=16))+
         theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-        theme(axis.title=element_text(size=14,face="bold"))+
+        theme(axis.title=element_text(size=16,face="bold"))+
         theme(strip.text = element_text(face="bold", size=14)) +
         ggtitle(plot_title)
         # ggtitle(sprintf("Actogram plot of individual activity over time of experiment %s", unique(dt[,experiment_id])))
@@ -868,7 +868,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Overview Actogram plot of population activity over time")
@@ -886,7 +886,7 @@ actoplot = function(file1 = file1,
           theme(plot.title = element_text(hjust = 0.5, size = 18))+
           theme(axis.text.x = element_text(size=16))+
           theme(axis.text.y = element_blank()) + theme(axis.ticks.y = element_blank())+
-          theme(axis.title=element_text(size=14,face="bold"))+
+          theme(axis.title=element_text(size=16,face="bold"))+
           theme(strip.text = element_text(face="bold", size=14)) +
           ggtitle(plot_title)
           # ggtitle("Actogram plot of population activity over time")
@@ -902,7 +902,7 @@ actoplot = function(file1 = file1,
 }
 ##DAM1## DELETE THESE ONES; NO LONGER NEEDED
 # dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
-# PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
 # PATH2 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115C5M"
 # PATH3 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Aes"
 # PATH4 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/190115Bes"
@@ -914,13 +914,13 @@ actoplot = function(file1 = file1,
 #dammulti = rbind(dammulti1, dammulti2)
 
 #RUN THESE BELOW
-# dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
-dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM002C06.txt")
+dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data/220714esM037C08.txt")
+# dam1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM002C06.txt")
 # dam1 = DAM1_single_reader("./www/DAM1_data/220714esM037C08.txt")
 
 # PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/My_webapp/www/DAM1_data"
-PATH1 = "./www/DAM1_data"
-# dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
+# PATH1 = "./www/DAM1_data"
+dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 
 # acto = actoplot_dam1(dammulti1,
 #                      num_of_plot = 4,
@@ -1444,25 +1444,25 @@ actoplot_etho = function(file1 = file1,
   # }
   print(p)
 }
-# data("sleep_sexual_dimorphism")
-# sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
+data("sleep_sexual_dimorphism")
+sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 3]
 acto_etho = actoplot(dam1,
                      file_format = "dam1",
                           condition = "moving",
-                          num_of_plot = 2,
-                          type_of_plot = "bar",
+                          num_of_plot = 4,
+                          type_of_plot = "tile",
                      plot_xlab = "time (hours)",
-                     plot_ylab = "activty",
+                     plot_ylab = "activity",
                           operation = "mean",
                           pop_overview = "NULL",
-                          DD_days_start = 4, #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          DD_days_end = 17, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_start = 0, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                          LD_days_end = 3, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          DD_days_start = "none", #for sake of website, can't use NULL ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          DD_days_end = 18, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          LD_days_start = "none", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                          LD_days_end = 2, ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                           D_start = 0,
                           D_end_L_start = 12,
                           L_end = 24,
                           LD_offset = -4)
 
-acto_etho = acto_etho + annotate(geom="segment", x=seq(0, 48, 1), xend=seq(0, 48, 1), y = 0, yend=0.1)
-acto_etho
+# acto_etho = acto_etho + annotate(geom="segment", x=seq(0, 48, 1), xend=seq(0, 48, 1), y = 0, yend=0.1)
+# acto_etho
