@@ -7,8 +7,8 @@ actoplot = function(file1 = file1,
                          #y = activity, #name of column in datatable you want to display on y-axis
                          type_of_plot = "bar", #can be "bar", "line", "ribbon" or "tile"
                          num_of_plot = 2, #can be any integer
-                         #operation = mean, #can be sum/median ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
-                         operation = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         operation = mean, #can be sum/median ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         # operation = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          plot_title = "",
                          plot_xlab = "time",
                          plot_ylab = "activity",
@@ -23,8 +23,8 @@ actoplot = function(file1 = file1,
                          L_end = 24,
                          LD_offset = 0, #how much you want to shift the LD annotations by
                          condition = NULL,
-                         #pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data 
-                         pop_overview = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
+                         pop_overview = NULL, #if not null, then can choose which operation like above to further summarise the population data
+                         # pop_overview = "mean", ##REMINDER CHANGE THIS BACK FOR NON WEBSITE
                          time_to_round = rethomics:::hours(1) #see if can rename this to something used before
                          ){
   num_of_plot = as.numeric(num_of_plot)

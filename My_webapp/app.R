@@ -9,13 +9,14 @@ source("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Projec
 # source("./actoplot_v6.R")
 
 PATH1 = "/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M"
+# PATH1 = "./120115A5M"
 dammulti1 = DAM1_multi_reader(PATH1, time_format = "min")
 data("sleep_sexual_dimorphism")
-sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 2]
+sleep_sexual_dimorphism = sleep_sexual_dimorphism[region_id <= 3]
 
 ui <- navbarPage(theme = shinytheme("readable"),
     title = "Analysis of Circadian Rhythm",
-    position = "fixed-top",
+    # position = "fixed-top",
     inverse = TRUE,
     id = "inTabset",
     collapsible = TRUE,
@@ -28,7 +29,7 @@ ui <- navbarPage(theme = shinytheme("readable"),
                     br(),br()),
     HTML("<a name='top'></a>"),
     tabPanel("Home",
-             tags$style(type="text/css", "body {padding-top: 70px;}"),
+             # tags$style(type="text/css", "body {padding-top: 70px;}"),
              # onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');",
              fluidRow(
                column(6, offset = 3, 
@@ -88,12 +89,12 @@ actionLink("ref4", tags$sup("[4]")),
 br(),br(),
 "Though organisms as a whole experience circadian rhythms, individual cells regulate their own rhythms as well. Almost every single cell has its own circadian clock. This is particularly evident in the regulation of the cell cycle, as cellular proliferation has been proven to be rhythmic with circadian  disruption being linked to cell cycle deregulation and possible tumour growth.",
 actionLink("ref5", tags$sup("[5]")),
-" At the molecular level, almost all cells express so-called clock genes that construct feedback loops that regulate aforementioned molecular osciallitions.",
+" At the molecular level, almost all cells express so-called clock genes that construct feedback loops to regulate aforementioned molecular osciallitions.",
 br(),br(),
 "Circadian rhythms are only partly controlled by endogenoues means, as environmental cues can also entrain and synchronize such biological rhythms to envirmental oscillations.", 
 "These cues, known as", tags$i("zeitgebers"), "(German for “time giver”), achieves entrainment when the period and phase of the biological rhythms match those of the environmental oscillations.", 
 actionLink("ref3.1", tags$sup("[3]")),
-"Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom. As the sun rises during mornings and falls during evenings, daylight changes to night and temperatures oscillate, which forces entrainment on most organisms. Hence the daily rountine activities of feeding and sleep can be shown to follow such enivironmental cues.", 
+"Examples of", tags$i("zeitgebbers"), "are light and temperature, and these are the most common and prominent ones among the animal kingdom.", 
 "When completely isolated from", tags$i("zeitgebbers"), "an organisms rhythmicity will then be solely regulated by its endogenous circadian clocks. These might not necessarily be around 24 hours and can even deviate by a few hours, hence why entrainment by", tags$i("zeitgebers"), 
 "is required. The period during which an organisms rhythmicity is solely regulated endogenously is called the free-running period", actionLink("ref6", tags$sup("[6]")),
 tags$b("(Fig. 1)"),".", HTML('</p>')
@@ -322,7 +323,7 @@ navbarMenu(title="Visual Analysis",
                                tags$b("b)"), "Double-plotted actogram of wild-type", tags$i("Drosophila"), "DAM1 activity data. Entrained under 12:12 LD cycle for 3 days followed by 16 days of DD.", 
                                "All data acquired from Beckwith and Ceriani (2015)", actionLink("ref3.3", tags$sup("[3]")),
                                "Additional annotations of manual analysis of periodicity shown for LD and DD phases.", 
-                               "Click image to enlarge.",
+                               "Click images to enlarge.",
                                HTML('</p>')
                                ))
                
@@ -361,6 +362,7 @@ navbarMenu(title="Visual Analysis",
                                HTML('<p style="font-size:18px">'),
                                tags$b("Figure 6."), "Example", tags$b("a)"), "bar, and", tags$b("b)"), "line double-plotted actograms, and", tags$b("c)"), "ribbon, and", tags$b("d)"), "tile quadruple-plotted actograms created from",
                                code("actoplot()"), "Data from Beckwith and Ceriani (2015)", actionLink("ref3.4", tags$sup("[3]")), "was used. Also shown in", tags$b("e)"), "is  population ethoscope data with all individuals shown separately on the same plot, generated from pre-packaged data in “rethomics”.",
+                               "Click images to enlarge.",
                                HTML('</p>')
                              ))
                       
@@ -526,50 +528,249 @@ navbarMenu(title="Visual Analysis",
                       tags$i("r"),"will be 1 at the start due to perfect correlation of data against self but will then decrease as the data becomes out of register with itself as lag increases.", 
                       "However, if there is a regular rhythmicity then the peaks and troughs in the amplitude of the data will slip back into register and r will increase again when the lag approximates the period of the data.", actionLink("ref15", tags$sup("[15]")),
                       br(),br(),
-                      "Plotting the correlation coefficients against lag in a correlogram can identify rhythmicity and the period. Rhythmic data will create sinusoidal oscillations on the correlogram with decreasing amplitude as lag increases",
+                      "Plotting the correlation coefficients against lag on a correlogram can identify rhythmicity and the period. Rhythmic data will create sinusoidal oscillations on the correlogram with decreasing amplitude as lag increases",
                       tags$b("(Fig 7a and 7b)"), 
                       ", and any local maxima peaks above the chosen confidence interval can be considered as statistically significant multiples of the period.", 
                       actionLink("ref14.1", tags$sup("[14;")), actionLink("ref15.1", tags$sup("15]")),
-                      "Chatfield (2016) describes the 95% confidence interval as", HTML('&plusmn;2/&radic;<em>N</em>'),
+                      "Chatfield (2016) describes the 95% confidence interval as", HTML('&plusmn;2/&radic;<em>N</em>.'),
                       br(),br(),
-                      "In", tags$b("Fig. 7c"), "statistically significant peaks appear at 12, 24, and 36, suggesting a circadian period of 24 hours, while a local maxima peak at 25 hours is seen in", tags$b("Fig. 7d"), 
-                      "agreeing with the actogram analysis in", tags$b("Fig. 5")
+                      "In", tags$b("Fig. 7c)"), "statistically significant peaks appear at 12, 24, and 36, suggesting a circadian period of 24 hours, while a local maxima peak at 25 hours is seen in", tags$b("Fig. 7d)"), 
+                      "agreeing with the actogram analysis in", tags$b("Fig. 5."), "Note that the correlograms in", tags$b("Fig. 7b) and d)"), "are more profound than in", tags$b("Fig 7a) and c)"), 
+                      "as more data in DD was available for calculations than in LD.",
                       HTML('</p>')
                       )
-             )
+             ),
+             fluidRow(br(),
+               column(6, offset = 3, 
+                      wellPanel(
+                        HTML('<p style="font-size:18px">'),
+                        tags$b("Figure 7."), "Correlograms of correlation coefficients against lag (or period (hours)) from the autocorrelation of data used in",
+                        tags$b("figure 5"), "(Beckwith and Ceriani (2015))", actionLink("ref3.5", tags$sup("[3]")), "during", tags$b("a)"), "LD phase only and",
+                        tags$b("b)"), "DD phase only.", tags$b("c and d)"), "Zoomed in plots of", tags$b("a)"), "and", tags$b("b)"), "between x-limits of [12, 36] hours to show only periods near a circadian range.",
+                        br(), "The 95% confidence intervals are shown via dotted lines. Click images to enlarge.",
+                        HTML('</p>')
+                      )
+                             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image13 img {max-width: 100%; width: 100%; height: auto}"
              )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image14 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image15 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             tags$head(tags$style(
+               type="text/css",
+               "#image16 img {max-width: 100%; width: 100%; height: auto}"
+             )),
+             fluidRow(br(),
+                      column(8, offset = 2,
+                             column(6, 
+                                    HTML('<p style="font-size:18px">'), tags$b("a)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="24hr_correlogram.jpeg" target="_blank">'), 
+                                    imageOutput("image13", height = "auto"), HTML('</a>')),
+                             column(6,
+                                    HTML('<p style="font-size:18px">'), tags$b("b)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="25hr_correlogram.jpeg" target="_blank">'), 
+                                    imageOutput("image14", height = "auto"), HTML('</a>')
+                                    
+                             )
+                      )),
+             fluidRow(br(),
+                      column(8, offset = 2,
+                             column(6, 
+                                    HTML('<p style="font-size:18px">'), tags$b("c)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="24hr_correlogram_zoomed.jpeg" target="_blank">'), 
+                                    imageOutput("image15", height = "auto"), HTML('</a>')),
+                             column(6,
+                                    HTML('<p style="font-size:18px">'), tags$b("d)"), HTML('</p>'),
+                                    # br(),
+                                    HTML('<a href="25hr_correlogram_zoomed.jpeg" target="_blank">'), 
+                                    imageOutput("image16", height = "auto"), HTML('</a>')
+                                    
+                             )
+                      )),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('autocorprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('autocornextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
+             )
+             ),
+    tabPanel("Periodograms",
+             fluidRow(
+               column(6, offset = 3,
+                      h2("Identifying Periodicity and Rhyhtmic Power using Periodograms"), hr(),
+                      HTML('<p style="font-size:18px">'),
+                      "A more precise method of analysing periods are periodograms constructed from Fourier analysis. Fourier (1822) theorized that any time-series signal can be decomposed into sine and cosine components of various frequencies. Essentially the data is transformed from the time domain into the frequency domain using Fourier Transform.", 
+"The periodogram shows the spectral energy (power) associated with each frequency, with any significant peaks suggesting fundamental frequencies and therefore its reciprocal period. Data that have non-sinusoidal waveforms (not composed of a single sine wave and therefore a single frequency) will have a peak at the fundamental frequency with
+additional smaller peaks also appearing at harmonic frequencies relative the fundamental frequency.",
+actionLink("ref10.2", tags$sup("[10;")), actionLink("ref16", tags$sup("16]")),
+br(),br(),
+"Periodograms can identify hidden oscillations in data that might not be obvious in an actogram or correlogram. Complex rhythms can occur and periodograms can separate the rhythms apart.",
+br(),br(),
+"There have been many additional methods of calculating a periodogram since Fourier analysis was first described. The Lomb-Scargle periodogram modifies Fourier analysis by accomodating unequally spaced time-series data as well, where for example there are missing values due to equipment fault or otherwise.", 
+"Standard Fourier analysis does not adjust for this. There are other adaptations of generating a periodogram but the Lomb-Scargle has been shown to be one of the better performing methods.",
+actionLink("ref10.3", tags$sup("[10;")), actionLink("ref17", tags$sup("17]")),
+br(),br(),
+"Though periodograms remove the subjectiveness of manual actogram analysis, caution must be used against accepting numerical output that might be obviously skewed due to noisy data or pseudorhythms. Direct visual inspection of actograms provides a check against this.",
+actionLink("ref15.2", tags$sup("[15]")),
+br(),br(),
+"For example, in", tags$b("Fig. 8a)"), "there’s a single significant peak with a frequency of 0.0845 with a normalised power of 11.1. The reciprocal is a period of 11.8 hours. This may seem to contrast with previous analysis however inspecting the LD phase of the actogram in", tags$b("Fig. 5a)"),
+", shows two main bouts of activity daily: one just after lights are turned on and one just after lights are turned off, which occur with a 12 hour period since its 12:12 LD. Therefore, this peak can be deduced to be an approximate 12 hour harmonic period of the 24 hour circadian period.",
+"In", tags$b("Fig. 8b)"), "there are two significant peaks: one with a frequency of 0.0405 (period of 24.7 hours) with a normalised power of 31.3, supporting previous analysis; and one with a harmonic frequency of 0.0811 (period of 12.3 hours) with a normalised power of 57.4. The pattern of 2 main bouts daily with a 12 hour period can still be observed even in DD though less obvious.",
+                      HTML('</p>')
+                      )
+             ),
+tags$head(tags$style(
+  type="text/css",
+  "#image17 img {max-width: 100%; width: 100%; height: auto}"
+)),
+tags$head(tags$style(
+  type="text/css",
+  "#image18 img {max-width: 100%; width: 100%; height: auto}"
+)),
+fluidRow(br(),
+         column(6, offset = 3,
+                column(6, 
+                       HTML('<p style="font-size:18px">'), tags$b("a)"), HTML('</p>'),
+                       # br(),
+                       HTML('<a href="24hr_periodogram.jpeg" target="_blank">'), 
+                       imageOutput("image17", height = "auto"), HTML('</a>')),
+                column(6,
+                       HTML('<p style="font-size:18px">'), tags$b("b)"), HTML('</p>'),
+                       # br(),
+                       HTML('<a href="25hr_periodogram.jpeg" target="_blank">'), 
+                       imageOutput("image18", height = "auto"), HTML('</a>')
+                       
+                )
+         )),
+fluidRow(br(),
+         column(6, offset = 3,
+                wellPanel(
+                  HTML('<p style="font-size:18px">'),
+                  tags$b("Figure 8."), "Lomb-Scargle Periodograms of normalised power against frequency of data used in", tags$b("figure 5"), "(Beckwith and Ceriani (2015))", 
+                  actionLink("ref3.6", tags$sup("[3]")), "during", tags$b("a)"), "LD phase only and", tags$b("b)"), 
+                  "DD phase only. 95% confidence intervals are shown via dotted lines and calculated according to Refinetti", tags$i("et al."), "(2007)",
+                  actionLink("ref10.4", tags$sup("[10]")), ". Click images to enlarge.",
+                  HTML('</p>')
+                ))
+             ),
+fluidRow(
+  column(2, offset = 7,
+         actionButton('periodoprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+         actionButton('periodonextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+  )
+))
+    ),
+    navbarMenu(title="Conclusion",
+    tabPanel("Conclusion",
+             fluidRow(
+               column(6, offset = 3,
+                      h2("Conclusion"), hr(),
+                      HTML('<p style="font-size:18px">'),
+                      "Circadian Rhythms are entrainable endogenous oscillations with an approximate period of 24 hours. They can occur in a wide variety of biological process from physiological activity to molecular modulations and are important aspects of normal functionality.", 
+                      "If not correctly regulated, processes may become dysfunctional and diseases states can occur, therefore studying them can be of great importance.",
+                      br(),br(),
+                      "Overviewed on this website are several methods of analysing circadian rhythms from visual inspection of actograms to more quantitative methods such as autocorrelations and use of periodograms. Clearly there are other methods that exist which were not covered here; some of which are more powerful but complex, such as wavelet analysis.",
+                      actionLink("ref18", tags$sup("[18]")), "But the methods shown here are perhaps the most approachable and common in the field.",
+                      br(),br(),
+                      "A custom R package that is compatible with the “rethomics” package from Gilestro Laboratory has been developed and can read and process raw data from common equipment used for studying circadian rhythms in the field. It has been designed with the aim of being modular and so can be improved without difficulty in the future.", 
+                      "Together with “rethomics”, it can hopefully provide experimentalists an alternative means of visualising and analysing data compared to current existing methods.",
+                      HTML('</p>')
+               )
+             ),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('conclusionprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('conclusionnextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
+             )
+             ),
+    tabPanel("Methods",
+             fluidRow(
+               column(6, offset = 3,
+                      h2("Methods"), hr(),
+                      HTML('<p style="font-size:18px">'),
+                      "Autocorrelation performed using funtion", code("acf()"), "from the built-in “stats” package.",
+                      br(),br(),
+                      "Periodograms calculated using function", code("lsp()"), "from the", tags$a(href="https://cran.r-project.org/web/packages/lomb/index.html", "lomb", target="_blank"), "package.",
+                      br(),br(),
+                      "This website was developped using the", tags$a(href="https://shiny.rstudio.com/", "shiny", target="_blank"), "and", tags$a(href="https://rstudio.github.io/shinythemes/", "shinytheme", target="_blank"), "package.",
+                      HTML('</p>')
+                      )
+             ),
+             fluidRow(
+               column(2, offset = 7,
+                      actionButton('methodsprevpagebutton', 'Previous Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"),
+                      actionButton('methodsnextpagebutton', 'Next Page', onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');")
+               )
+             )
+             )
+    ),
     tabPanel("References",
              fluidRow(
                column(6, offset = 3, HTML("<a name='ref1'></a>"),
-                      "[1] Vitaterna, M. H., Takahashi, J. S. & Turek, F. W. (2001) Overview of circadian rhythms. Alcohol Research and Health. 25 (2), 85-93.",
+                      "[1] Vitaterna, M. H., Takahashi, J. S. & Turek, F. W. (2001) Overview of circadian rhythms. Alcohol Research and Health. 25 (2), 85-93.", 
+                      tags$a(href="https://www.researchgate.net/profile/Joseph_Takahashi/publication/11764172_Overview_of_Circadian_Rhythms/links/0c960525dc638d9dfe000000.pdf", "Article", target="_blank"),
                       p(),
                       "[2] Panda, S., Hogenesch, J. B. & Kay, S. A. (2002) Circadian rhythms from flies to human. Nature. 417 (6886), 329-335.",
+                      tags$a(href="https://www.nature.com/nature/journal/v417/n6886/full/417329a.html", "Article", target="_blank"),
                       p(),
                       "[3] Beckwith, E. J. & Ceriani, M. F. (2015) Experimental assessment of the network properties of the Drosophila circadian clock. Journal of Comparative Neurology. 523 (6), 982-996.",
+                      tags$a(href="http://onlinelibrary.wiley.com/doi/10.1002/cne.23728/full", "Article", target="_blank"),
                       p(),
                       "[4] Bernard, S., Gonze, D., Čajavec, B., Herzel, H. & Kramer, A. (2007) Synchronization-induced rhythmicity of circadian oscillators in the suprachiasmatic nucleus. PLoS Comput Biol. 3 (4), e68.",
+                      tags$a(href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.0030068", "Article", target="_blank"),
                       p(),
                       "[5] Feillet, C., Van Der Horst, Gijsbertus TJ, Levi, F., Rand, D. A. & Delaunay, F. (2015) Coupling between the circadian clock and cell cycle oscillators: implication for healthy cells and malignant growth. Frontiers in Neurology. 6 96.0000",
+                      tags$a(href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4426821/", "Article", target="_blank"),
                       p(),
                       "[6] Aschoff, J. (1981) Freerunning and entrained circadian rhythms. In: Anonymous Biological rhythms. , Springer. pp. 81-93.",
+                      tags$a(href="https://link.springer.com/chapter/10.1007/978-1-4615-6552-9_6#page-1", "Book", target="_blank"),
                       p(),
                       "[7] Golombek, D. A. & Rosenstein, R. E. (2010) Physiology of circadian entrainment. Physiological Reviews. 90 (3), 1063-1102.",
+                      tags$a(href="http://physrev.physiology.org/content/90/3/1063.short", "Article", target="_blank"),
                       p(),
                       "[8] Geissmann, Q., Rodriguez, L. G., Beckwith, E. J., French, A. S., Jamasb, A. R. & Gilestro, G. F. (2017) Ethoscopes: an open platform for high-throughput ethomics. Biorxiv. 113647.",
+                      tags$a(href="http://biorxiv.org/content/early/2017/04/02/113647", "Article", target="_blank"),
                       p(),
                       "[9] Rosato, E. & Kyriacou, C. P. (2006) Analysis of locomotor activity rhythms in Drosophila. Nature Protocols. 1 (2), 559-568.",
+                      tags$a(href="https://www.nature.com/nprot/journal/v1/n2/abs/nprot.2006.79.html", "Protocol", target="_blank"),
                       p(),
                       "[10] Refinetti, R., Cornélissen, G. & Halberg, F. (2007) Procedures for numerical analysis of circadian rhythms. Biological Rhythm Research. 38 (4), 275-325.",
+                      tags$a(href="http://www.tandfonline.com/doi/abs/10.1080/09291010600903692", "Article", target="_blank"),
                       p(),
                       "[11] Refinetti, R. (2016) Circadian physiology. , CRC press.",
+                      tags$a(href="https://books.google.co.uk/books?hl=en&lr=&id=orj1CwAAQBAJ&oi=fnd&pg=PP1&dq=+%5B11%5D+Refinetti,+R.+(2016)+Circadian+physiology.+,+CRC+press.+&ots=uvHWQB81jO&sig=M8W1rTGk04zbk0g7Mu4fXzwCATE#v=onepage&q&f=false", "Book", target="_blank"),
                       p(),
                       "[12] Verwey, M., Robinson, B. & Amir, S. (2013) Recording and analysis of circadian rhythms in running-wheel activity in rodents. JoVE (Journal of Visualized Experiments). (71), e50186-e50186.",
-                      p(),
+                      tags$a(href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3582575/", "Article", target="_blank"),
+                       p(),
                       "[13] Yang, Y., Duguay, D., Bedard, N., Rachalski, A., Baquiran, G., Na, C. H., Fahrenkrug, J., Storch, K. F., Peng, J., Wing, S. S. & Cermakian, N. (2012) Regulation of behavioral circadian rhythms and clock protein PER1 by the deubiquitinating enzyme USP2. Biology Open. 1 (8), 789-801.",
+                      tags$a(href="http://bio.biologists.org/content/early/2012/06/26/bio.20121990.short", "Article", target="_blank"),
                       p(),
                       "[14] Chatfield, C. (2016) The analysis of time series: an introduction. , CRC press.",
+                      tags$a(href="https://books.google.co.uk/books?hl=en&lr=&id=qKzyAbdaDFAC&oi=fnd&pg=PP1&dq=+%5B14%5D+Chatfield,+C.+(2016)+The+analysis+of+time+series:+an+introduction.+,+CRC+press.+&ots=sxD1b4XFOj&sig=jyoJflnVtN-NfymK0t5F7fuyU6M#v=onepage&q&f=false", "Book", target="_blank"),
                       p(),
-                      "[15] Levine, J. D., Funes, P., Dowse, H. B. & Hall, J. C. (2002) Signal analysis of behavioral and molecular cycles. BMC Neuroscience. 3 (1), 1."
+                      "[15] Levine, J. D., Funes, P., Dowse, H. B. & Hall, J. C. (2002) Signal analysis of behavioral and molecular cycles. BMC Neuroscience. 3 (1), 1.",
+                      tags$a(href="https://bmcneurosci.biomedcentral.com/articles/10.1186/1471-2202-3-1", "Article", target="_blank"),
+                      p(),
+                      "[16] Fourier, J. (1822) Theorie analytique de la chaleur, par M. Fourier. , Chez Firmin Didot, père et fils.",
+                      tags$a(href="https://books.google.co.uk/books?hl=en&lr=&id=rRnq7SY-uUUC&oi=fnd&pg=PA1&dq=+%5B16%5D+Fourier,+J.+(1822)+Theorie+analytique+de+la+chaleur,+par+M.+Fourier.+,+Chez+Firmin+Didot,+p%C3%A8re+et+fils.+&ots=wlo4BIsvWT&sig=1lBQ7GhHwUiKEydtadl2Sd-TbJA#v=onepage&q&f=false", "Book", target="_blank"),
+                      p(),
+                      "[17] Lomb, N. R. (1976) Least-squares frequency analysis of unequally spaced data. Astrophysics and Space Science. 39 (2), 447-462.",
+                      tags$a(href="https://link.springer.com/article/10.1007%2FBF00648343?LI=true", "Article", target="_blank"),
+                      p(),
+                      "[18] Addison, P. S. (2017) The illustrated wavelet transform handbook: introductory theory and applications in science, engineering, medicine and finance. , CRC press.", 
+                      tags$a(href="https://books.google.co.uk/books?hl=en&lr=&id=wBoNDgAAQBAJ&oi=fnd&pg=PP1&dq=Addison,+P.+S.+(2017)+The+illustrated+wavelet+transform+handbook:+introductory+theory+and+applications+in+science,+engineering,+medicine+and+finance.+,+CRC+press.&ots=ybdnc20Xp5&sig=YhEBF4JqmbiXSNozHGymhjGMv4k#v=onepage&q&f=false", "Book", target="_blank")
                       )
              )),
 tags$script(" $(document).ready(function () {
@@ -691,6 +892,60 @@ server <- function(input, output, session) {
     ))
   }, deleteFile = FALSE)
   
+  output$image13 <- renderImage({
+    return(list(
+      src = "www/24hr_correlogram.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image14 <- renderImage({
+    return(list(
+      src = "www/25hr_correlogram.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image15 <- renderImage({
+    return(list(
+      src = "www/24hr_correlogram_zoomed.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image16 <- renderImage({
+    return(list(
+      src = "www/25hr_correlogram_zoomed.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image17 <- renderImage({
+    return(list(
+      src = "www/24hr_periodogram.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
+  output$image18 <- renderImage({
+    return(list(
+      src = "www/25hr_periodogram.jpeg",
+      contentType = "image/jpeg"
+      # ,
+      # width = "500px"
+    ))
+  }, deleteFile = FALSE)
+  
   output$video <- renderUI({
     tags$video(src="https://www.youtube.com/embed/5oWGBUMJON8", type = "video/mp4", autoplay = NA, controls = NA)
   })
@@ -756,6 +1011,46 @@ server <- function(input, output, session) {
                       selected = "Autocorrelation")
   })
   
+  observeEvent(input$autocorprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Demo")
+  })
+  
+  observeEvent(input$autocornextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Periodograms")
+  })
+  
+  observeEvent(input$periodoprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Autocorrelation")
+  })
+  
+  observeEvent(input$periodonextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Conclusion")
+  })
+  
+  observeEvent(input$conclusionprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Periodograms")
+  })
+  
+  observeEvent(input$conclusionnextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Methods")
+  })
+  
+  observeEvent(input$methodsprevpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "Conclusion")
+  })
+  
+  observeEvent(input$methodsnextpagebutton, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+  })
+  
   observeEvent(input$homenextpage, {
     updateTabsetPanel(session, "inTabset",
                       selected = "Introduction")
@@ -769,6 +1064,7 @@ server <- function(input, output, session) {
   observeEvent(input$loaddata, {
     withProgress(message = "loading", value = 0,{
     dam1ex1 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/per_rescue_v2/120115A5M/120115A5mCtM007C03.txt")
+      # dam1ex1 = DAM1_single_reader("./120115A5M/120115A5mCtM007C03.txt")
     # dam1ex2 = DAM1_single_reader("/media/nick/Data/Users/N/Documents/MSc_Bioinfo/2016/Data_Analysis_Project/Circadian_Rhythm/Estaban_new_data/Circadian_data_for_Nicholas/220914es5/220914es5CtM011C27.txt")
       # dam1ex1 = DAM1_single_reader("./www/DAM1_data/220714esM035C01.txt")
       # dam1ex2 = DAM1_single_reader("./www/DAM1_data/220714esM035C02.txt")
@@ -1041,6 +1337,18 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref3.5, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref3.6, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
   observeEvent(input$ref4, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
@@ -1101,6 +1409,24 @@ server <- function(input, output, session) {
     HTML("<a href='#ref1'></a>")
   })
   
+  observeEvent(input$ref10.2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref10.3, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref10.4, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
   observeEvent(input$ref11, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
@@ -1138,6 +1464,30 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$ref15.1, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref15.2, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref16, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref17, {
+    updateTabsetPanel(session, "inTabset",
+                      selected = "References")
+    HTML("<a href='#ref1'></a>")
+  })
+  
+  observeEvent(input$ref18, {
     updateTabsetPanel(session, "inTabset",
                       selected = "References")
     HTML("<a href='#ref1'></a>")
