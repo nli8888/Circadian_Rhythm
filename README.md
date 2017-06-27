@@ -52,7 +52,15 @@ conidition - solely for ethoscope data currently. As ethoscope data has multiple
 
 time_to_round - the time interval for which data is grouped by and is statistically summarised by "operation" (and "pop_overview" for population data). Default is 1 hour but can be technically changed. HOWEVER, note that if changing this will affect the x-axis labelling due to the way the code works. So for example, time_to_round = hours(0.5) is possible for 30 minute intervals but the x-axis will double as each interval is considered as an integer. This is an issue related to how the duplication of data is coded currently when plotting multi-plotted actograms. Hopefully you can figure out a work around.
 
-LD_days_start - integer
+LD_days_start - integer, the day when LD starts.
+
+LD_days_end - the day when LD end. If only one day is desired then both LD_days_start and LD_days_end have to equal the same day
+
+Same applies for DD_days_start and DD_days_end. Note that any overlapp of days between LD and DD will result in DD overwriting LD
+
+For LD, the individual duration of light and darkness can be adjusted with D_start, D_end_L_start, and L_end. Default is 12:12 LD (D_start = 0, D_end_L_start = 12, L_end = 24). To actually shift the LD as a whole use LD_offset. LD_offset = 5 will shift the LD to the right by 5 hours and -5 to the left by 5 hours. 
+
+Note, as of the current time of writing this I have not tested what happens when the time_to_round does not equal 1 hour on the effects of these LD and DD options. 
 
 
 
